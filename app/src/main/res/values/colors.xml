@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="f1_black_background">#FAFAFA</color>
+    <color name="f1_card_dark">#FFFFFF</color>
+    <color name="f1_card_lighter">#F0F0F0</color>
+    <color name="f1_red_accent">#E10600</color>
+    <color name="f1_red_dark">#B00500</color>
+    <color name="text_primary_white">#1A1A1A</color>
+    <color name="text_secondary_gray">#757575</color>
+    <color name="f1_gold">#FFD700</color>
+    <color name="f1_silver">#C0C0C0</color>
+    <color name="f1_bronze">#CD7F32</color>
+</resources>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/f1_black_background"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvTechMain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TECH and ANALYSIS"
+        android:textSize="22sp"
+        android:fontFamily="sans-serif-black"
+        android:textColor="@color/text_primary_white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        app:cardCornerRadius="16dp"
+        app:cardBackgroundColor="@color/f1_card_dark"
+        app:strokeColor="@color/f1_card_lighter"
+        app:strokeWidth="1dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTechMain"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="DRS System"
+                android:textColor="@color/f1_red_accent"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Drag Reduction System reduces rear wing drag to increase top speed."
+                android:textColor="@color/text_secondary_gray"
+                android:layout_marginTop="6dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Ground Effect Aerodynamics"
+                android:textColor="@color/f1_red_accent"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Modern F1 cars use floor tunnels to generate downforce."
+                android:textColor="@color/text_secondary_gray"
+                android:layout_marginTop="6dp"/>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

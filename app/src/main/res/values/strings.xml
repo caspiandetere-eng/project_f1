@@ -46,6 +46,7 @@
     <string name="app_title">F1 INSIGHT</string>
     <string name="season_year">2026 Season</string>
     <string name="upcoming_latest_race">UPCOMING / LATEST RACE</string>
+    <string name="upcoming_race">UPCOMING RACE</string>
     <string name="bahrain_grand_prix">BAHRAIN GRAND PRIX</string>
     <string name="sakhir_circuit_57_laps">Sakhir Circuit | 57 Laps</string>
     <string name="race_center">Race Center &gt;</string>

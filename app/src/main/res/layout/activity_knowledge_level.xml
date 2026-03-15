@@ -24,7 +24,7 @@
         android:layout_marginEnd="16dp"
         android:background="@drawable/bg_glass_red"
         android:src="@android:drawable/ic_menu_manage"
-        android:tint="#FFFFFF"
+        app:tint="#FFFFFF"
         android:contentDescription="Settings"
         android:elevation="8dp"
         app:layout_constraintEnd_toEndOf="parent"

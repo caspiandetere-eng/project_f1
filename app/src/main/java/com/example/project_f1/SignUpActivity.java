@@ -25,14 +25,26 @@ public class SignUpActivity extends AppCompatActivity {
             String name = etName.getText().toString().trim();
             String email = etEmail.getText().toString().trim();
             String password = etPassword.getText().toString().trim();
-            
+
             if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
                 Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                 return;
             }
-            
+
+            long userId = UserRepository.register(this, name, email, password);
+            if (userId == -1) {
+                Toast.makeText(this, "Email already registered", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            getSharedPreferences("F1Prefs", MODE_PRIVATE).edit()
+                .putInt("user_id", (int) userId)
+                .putString("user_email", email)
+                .putString("user_name", name)
+                .apply();
+
             Intent intent = new Intent(this, KnowledgeLevelActivity.class);
-            intent.putExtra("email", email);
+            intent.putExtra("user_id", (int) userId);
             startActivity(intent);
         });
     }

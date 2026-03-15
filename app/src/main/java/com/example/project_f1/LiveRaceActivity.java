@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -66,19 +65,60 @@ public class LiveRaceActivity extends AppCompatActivity {
     }
     
     private void loadLatestSession() {
-        OpenF1ApiClient.getApiService().getSessions(2024, "Race").enqueue(new Callback<List<OpenF1Session>>() {
+        OpenF1ApiClient.getApiService().getSessions(2026, "Race").enqueue(new Callback<List<OpenF1Session>>() {
             @Override
             public void onResponse(Call<List<OpenF1Session>> call, Response<List<OpenF1Session>> response) {
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                    sessionKey = response.body().get(response.body().size() - 1).sessionKey;
-                    startLiveUpdates();
+                    List<OpenF1Session> sessions = response.body();
+                    OpenF1Session currentSession = findCurrentOrLatestSession(sessions);
+                    
+                    if (currentSession != null) {
+                        sessionKey = currentSession.sessionKey;
+                        raceStatus.setText("🚨 " + currentSession.sessionName.toUpperCase());
+                        startLiveUpdates();
+                    } else {
+                        showFallbackData();
+                    }
+                } else {
+                    showFallbackData();
                 }
             }
 
             @Override
             public void onFailure(Call<List<OpenF1Session>> call, Throwable t) {
+                showFallbackData();
             }
         });
+    }
+    
+    private OpenF1Session findCurrentOrLatestSession(List<OpenF1Session> sessions) {
+        if (sessions == null || sessions.isEmpty()) return null;
+        
+        long currentTime = System.currentTimeMillis();
+        OpenF1Session currentSession = null;
+        OpenF1Session latestSession = sessions.get(sessions.size() - 1);
+        
+        for (OpenF1Session session : sessions) {
+            try {
+                if (session.dateStart != null && session.dateEnd != null) {
+                    long startTime = java.time.Instant.parse(session.dateStart).toEpochMilli();
+                    long endTime = java.time.Instant.parse(session.dateEnd).toEpochMilli();
+                    
+                    if (currentTime >= startTime && currentTime <= endTime) {
+                        currentSession = session;
+                        break;
+                    }
+                    
+                    if (currentTime > endTime && currentSession == null) {
+                        currentSession = session;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return currentSession != null ? currentSession : latestSession;
     }
 
     private void startLiveUpdates() {
@@ -153,7 +193,8 @@ public class LiveRaceActivity extends AppCompatActivity {
         );
         params.setMargins(0, 0, 0, 20);
         card.setLayoutParams(params);
-        card.startAnimation(AnimationUtils.loadAnimation(this, R.anim.slide_up_fade));
+        card.setAlpha(0f);
+        card.animate().alpha(1f).setDuration(300);
         return card;
     }
 
@@ -173,8 +214,19 @@ public class LiveRaceActivity extends AppCompatActivity {
         update.setPadding(30, 20, 30, 20);
         Typeface typeface = ResourcesCompat.getFont(this, R.font.inter);
         if (typeface != null) update.setTypeface(typeface);
-        update.startAnimation(AnimationUtils.loadAnimation(this, R.anim.fade_in));
+        update.setAlpha(0f);
+        update.animate().alpha(1f).setDuration(300);
         updatesContainer.addView(update, 0);
+    }
+    
+    private void showFallbackData() {
+        positionsContainer.removeAllViews();
+        for (int i = 1; i <= 5; i++) {
+            String driverName = driverNames.getOrDefault(i, "Driver " + i);
+            String gap = i == 1 ? "LEADER" : "+" + (i * 0.5f) + "s";
+            positionsContainer.addView(createPositionCard(i, driverName, gap));
+        }
+        currentLap.setText("LIVE RACE DATA");
     }
 
     @Override

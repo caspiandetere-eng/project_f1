@@ -17,4 +17,10 @@ public class OpenF1Session {
     
     @SerializedName("year")
     public int year;
+    
+    @SerializedName("date_start")
+    public String dateStart;
+    
+    @SerializedName("date_end")
+    public String dateEnd;
 }

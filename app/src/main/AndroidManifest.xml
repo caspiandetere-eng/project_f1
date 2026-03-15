@@ -34,6 +34,7 @@
         <activity android:name=".LapDetailsActivity" android:exported="false" />
         <activity android:name=".F1ImpactActivity" android:exported="false" />
         <activity android:name=".SettingsActivity" android:exported="false" />
+        <activity android:name=".OnboardingActivity" android:exported="false" />
     </application>
 
 </manifest>

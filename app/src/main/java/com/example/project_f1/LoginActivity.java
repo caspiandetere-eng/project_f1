@@ -34,17 +34,26 @@ public class LoginActivity extends AppCompatActivity {
                 v.animate().scaleX(1f).scaleY(1f).setDuration(100);
                 String email = etEmail.getText().toString().trim();
                 String password = etPassword.getText().toString().trim();
-                
+
                 if (email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                
+
+                UserRepository.User user = UserRepository.login(this, email, password);
+                if (user == null) {
+                    Toast.makeText(this, "Invalid email or password", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 prefs.edit()
                     .putBoolean("is_logged_in", true)
-                    .putString("user_email", email)
+                    .putInt("user_id", user.id)
+                    .putString("user_email", user.email)
+                    .putString("user_name", user.name)
+                    .putString("knowledge_level", user.level)
                     .apply();
-                
+
                 startActivity(new Intent(this, MainActivity.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.fade_in);
                 finish();

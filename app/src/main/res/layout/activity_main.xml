@@ -25,7 +25,7 @@
         android:layout_marginEnd="16dp"
         android:background="@drawable/bg_glass_red"
         android:src="@android:drawable/ic_menu_manage"
-        android:tint="#FFFFFF"
+        app:tint="#FFFFFF"
         android:contentDescription="Settings"
         android:elevation="8dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -92,19 +92,28 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/knowledgePanelsContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/headerLayout" />
+
             <TextView
                 android:id="@+id/labelNextRace"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="24dp"
                 android:fontFamily="@font/barlow_condensed"
                 android:textFontWeight="700"
                 android:letterSpacing="0.15"
-                android:text="@string/upcoming_latest_race"
+                android:text="@string/upcoming_race"
                 android:textColor="#E10600"
                 android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/headerLayout" />
+                app:layout_constraintTop_toBottomOf="@id/knowledgePanelsContainer" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardLatestRace"
@@ -155,7 +164,7 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/barlow_condensed"
                             android:textFontWeight="700"
-                            android:text="🔴 LIVE"
+                            android:text="📅 UPCOMING"
                             android:textColor="#E10600"
                             android:textSize="14sp"
                             app:layout_constraintStart_toStartOf="parent"
@@ -171,7 +180,7 @@
                             android:letterSpacing="0.08"
                             android:shadowColor="#E10600"
                             android:shadowRadius="15"
-                            android:text="@string/bahrain_grand_prix"
+                            android:text="LOADING..."
                             android:textAllCaps="true"
                             android:textColor="#FFFFFF"
                             android:textSize="24sp"
@@ -185,7 +194,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="6dp"
                             android:fontFamily="@font/jetbrains_mono"
-                            android:text="LAP 1 / 57"
+                            android:text="LOADING..."
                             android:textColor="#999999"
                             android:textSize="14sp"
                             app:layout_constraintStart_toStartOf="parent"
@@ -197,13 +206,14 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
                             android:orientation="vertical"
+                            android:visibility="gone"
                             app:layout_constraintTop_toBottomOf="@id/tvCurrentLap" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:text="Tap for detailed view →"
+                            android:text="View race details →"
                             android:textColor="#E10600"
                             android:textSize="15sp"
                             android:textStyle="bold"
@@ -286,7 +296,18 @@
                         android:id="@+id/topStandingsContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical" />
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/inter"
+                            android:text="Loading..."
+                            android:textColor="#999999"
+                            android:textSize="14sp"
+                            android:padding="8dp" />
+
+                    </LinearLayout>
 
 
                     <TextView

@@ -2,7 +2,6 @@ package com.example.project_f1;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -53,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         setClickListeners();
         initDriverNames();
         loadLatestSession();
+        showCoachMarksIfNeeded();
     }
 
     private void initViews() {
@@ -67,6 +67,26 @@ public class MainActivity extends AppCompatActivity {
         cardLatestRace = findViewById(R.id.cardLatestRace);
         cardLapDetails = findViewById(R.id.cardLapDetails);
         cardF1Impact = findViewById(R.id.cardF1Impact);
+    }
+
+    private void showCoachMarksIfNeeded() {
+        SharedPreferences prefs = getSharedPreferences("F1Prefs", MODE_PRIVATE);
+        if (prefs.getBoolean("coach_marks_done", false)) return;
+
+        KnowledgeLevelManager.KnowledgeLevel level = KnowledgeLevelManager.getKnowledgeLevel(this);
+        if (level != KnowledgeLevelManager.KnowledgeLevel.ROOKIE &&
+            level != KnowledgeLevelManager.KnowledgeLevel.CASUAL) return;
+
+        cardLatestRace.post(() -> {
+            CoachMarkOverlay.CoachMark[] marks = {
+                new CoachMarkOverlay.CoachMark(cardLatestRace, "Upcoming Race", "See the next race on the calendar and tap to explore session details."),
+                new CoachMarkOverlay.CoachMark(cardStandings, "Driver Standings", "Check who's leading the championship across different eras."),
+                new CoachMarkOverlay.CoachMark(cardHistory, "F1 History", "Explore iconic moments and legendary drivers from F1's past."),
+            };
+            new CoachMarkOverlay(this).show(this, marks, () ->
+                prefs.edit().putBoolean("coach_marks_done", true).apply()
+            );
+        });
     }
 
     private void setClickListeners() {
@@ -139,20 +159,69 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<OpenF1Session>> call, Response<List<OpenF1Session>> response) {
                 if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                    OpenF1Session session = response.body().get(response.body().size() - 1);
-                    sessionKey = session.sessionKey;
-                    tvRaceName.setText(session.circuitShortName.toUpperCase() + " GP");
-                    startLiveUpdates();
+                    List<OpenF1Session> sessions = response.body();
+                    OpenF1Session upcomingSession = findUpcomingSession(sessions);
+                    
+                    if (upcomingSession != null) {
+                        sessionKey = upcomingSession.sessionKey;
+                        String raceName = upcomingSession.circuitShortName != null ? 
+                            upcomingSession.circuitShortName.toUpperCase() + " GP" : "RACE";
+                        tvRaceName.setText(raceName);
+                        
+                        if (upcomingSession.dateStart != null) {
+                            String dateStr = formatRaceDate(upcomingSession.dateStart);
+                            tvCurrentLap.setText(dateStr);
+                        }
+                        
+                        loadTopStandings();
+                    } else {
+                        tvRaceName.setText("NO UPCOMING RACE");
+                        loadTopStandings();
+                    }
+                } else {
+                    tvRaceName.setText("LOADING RACE...");
                     loadTopStandings();
                 }
             }
 
             @Override
             public void onFailure(Call<List<OpenF1Session>> call, Throwable t) {
-                tvRaceName.setText("BAHRAIN GRAND PRIX");
+                tvRaceName.setText("LOADING RACE...");
                 loadTopStandings();
             }
         });
+    }
+    
+    private String formatRaceDate(String dateStart) {
+        try {
+            java.time.Instant instant = java.time.Instant.parse(dateStart);
+            java.time.ZonedDateTime zdt = instant.atZone(java.time.ZoneId.systemDefault());
+            java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("MMM dd, yyyy");
+            return formatter.format(zdt);
+        } catch (Exception e) {
+            return "Race Date TBA";
+        }
+    }
+    
+    private OpenF1Session findUpcomingSession(List<OpenF1Session> sessions) {
+        if (sessions == null || sessions.isEmpty()) return null;
+        
+        long currentTime = System.currentTimeMillis();
+        
+        for (OpenF1Session session : sessions) {
+            try {
+                if (session.dateStart != null) {
+                    long startTime = java.time.Instant.parse(session.dateStart).toEpochMilli();
+                    if (startTime > currentTime) {
+                        return session;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return sessions.get(sessions.size() - 1);
     }
     
     private void startLiveUpdates() {
@@ -209,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
         row.setTextColor(0xFFFFFFFF);
         row.setTextSize(14);
         row.setPadding(0, 10, 0, 10);
-        Typeface typeface = ResourcesCompat.getFont(this, R.font.jetbrains_mono);
+        android.graphics.Typeface typeface = ResourcesCompat.getFont(this, R.font.jetbrains_mono);
         if (typeface != null) row.setTypeface(typeface);
         return row;
     }
@@ -316,7 +385,7 @@ public class MainActivity extends AppCompatActivity {
         posText.setWidth(dpToPx(32));
         posText.setHeight(dpToPx(32));
         posText.setBackgroundResource(position == 1 ? R.drawable.gradient_red : R.drawable.bg_position_circle);
-        posText.setTypeface(null, android.graphics.Typeface.BOLD);
+        posText.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed), android.graphics.Typeface.BOLD);
         row.addView(posText);
         
         View bar = new View(this);
@@ -342,7 +411,7 @@ public class MainActivity extends AppCompatActivity {
         ptsText.setText(driver.points);
         ptsText.setTextColor(0xFFE10600);
         ptsText.setTextSize(18);
-        ptsText.setTypeface(null, android.graphics.Typeface.BOLD);
+        ptsText.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed), android.graphics.Typeface.BOLD);
         row.addView(ptsText);
         
         return row;

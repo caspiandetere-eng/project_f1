@@ -20,11 +20,12 @@ public class KnowledgeLevelActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences("F1Prefs", MODE_PRIVATE);
         String email = getIntent().getStringExtra("email");
+        int userId = getIntent().getIntExtra("user_id", -1);
         
-        findViewById(R.id.cardRookie).setOnClickListener(v -> selectLevel(prefs, email, "rookie"));
-        findViewById(R.id.cardCasual).setOnClickListener(v -> selectLevel(prefs, email, "casual"));
-        findViewById(R.id.cardEnthusiast).setOnClickListener(v -> selectLevel(prefs, email, "enthusiast"));
-        findViewById(R.id.cardInsider).setOnClickListener(v -> selectLevel(prefs, email, "insider"));
+        findViewById(R.id.cardRookie).setOnClickListener(v -> selectLevel(prefs, userId, "rookie"));
+        findViewById(R.id.cardCasual).setOnClickListener(v -> selectLevel(prefs, userId, "casual"));
+        findViewById(R.id.cardEnthusiast).setOnClickListener(v -> selectLevel(prefs, userId, "enthusiast"));
+        findViewById(R.id.cardInsider).setOnClickListener(v -> selectLevel(prefs, userId, "insider"));
         findViewById(R.id.btnMenu).setOnClickListener(v -> startActivity(new Intent(this, SettingsActivity.class)));
     }
 
@@ -43,14 +44,21 @@ public class KnowledgeLevelActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void selectLevel(SharedPreferences prefs, String email, String level) {
+    private void selectLevel(SharedPreferences prefs, int userId, String level) {
+        if (userId != -1) UserRepository.updateLevel(this, userId, level);
         prefs.edit()
             .putString("knowledge_level", level)
             .putBoolean("is_logged_in", true)
-            .putString("user_email", email)
             .apply();
-        
-        startActivity(new Intent(this, MainActivity.class));
+
+        boolean needsOnboarding = (level.equals("rookie") || level.equals("casual"))
+            && !prefs.getBoolean("onboarding_done", false);
+
+        if (needsOnboarding) {
+            startActivity(new Intent(this, OnboardingActivity.class));
+        } else {
+            startActivity(new Intent(this, MainActivity.class));
+        }
         finish();
     }
 }

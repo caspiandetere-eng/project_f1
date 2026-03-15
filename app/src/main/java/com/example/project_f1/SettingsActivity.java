@@ -21,6 +21,7 @@ public class SettingsActivity extends AppCompatActivity {
         
         Button btnLogout = findViewById(R.id.btnLogout);
         Button btnBack = findViewById(R.id.btnBack);
+        Button btnClearCache = findViewById(R.id.btnClearCache);
         SwitchCompat switchTheme = findViewById(R.id.switchTheme);
         SharedPreferences prefs = getSharedPreferences("F1Prefs", MODE_PRIVATE);
         
@@ -33,7 +34,13 @@ public class SettingsActivity extends AppCompatActivity {
         });
         
         btnLogout.setOnClickListener(v -> logout());
+        btnClearCache.setOnClickListener(v -> clearCache());
         btnBack.setOnClickListener(v -> finish());
+    }
+    
+    private void clearCache() {
+        CacheManager.clearAllCache(this);
+        android.widget.Toast.makeText(this, "Cache cleared", android.widget.Toast.LENGTH_SHORT).show();
     }
     
     private void logout() {

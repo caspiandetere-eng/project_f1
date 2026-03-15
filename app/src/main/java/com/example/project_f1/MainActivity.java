@@ -17,6 +17,7 @@ import com.example.project_f1.models.JolpicaStandingsResponse;
 import com.example.project_f1.models.OpenF1Position;
 import com.example.project_f1.models.OpenF1Session;
 import com.google.android.material.card.MaterialCardView;
+import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -221,12 +222,12 @@ public class MainActivity extends AppCompatActivity {
         cardLapDetails.setAlpha(0f);
         cardF1Impact.setAlpha(0f);
         
-        cardLatestRace.animate().alpha(1f).setDuration(500).setStartDelay(100);
-        cardStandings.animate().alpha(1f).setDuration(500).setStartDelay(200);
-        cardHistory.animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(500).setStartDelay(300);
-        cardTech.animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(500).setStartDelay(350);
-        cardLapDetails.animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(500).setStartDelay(400);
-        cardF1Impact.animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(500).setStartDelay(450);
+        cardLatestRace.animate().alpha(1f).setDuration(400).setStartDelay(100);
+        cardStandings.animate().alpha(1f).setDuration(400).setStartDelay(150);
+        cardHistory.animate().alpha(1f).setDuration(400).setStartDelay(200);
+        cardTech.animate().alpha(1f).setDuration(400).setStartDelay(250);
+        cardLapDetails.animate().alpha(1f).setDuration(400).setStartDelay(300);
+        cardF1Impact.animate().alpha(1f).setDuration(400).setStartDelay(350);
     }
     
     @Override
@@ -236,11 +237,29 @@ public class MainActivity extends AppCompatActivity {
     }
     
     private void loadTopStandings() {
+        String cacheKey = "standings_2026";
+        String cachedData = CacheManager.getCache(this, cacheKey);
+        
+        if (cachedData != null) {
+            try {
+                JolpicaStandingsResponse standings = new Gson().fromJson(cachedData, JolpicaStandingsResponse.class);
+                updateTopStandings(standings);
+            } catch (Exception e) {
+                loadStandingsFromApi(cacheKey);
+            }
+        } else {
+            loadStandingsFromApi(cacheKey);
+        }
+    }
+    
+    private void loadStandingsFromApi(String cacheKey) {
         JolpicaApiClient.getApiService().getDriverStandings(2026).enqueue(new Callback<JolpicaStandingsResponse>() {
             @Override
             public void onResponse(Call<JolpicaStandingsResponse> call, Response<JolpicaStandingsResponse> response) {
                 if (response.isSuccessful() && response.body() != null && 
                     !response.body().mrData.standingsTable.standingsLists.isEmpty()) {
+                    String json = new Gson().toJson(response.body());
+                    CacheManager.saveCache(MainActivity.this, cacheKey, json);
                     updateTopStandings(response.body());
                 }
             }
@@ -258,9 +277,13 @@ public class MainActivity extends AppCompatActivity {
         List<JolpicaStandingsResponse.DriverStanding> drivers = 
             standings.mrData.standingsTable.standingsLists.get(0).driverStandings;
         
-        for (int i = 0; i < Math.min(2, drivers.size()); i++) {
+        int maxDrivers = KnowledgeLevelManager.isRookie(this) ? 2 : 3;
+        for (int i = 0; i < Math.min(maxDrivers, drivers.size()); i++) {
             JolpicaStandingsResponse.DriverStanding driver = drivers.get(i);
-            topStandingsContainer.addView(createStandingRow(i + 1, driver));
+            LinearLayout row = createStandingRow(i + 1, driver);
+            row.setAlpha(0f);
+            topStandingsContainer.addView(row);
+            row.animate().alpha(1f).setDuration(300).setStartDelay(i * 100);
         }
     }
     
@@ -269,7 +292,14 @@ public class MainActivity extends AppCompatActivity {
         row.setOrientation(LinearLayout.HORIZONTAL);
         row.setGravity(android.view.Gravity.CENTER_VERTICAL);
         row.setPadding(dpToPx(12), dpToPx(12), dpToPx(12), dpToPx(12));
-        if (position == 1) row.setBackgroundColor(0x15E10600);
+        
+        int bgResource = R.drawable.bg_glass_card;
+        if (position == 1) bgResource = R.drawable.bg_podium_gold;
+        else if (position == 2) bgResource = R.drawable.bg_podium_silver;
+        else if (position == 3) bgResource = R.drawable.bg_podium_bronze;
+        
+        row.setBackgroundResource(bgResource);
+        
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
@@ -293,7 +323,10 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout.LayoutParams barParams = new LinearLayout.LayoutParams(dpToPx(3), LinearLayout.LayoutParams.MATCH_PARENT);
         barParams.setMargins(dpToPx(12), 0, dpToPx(12), 0);
         bar.setLayoutParams(barParams);
-        bar.setBackgroundColor(position == 1 ? 0xFFFFD700 : 0xFFC0C0C0);
+        int barColor = 0xFFFFD700;
+        if (position == 2) barColor = 0xFFC0C0C0;
+        else if (position == 3) barColor = 0xFFCD7F32;
+        bar.setBackgroundColor(barColor);
         row.addView(bar);
         
         TextView nameText = new TextView(this);

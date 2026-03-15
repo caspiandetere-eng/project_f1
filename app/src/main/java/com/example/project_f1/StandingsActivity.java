@@ -107,12 +107,27 @@ public class StandingsActivity extends AppCompatActivity {
     }
 
     private void loadHistoricalStandings(int year) {
+        String cacheKey = "standings_" + year;
+        String cachedData = CacheManager.getCache(this, cacheKey);
+        
+        if (cachedData != null) {
+            try {
+                JolpicaStandingsResponse standings = new com.google.gson.Gson().fromJson(cachedData, JolpicaStandingsResponse.class);
+                displayHistoricalStandings(standings);
+                return;
+            } catch (Exception e) {
+                // Fall through to API call
+            }
+        }
+        
         currentCall = JolpicaApiClient.getApiService().getDriverStandings(year);
         currentCall.enqueue(new Callback<JolpicaStandingsResponse>() {
             @Override
             public void onResponse(Call<JolpicaStandingsResponse> call, Response<JolpicaStandingsResponse> response) {
                 if (response.isSuccessful() && response.body() != null && 
                     !response.body().mrData.standingsTable.standingsLists.isEmpty()) {
+                    String json = new com.google.gson.Gson().toJson(response.body());
+                    CacheManager.saveCache(StandingsActivity.this, cacheKey, json);
                     displayHistoricalStandings(response.body());
                 } else {
                     showFallbackStandings();

@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     private MaterialCardView cardHistory, cardTech, cardStandings, cardLatestRace, cardLapDetails, cardF1Impact;
     private DrawerLayout drawerLayout;
     private final Handler handler = new Handler(Looper.getMainLooper());
-    private Call<List<OpenF1Session>> sessionCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,12 +161,11 @@ public class MainActivity extends AppCompatActivity {
     private void initDriverNames() {}
 
     private void loadLatestSession() {
-        sessionCall = OpenF1ApiClient.getApiService().getSessions(2026, "Race");
-        sessionCall.enqueue(new Callback<List<OpenF1Session>>() {
+        DataSyncManager.loadSessions(this, 2026, new DataSyncManager.SyncCallback<List<OpenF1Session>>() {
             @Override
-            public void onResponse(Call<List<OpenF1Session>> call, Response<List<OpenF1Session>> response) {
-                if (response.isSuccessful() && response.body() != null && !response.body().isEmpty()) {
-                    OpenF1Session upcomingSession = findUpcomingSession(response.body());
+            public void onSuccess(List<OpenF1Session> sessions) {
+                if (!sessions.isEmpty()) {
+                    OpenF1Session upcomingSession = findUpcomingSession(sessions);
                     if (upcomingSession != null) {
                         String raceName = upcomingSession.circuitShortName != null ?
                                 upcomingSession.circuitShortName.toUpperCase() + " GP" : "RACE";
@@ -178,13 +176,13 @@ public class MainActivity extends AppCompatActivity {
                         tvRaceName.setText("NO UPCOMING RACE");
                     }
                 } else {
-                    tvRaceName.setText("LOADING RACE...");
+                    tvRaceName.setText("NO UPCOMING RACE");
                 }
                 loadTopStandings();
             }
 
             @Override
-            public void onFailure(Call<List<OpenF1Session>> call, Throwable t) {
+            public void onFailure(String error) {
                 tvRaceName.setText("LOADING RACE...");
                 loadTopStandings();
             }
@@ -215,22 +213,17 @@ public class MainActivity extends AppCompatActivity {
     private void startLiveUpdates() {}
 
     private void loadTopStandings() {
-        List<UserRepository.StandingRow> cached = UserRepository.getStandings(this, 2026);
-        if (!cached.isEmpty()) {
-            updateTopStandingsFromDb(cached);
-            if (!UserRepository.isStandingsStale(this, 2026, 60 * 60 * 1000L)) return;
-        }
-        JolpicaApiClient.getApiService().getDriverStandings(2026).enqueue(new Callback<JolpicaStandingsResponse>() {
+        DataSyncManager.loadStandings(this, 2026, new DataSyncManager.SyncCallback<JolpicaStandingsResponse>() {
             @Override
-            public void onResponse(Call<JolpicaStandingsResponse> call, Response<JolpicaStandingsResponse> response) {
-                if (response.isSuccessful() && response.body() != null &&
-                        !response.body().mrData.standingsTable.standingsLists.isEmpty()) {
-                    UserRepository.saveStandings(MainActivity.this, 2026, response.body());
-                    updateTopStandingsFromDb(UserRepository.getStandings(MainActivity.this, 2026));
+            public void onSuccess(JolpicaStandingsResponse response) {
+                List<UserRepository.StandingRow> standings = UserRepository.getStandings(MainActivity.this, 2026);
+                if (!standings.isEmpty()) {
+                    updateTopStandingsFromDb(standings);
                 }
             }
+
             @Override
-            public void onFailure(Call<JolpicaStandingsResponse> call, Throwable t) {}
+            public void onFailure(String error) {}
         });
     }
 
@@ -259,7 +252,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         handler.removeCallbacksAndMessages(null);
-        if (sessionCall != null) sessionCall.cancel();
     }
 
     private void loadTopStandingsLegacy() {}
@@ -308,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
 
         TextView ptsText = new TextView(this);
         ptsText.setText(r.points);
-        ptsText.setTextColor(0xFFE10600);
+        ptsText.setTextColor(0xFFFFFFFF);
         ptsText.setTextSize(18);
         ptsText.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed), android.graphics.Typeface.BOLD);
         row.addView(ptsText);

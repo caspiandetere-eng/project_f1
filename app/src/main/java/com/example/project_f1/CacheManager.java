@@ -15,24 +15,35 @@ public class CacheManager {
     }
     
     public static void saveCache(Context context, String key, String data) {
+        saveCache(context, key, data, CACHE_DURATION);
+    }
+    
+    public static void saveCache(Context context, String key, String data, long ttlMs) {
         SharedPreferences prefs = getCachePrefs(context);
         prefs.edit()
             .putString(key, data)
             .putLong(key + "_time", System.currentTimeMillis())
+            .putLong(key + "_ttl", ttlMs)
             .apply();
     }
     
     public static String getCache(Context context, String key) {
         SharedPreferences prefs = getCachePrefs(context);
         long cacheTime = prefs.getLong(key + "_time", 0);
+        long ttl = prefs.getLong(key + "_ttl", CACHE_DURATION);
         long currentTime = System.currentTimeMillis();
         
-        if (currentTime - cacheTime > CACHE_DURATION) {
-            prefs.edit().remove(key).remove(key + "_time").apply();
+        if (currentTime - cacheTime > ttl) {
+            clearCache(context, key);
             return null;
         }
         
         return prefs.getString(key, null);
+    }
+    
+    public static void clearCache(Context context, String key) {
+        SharedPreferences prefs = getCachePrefs(context);
+        prefs.edit().remove(key).remove(key + "_time").remove(key + "_ttl").apply();
     }
     
     public static void clearAllCache(Context context) {
@@ -43,6 +54,18 @@ public class CacheManager {
         if (cacheDir.exists()) {
             deleteDir(cacheDir);
         }
+    }
+    
+    public static long getCacheSize(Context context) {
+        SharedPreferences prefs = getCachePrefs(context);
+        long size = 0;
+        for (String key : prefs.getAll().keySet()) {
+            if (!key.endsWith("_time") && !key.endsWith("_ttl")) {
+                String value = prefs.getString(key, "");
+                size += value.length();
+            }
+        }
+        return size;
     }
     
     private static boolean deleteDir(File dir) {

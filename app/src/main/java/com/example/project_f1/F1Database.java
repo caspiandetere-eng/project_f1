@@ -16,7 +16,6 @@ public class F1Database extends SQLiteOpenHelper {
     static final String COL_EMAIL      = "email";
     static final String COL_PASSWORD   = "password";
     static final String COL_LEVEL      = "knowledge_level";
-
     // favorites
     static final String TABLE_FAVORITES = "favorites";
     static final String COL_USER_ID     = "user_id";

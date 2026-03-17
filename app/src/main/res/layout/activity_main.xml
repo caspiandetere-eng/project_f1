@@ -114,7 +114,7 @@
                     android:letterSpacing="0.15"
                     android:text="@string/upcoming_race"
                     android:textColor="#E10600"
-                    android:textSize="15sp"
+                    android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/knowledgePanelsContainer" />
 
@@ -248,8 +248,8 @@
                     android:textFontWeight="700"
                     android:letterSpacing="0.15"
                     android:text="@string/tops"
-                    android:textColor="#E10600"
-                    android:textSize="15sp"
+                    android:textColor="#D8D8D8"
+                    android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/cardLatestRace" />
 
@@ -345,8 +345,8 @@
                     android:textFontWeight="700"
                     android:letterSpacing="0.15"
                     android:text="@string/explore"
-                    android:textColor="#E10600"
-                    android:textSize="15sp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/cardStandings" />
 

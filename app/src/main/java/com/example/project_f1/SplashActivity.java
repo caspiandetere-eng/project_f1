@@ -1,46 +1,86 @@
 package com.example.project_f1;
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsControllerCompat;
+import com.example.project_f1.models.JolpicaStandingsResponse;
+import com.example.project_f1.models.OpenF1Session;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SplashActivity extends AppCompatActivity {
+    private TextView tvStatus;
+    private ProgressBar progressBar;
+    private AtomicInteger tasksCompleted = new AtomicInteger(0);
+    private static final int TOTAL_TASKS = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Red status bar + black nav bar
-        WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
-        getWindow().setStatusBarColor(Color.parseColor("#E10600"));
-        getWindow().setNavigationBarColor(Color.parseColor("#0A0A0A"));
-        WindowInsetsControllerCompat controller =
-                WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
-        controller.setAppearanceLightStatusBars(false);
-        controller.setAppearanceLightNavigationBars(false);
-
+        ThemeManager.applyTheme(this);
         setContentView(R.layout.activity_splash);
+        ThemeManager.applyStatusBar(this);
 
-        View content = findViewById(R.id.splashContent);
+        tvStatus = findViewById(R.id.tvStatus);
+        progressBar = findViewById(R.id.progressBar);
 
-        // Fade + scale in
-        content.setScaleX(0.8f);
-        content.setScaleY(0.8f);
-        content.animate()
-                .alpha(1f)
-                .scaleX(1f)
-                .scaleY(1f)
-                .setDuration(600)
-                .withEndAction(() ->
-                    content.postDelayed(() -> {
-                        startActivity(new Intent(this, LoginActivity.class));
-                        overridePendingTransition(R.anim.fade_in, R.anim.slide_out_left);
-                        finish();
-                    }, 1000)
-                ).start();
+        SharedPreferences prefs = getSharedPreferences("F1Prefs", MODE_PRIVATE);
+        if (!prefs.getBoolean("is_logged_in", false)) {
+            navigateTo(LoginActivity.class);
+            return;
+        }
+
+        preloadEssentialData();
+    }
+
+    private void preloadEssentialData() {
+        tvStatus.setText("Loading sessions...");
+        
+        DataSyncManager.loadSessions(this, 2026, new DataSyncManager.SyncCallback<List<OpenF1Session>>() {
+            @Override
+            public void onSuccess(List<OpenF1Session> data) {
+                updateProgress("Loading standings...");
+                checkCompletion();
+            }
+
+            @Override
+            public void onFailure(String error) {
+                updateProgress("Loading standings...");
+                checkCompletion();
+            }
+        });
+
+        DataSyncManager.loadStandings(this, 2026, new DataSyncManager.SyncCallback<JolpicaStandingsResponse>() {
+            @Override
+            public void onSuccess(JolpicaStandingsResponse data) {
+                updateProgress("Ready!");
+                checkCompletion();
+            }
+
+            @Override
+            public void onFailure(String error) {
+                updateProgress("Ready!");
+                checkCompletion();
+            }
+        });
+    }
+
+    private void updateProgress(String status) {
+        tvStatus.setText(status);
+        tasksCompleted.incrementAndGet();
+    }
+
+    private void checkCompletion() {
+        if (tasksCompleted.get() >= TOTAL_TASKS) {
+            navigateTo(MainActivity.class);
+        }
+    }
+
+    private void navigateTo(Class<?> targetActivity) {
+        startActivity(new Intent(this, targetActivity));
+        finish();
     }
 }

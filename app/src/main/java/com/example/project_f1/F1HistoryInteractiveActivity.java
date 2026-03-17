@@ -15,6 +15,7 @@ public class F1HistoryInteractiveActivity extends AppCompatActivity {
         
         ThemeManager.applyTheme(this);
         setContentView(R.layout.activity_f1_history_interactive);
+        ThemeManager.applyStatusBar(this);
 
         setupExpandableCards();
     }

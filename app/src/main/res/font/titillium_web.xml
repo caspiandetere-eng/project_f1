@@ -3,5 +3,4 @@
     <font android:fontStyle="normal" android:fontWeight="400" android:font="@font/titilliumweb_regular" />
     <font android:fontStyle="normal" android:fontWeight="600" android:font="@font/titilliumweb_semibold" />
     <font android:fontStyle="normal" android:fontWeight="700" android:font="@font/titilliumweb_bold" />
-    <font android:fontStyle="normal" android:fontWeight="900" android:font="@font/titilliumweb_black" />
 </font-family>

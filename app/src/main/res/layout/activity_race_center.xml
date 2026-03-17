@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/f1_black_background">
+    android:background="@drawable/bg_racing_gradient">
 
     <View
         android:id="@+id/topStripe"
@@ -15,280 +15,77 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageButton
+        android:id="@+id/btnBack"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/bg_glass_card"
+        android:src="@android:drawable/ic_media_previous"
+        android:contentDescription="Back"
+        app:tint="#FFFFFF"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/titillium_web"
+        android:textFontWeight="700"
+        android:letterSpacing="0.1"
+        android:text="RACE CALENDAR"
+        android:textColor="#FFFFFF"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="@id/btnBack"
+        app:layout_constraintStart_toEndOf="@id/btnBack"
+        app:layout_constraintTop_toTopOf="@id/btnBack" />
+
+    <TextView
+        android:id="@+id/tvSeason"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/barlow_condensed"
+        android:textFontWeight="700"
+        android:text="2026"
+        android:textColor="#E10600"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/btnBack" />
+
     <ScrollView
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingBottom="24dp"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topStripe">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnBack">
 
         <LinearLayout
+            android:id="@+id/racesContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="20dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <View
-                    android:layout_width="4dp"
-                    android:layout_height="50dp"
-                    android:layout_marginEnd="12dp"
-                    android:background="@drawable/racing_stripe" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-black"
-                    android:letterSpacing="0.1"
-                    android:text="@string/race_center_title"
-                    android:textColor="@color/text_primary_white"
-                    android:textSize="28sp" />
-            </LinearLayout>
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="20dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/bahrain_grand_prix"
-                android:textColor="@color/text_secondary_gray"
-                android:textSize="14sp" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                app:cardBackgroundColor="@color/f1_card_dark"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="8dp"
-                app:strokeColor="#40E10600"
-                app:strokeWidth="2dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-black"
-                        android:letterSpacing="0.1"
-                        android:text="@string/race_schedule"
-                        android:textColor="@color/f1_red_accent"
-                        android:textSize="13sp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif-medium"
-                                android:text="@string/practice_1"
-                                android:textColor="@color/text_secondary_gray"
-                                android:textSize="12sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:fontFamily="sans-serif-bold"
-                                android:text="@string/fri_1400"
-                                android:textColor="@color/text_primary_white"
-                                android:textSize="16sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif-medium"
-                                android:text="@string/qualifying"
-                                android:textColor="@color/text_secondary_gray"
-                                android:textSize="12sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:fontFamily="sans-serif-bold"
-                                android:text="@string/sat_1700"
-                                android:textColor="@color/text_primary_white"
-                                android:textSize="16sp" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginBottom="16dp"
-                        android:background="#20E10600" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/gradient_red"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="16dp">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif-black"
-                                android:letterSpacing="0.1"
-                                android:text="@string/race"
-                                android:textColor="@color/text_primary_white"
-                                android:textSize="14sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:fontFamily="sans-serif-bold"
-                                android:text="@string/sun_1800"
-                                android:textColor="@color/text_primary_white"
-                                android:textSize="18sp" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-black"
-                            android:text="🏁"
-                            android:textSize="32sp" />
-                    </LinearLayout>
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:fontFamily="sans-serif-black"
-                android:letterSpacing="0.15"
-                android:text="@string/circuit_info"
-                android:textColor="@color/f1_red_accent"
-                android:textSize="13sp" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                app:cardBackgroundColor="@color/f1_card_dark"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="8dp"
-                app:strokeColor="#40E10600"
-                app:strokeWidth="2dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="sans-serif-medium"
-                            android:text="@string/circuit_length"
-                            android:textColor="@color/text_secondary_gray"
-                            android:textSize="13sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-bold"
-                            android:text="@string/circuit_length_val"
-                            android:textColor="@color/text_primary_white"
-                            android:textSize="15sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="sans-serif-medium"
-                            android:text="@string/race_distance"
-                            android:textColor="@color/text_secondary_gray"
-                            android:textSize="13sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-bold"
-                            android:text="@string/race_distance_val"
-                            android:textColor="@color/text_primary_white"
-                            android:textSize="15sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="sans-serif-medium"
-                            android:text="@string/lap_record"
-                            android:textColor="@color/text_secondary_gray"
-                            android:textSize="13sp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-bold"
-                            android:text="@string/lap_record_val"
-                            android:textColor="@color/text_primary_white"
-                            android:textSize="15sp" />
-                    </LinearLayout>
-
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                android:fontFamily="@font/inter"
+                android:text="Loading upcoming races..."
+                android:textColor="#999999"
+                android:textSize="14sp"
+                android:padding="8dp" />
 
         </LinearLayout>
     </ScrollView>

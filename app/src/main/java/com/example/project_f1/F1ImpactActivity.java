@@ -13,6 +13,7 @@ public class F1ImpactActivity extends AppCompatActivity {
         
         ThemeManager.applyTheme(this);
         setContentView(R.layout.activity_f1_impact);
+        ThemeManager.applyStatusBar(this);
         animateCards();
     }
 

@@ -16,6 +16,7 @@ public class SettingsActivity extends AppCompatActivity {
         ThemeManager.applyTheme(this);
         
         setContentView(R.layout.activity_settings);
+        ThemeManager.applyStatusBar(this);
         
         setTitle("Settings");
         

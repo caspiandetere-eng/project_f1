@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home"
+            android:icon="@android:drawable/ic_menu_today"
+            android:title="Home" />
+        <item
+            android:id="@+id/nav_live_race"
+            android:icon="@android:drawable/ic_media_play"
+            android:title="Live Race" />
+        <item
+            android:id="@+id/nav_standings"
+            android:icon="@android:drawable/ic_menu_sort_by_size"
+            android:title="Driver Standings" />
+        <item
+            android:id="@+id/nav_calendar"
+            android:icon="@android:drawable/ic_menu_my_calendar"
+            android:title="Race Calendar" />
+        <item
+            android:id="@+id/nav_tech"
+            android:icon="@android:drawable/ic_menu_info_details"
+            android:title="Tech Analysis" />
+        <item
+            android:id="@+id/nav_history"
+            android:icon="@android:drawable/ic_menu_recent_history"
+            android:title="F1 History" />
+        <item
+            android:id="@+id/nav_impact"
+            android:icon="@android:drawable/ic_menu_directions"
+            android:title="F1 Impact" />
+    </group>
+
+    <item android:title="System">
+        <menu>
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@android:drawable/ic_menu_preferences"
+                android:title="Settings" />
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@android:drawable/ic_lock_power_off"
+                android:title="Logout" />
+        </menu>
+    </item>
+</menu>

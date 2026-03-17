@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <gradient android:startColor="#0A0A0A" android:endColor="#181818" android:angle="135"/>
+        </shape>
+    </item>
+    <!-- Silver diagonal sweep -->
+    <item android:left="60dp" android:right="-60dp">
+        <rotate android:fromDegrees="15" android:pivotX="50%" android:pivotY="50%">
+            <shape android:shape="rectangle">
+                <gradient android:startColor="#00C0C0C0" android:endColor="#22C0C0C0" android:angle="0"/>
+            </shape>
+        </rotate>
+    </item>
+    <!-- Top silver bar -->
+    <item android:bottom="120dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#888888"/>
+        </shape>
+    </item>
+    <!-- Second bar -->
+    <item android:top="12dp" android:bottom="108dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#555555"/>
+        </shape>
+    </item>
+    <!-- Metallic centre glow -->
+    <item android:left="60dp" android:right="60dp" android:top="20dp" android:bottom="20dp">
+        <shape android:shape="rectangle">
+            <gradient android:startColor="#00C0C0C0" android:centerColor="#1AC0C0C0" android:endColor="#00C0C0C0" android:angle="0"/>
+        </shape>
+    </item>
+    <!-- Dark vignette edges -->
+    <item android:right="200dp">
+        <shape android:shape="rectangle">
+            <gradient android:startColor="#88000000" android:endColor="#00000000" android:angle="0"/>
+        </shape>
+    </item>
+    <item android:left="200dp">
+        <shape android:shape="rectangle">
+            <gradient android:startColor="#00000000" android:endColor="#88000000" android:angle="0"/>
+        </shape>
+    </item>
+</layer-list>

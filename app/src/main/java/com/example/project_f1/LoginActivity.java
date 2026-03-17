@@ -1,5 +1,6 @@
 package com.example.project_f1;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -23,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
         }
         
         setContentView(R.layout.activity_login);
+        ThemeManager.applyStatusBar(this);
 
         TextInputEditText etEmail = findViewById(R.id.etEmail);
         TextInputEditText etPassword = findViewById(R.id.etPassword);
@@ -54,15 +56,16 @@ public class LoginActivity extends AppCompatActivity {
                     .putString("knowledge_level", user.level)
                     .apply();
 
-                startActivity(new Intent(this, MainActivity.class));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.fade_in);
+                navigate(new Intent(this, MainActivity.class));
                 finish();
             });
         });
 
-        btnSignUp.setOnClickListener(v -> {
-            startActivity(new Intent(this, SignUpActivity.class));
-            overridePendingTransition(R.anim.slide_in_right, R.anim.fade_in);
-        });
+        btnSignUp.setOnClickListener(v -> navigate(new Intent(this, SignUpActivity.class)));
+    }
+
+    private void navigate(Intent intent) {
+        startActivity(intent,
+            ActivityOptions.makeCustomAnimation(this, R.anim.slide_in_right, R.anim.fade_in).toBundle());
     }
 }

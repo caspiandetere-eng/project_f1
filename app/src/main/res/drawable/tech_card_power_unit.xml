@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <gradient android:startColor="#1A0000" android:endColor="#0D0000" android:angle="135"/>
+        </shape>
+    </item>
+    <!-- Diagonal red stripes -->
+    <item android:left="-200dp" android:top="-10dp" android:right="0dp" android:bottom="-10dp">
+        <rotate android:fromDegrees="-30">
+            <shape android:shape="rectangle">
+                <gradient android:startColor="#00E10600" android:endColor="#33E10600" android:angle="0"/>
+            </shape>
+        </rotate>
+    </item>
+    <!-- Bright red sweep from left -->
+    <item android:right="60dp">
+        <shape android:shape="rectangle">
+            <gradient android:startColor="#55E10600" android:endColor="#00E10600" android:angle="0"/>
+        </shape>
+    </item>
+    <!-- Top red bar -->
+    <item android:bottom="120dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#E10600"/>
+        </shape>
+    </item>
+    <!-- Second bar -->
+    <item android:top="12dp" android:bottom="108dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#B00500"/>
+        </shape>
+    </item>
+    <!-- Dark overlay on right -->
+    <item android:left="180dp">
+        <shape android:shape="rectangle">
+            <gradient android:startColor="#00000000" android:endColor="#CC000000" android:angle="0"/>
+        </shape>
+    </item>
+    <!-- Horizontal scan lines -->
+    <item android:top="30dp" android:bottom="90dp" android:left="20dp" android:right="20dp">
+        <shape android:shape="rectangle">
+            <gradient android:startColor="#00E10600" android:endColor="#22E10600" android:angle="90"/>
+        </shape>
+    </item>
+</layer-list>

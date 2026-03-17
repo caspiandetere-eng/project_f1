@@ -17,6 +17,7 @@ public class KnowledgeLevelActivity extends AppCompatActivity {
         ThemeManager.applyTheme(this);
         
         setContentView(R.layout.activity_knowledge_level);
+        ThemeManager.applyStatusBar(this);
 
         SharedPreferences prefs = getSharedPreferences("F1Prefs", MODE_PRIVATE);
         String email = getIntent().getStringExtra("email");

@@ -1,18 +1,16 @@
 package com.example.project_f1;
 
 import android.app.AlertDialog;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import com.example.project_f1.api.JolpicaApiClient;
 import com.example.project_f1.models.JolpicaStandingsResponse;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -29,6 +27,7 @@ public class StandingsActivity extends AppCompatActivity {
         
         ThemeManager.applyTheme(this);
         setContentView(R.layout.activity_standings);
+        ThemeManager.applyStatusBar(this);
         standingsContainer = findViewById(R.id.standingsContainer);
         tvSelectedYear = findViewById(R.id.tvSelectedYear);
         Button btn1950s = findViewById(R.id.btn1950s);
@@ -70,21 +69,69 @@ public class StandingsActivity extends AppCompatActivity {
 
 
 
-    private void createDriverRow(int position, String name, String points) {
-        TextView row = new TextView(this);
-        row.setText(position + "  " + name + "  " + points + " pts");
-        row.setTextColor(0xFFFFFFFF);
-        row.setTextSize(16);
-        row.setPadding(40, 30, 40, 30);
-        row.setBackgroundColor(position <= 3 ? 0xFF1A1A1A : 0xFF0D0D0D);
-        row.setShadowLayer(3, 1, 1, 0x80000000);
+    private void createDriverRow(int position, String name, String points, String wins) {
+        LinearLayout row = new LinearLayout(this);
+        row.setOrientation(LinearLayout.HORIZONTAL);
+        row.setGravity(android.view.Gravity.CENTER_VERTICAL);
+        row.setPadding(dp(14), dp(12), dp(14), dp(12));
+        row.setBackgroundResource(position == 1 ? R.drawable.bg_podium_gold
+            : position == 2 ? R.drawable.bg_podium_silver
+            : position == 3 ? R.drawable.bg_podium_bronze
+            : R.drawable.bg_glass_card);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        params.setMargins(0, 0, 0, 10);
+            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, 0, 0, dp(8));
         row.setLayoutParams(params);
+
+        // Position badge
+        TextView tvPos = new TextView(this);
+        tvPos.setText(String.valueOf(position));
+        tvPos.setTextColor(0xFFFFFFFF);
+        tvPos.setTextSize(15);
+        tvPos.setGravity(android.view.Gravity.CENTER);
+        tvPos.setWidth(dp(32));
+        tvPos.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed), android.graphics.Typeface.BOLD);
+        tvPos.setBackgroundResource(position == 1 ? R.drawable.gradient_red : R.drawable.bg_position_circle);
+        row.addView(tvPos);
+
+        // Name
+        TextView tvName = new TextView(this);
+        tvName.setText(name);
+        tvName.setTextColor(0xFFFFFFFF);
+        tvName.setTextSize(14);
+        tvName.setTypeface(ResourcesCompat.getFont(this, R.font.inter));
+        LinearLayout.LayoutParams nameParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+        nameParams.setMargins(dp(12), 0, dp(8), 0);
+        tvName.setLayoutParams(nameParams);
+        row.addView(tvName);
+
+        // Wins
+        if (wins != null && !wins.equals("0") && !wins.isEmpty()) {
+            TextView tvWins = new TextView(this);
+            tvWins.setText(wins + "W");
+            tvWins.setTextColor(0xFFFFD700);
+            tvWins.setTextSize(12);
+            tvWins.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed), android.graphics.Typeface.BOLD);
+            LinearLayout.LayoutParams wParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            wParams.setMargins(0, 0, dp(10), 0);
+            tvWins.setLayoutParams(wParams);
+            row.addView(tvWins);
+        }
+
+        // Points
+        TextView tvPts = new TextView(this);
+        tvPts.setText(points + " pts");
+        tvPts.setTextColor(0xFFE10600);
+        tvPts.setTextSize(14);
+        tvPts.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed), android.graphics.Typeface.BOLD);
+        row.addView(tvPts);
+
         standingsContainer.addView(row);
+    }
+
+    private int dp(int v) {
+        return (int) (v * getResources().getDisplayMetrics().density);
     }
 
     private void addLoadingText() {
@@ -106,61 +153,45 @@ public class StandingsActivity extends AppCompatActivity {
         standingsContainer.addView(error);
     }
 
+    private static final long STALE_MS = 60 * 60 * 1000; // 1 hour
+
     private void loadHistoricalStandings(int year) {
-        String cacheKey = "standings_" + year;
-        String cachedData = CacheManager.getCache(this, cacheKey);
-        
-        if (cachedData != null) {
-            try {
-                JolpicaStandingsResponse standings = new com.google.gson.Gson().fromJson(cachedData, JolpicaStandingsResponse.class);
-                displayHistoricalStandings(standings);
-                return;
-            } catch (Exception e) {
-                // Fall through to API call
-            }
+        List<UserRepository.StandingRow> cached = UserRepository.getStandings(this, year);
+        boolean isStale = UserRepository.isStandingsStale(this, year, STALE_MS);
+
+        if (!cached.isEmpty()) {
+            displayFromDb(cached);
+            if (!isStale) return; // fresh — skip network
         }
-        
+
         currentCall = JolpicaApiClient.getApiService().getDriverStandings(year);
         currentCall.enqueue(new Callback<JolpicaStandingsResponse>() {
             @Override
             public void onResponse(Call<JolpicaStandingsResponse> call, Response<JolpicaStandingsResponse> response) {
-                if (response.isSuccessful() && response.body() != null && 
-                    !response.body().mrData.standingsTable.standingsLists.isEmpty()) {
-                    String json = new com.google.gson.Gson().toJson(response.body());
-                    CacheManager.saveCache(StandingsActivity.this, cacheKey, json);
-                    displayHistoricalStandings(response.body());
-                } else {
+                if (response.isSuccessful() && response.body() != null &&
+                        !response.body().mrData.standingsTable.standingsLists.isEmpty()) {
+                    UserRepository.saveStandings(StandingsActivity.this, year, response.body());
+                    displayFromDb(UserRepository.getStandings(StandingsActivity.this, year));
+                } else if (cached.isEmpty()) {
                     showFallbackStandings();
                 }
             }
 
             @Override
             public void onFailure(Call<JolpicaStandingsResponse> call, Throwable t) {
-                showFallbackStandings();
+                if (cached.isEmpty()) showFallbackStandings();
             }
         });
     }
 
-    private void displayHistoricalStandings(JolpicaStandingsResponse standings) {
+    private void displayFromDb(List<UserRepository.StandingRow> rows) {
         standingsContainer.removeAllViews();
-        try {
-            for (JolpicaStandingsResponse.DriverStanding driver : standings.mrData.standingsTable.standingsLists.get(0).driverStandings) {
-                String name = "Unknown";
-                if (driver.driver != null) {
-                    if (driver.driver.givenName != null && !driver.driver.givenName.isEmpty() && driver.driver.familyName != null) {
-                        name = driver.driver.givenName.charAt(0) + ". " + driver.driver.familyName;
-                    } else if (driver.driver.familyName != null) {
-                        name = driver.driver.familyName;
-                    }
-                }
-                createDriverRow(
-                    driver.position != null ? Integer.parseInt(driver.position) : 0,
-                    name,
-                    driver.points != null ? driver.points : "0"
-                );
-            }
-        } catch (Exception e) {
-            showFallbackStandings();
+        for (UserRepository.StandingRow row : rows) {
+            String name = (row.givenName != null ? row.givenName.charAt(0) + ". " : "") +
+                (row.familyName != null ? row.familyName : row.driverId);
+            String constructor = row.constructor != null && !row.constructor.isEmpty()
+                ? "  " + row.constructor : "";
+            createDriverRow(row.position, name + constructor, row.points, row.wins);
         }
     }
 

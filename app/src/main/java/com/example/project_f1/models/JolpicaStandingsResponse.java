@@ -22,19 +22,40 @@ public class JolpicaStandingsResponse {
         public List<DriverStanding> driverStandings;
     }
 
+    public static class Driver {
+        @SerializedName("driverId")
+        public String driverId;
+        @SerializedName("givenName")
+        public String givenName;
+        @SerializedName("familyName")
+        public String familyName;
+        @SerializedName("nationality")
+        public String nationality;
+        @SerializedName("dateOfBirth")
+        public String dateOfBirth;
+    }
+
     public static class DriverStanding {
         @SerializedName("position")
         public String position;
         @SerializedName("points")
         public String points;
+        @SerializedName("wins")
+        public String wins;
+        @SerializedName("Constructors")
+        public java.util.List<Constructor> constructors;
         @SerializedName("Driver")
         public Driver driver;
+
+        // convenience getter — first constructor name or empty
+        public String getConstructor() {
+            if (constructors != null && !constructors.isEmpty()) return constructors.get(0).name;
+            return "";
+        }
     }
 
-    public static class Driver {
-        @SerializedName("givenName")
-        public String givenName;
-        @SerializedName("familyName")
-        public String familyName;
+    public static class Constructor {
+        @SerializedName("name")
+        public String name;
     }
 }

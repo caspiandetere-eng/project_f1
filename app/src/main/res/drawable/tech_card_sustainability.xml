@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <gradient android:startColor="#001400" android:endColor="#002000" android:angle="135"/>
+        </shape>
+    </item>
+    <!-- Green sweep from left -->
+    <item android:right="80dp">
+        <shape android:shape="rectangle">
+            <gradient android:startColor="#3300AA00" android:endColor="#0000AA00" android:angle="0"/>
+        </shape>
+    </item>
+    <!-- Top green bar -->
+    <item android:bottom="120dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#007700"/>
+        </shape>
+    </item>
+    <!-- Second bar -->
+    <item android:top="12dp" android:bottom="108dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#005500"/>
+        </shape>
+    </item>
+    <!-- Centre radial glow -->
+    <item android:left="80dp" android:right="80dp" android:top="15dp" android:bottom="15dp">
+        <shape android:shape="oval">
+            <gradient android:startColor="#2200CC00" android:endColor="#0000AA00" android:type="radial" android:gradientRadius="80%"/>
+        </shape>
+    </item>
+    <!-- Dark right overlay -->
+    <item android:left="180dp">
+        <shape android:shape="rectangle">
+            <gradient android:startColor="#00000000" android:endColor="#BB000000" android:angle="0"/>
+        </shape>
+    </item>
+</layer-list>

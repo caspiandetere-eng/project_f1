@@ -1,9 +1,22 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.Project_f1" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">#E10600</item>
+        <item name="colorPrimaryVariant">#B00500</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="android:colorBackground">#0D0D0D</item>
+        <item name="android:statusBarColor">#0D0D0D</item>
+        <item name="android:navigationBarColor">#0D0D0D</item>
+        <item name="android:windowLightStatusBar">false</item>
     </style>
 
-    <style name="Theme.Project_f1" parent="Base.Theme.Project_f1" />
+    <style name="Theme.Project_f1" parent="Base.Theme.Project_f1">
+        <item name="android:forceDarkAllowed">true</item>
+    </style>
+
+    <style name="NavItemTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">@font/inter</item>
+        <item name="android:textColor">#FFFFFF</item>
+    </style>
 </resources>

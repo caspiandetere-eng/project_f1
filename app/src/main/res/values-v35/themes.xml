@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Project_f1" parent="Base.Theme.Project_f1">
+        <item name="android:forceDarkAllowed">true</item>
+        <item name="android:statusBarColor">#0D0D0D</item>
+        <item name="android:navigationBarColor">#0D0D0D</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+        <item name="android:enforceStatusBarContrast">false</item>
+        <item name="android:enforceNavigationBarContrast">false</item>
+    </style>
+</resources>

@@ -1,5 +1,6 @@
 package com.example.project_f1.api;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -9,11 +10,12 @@ public class JolpicaApiClient {
 
     public static JolpicaApiService getApiService() {
         if (apiService == null) {
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            apiService = retrofit.create(JolpicaApiService.class);
+            apiService = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .client(ApiHttpClient.get())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(JolpicaApiService.class);
         }
         return apiService;
     }

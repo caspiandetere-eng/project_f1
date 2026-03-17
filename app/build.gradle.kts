@@ -22,7 +22,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -42,8 +43,6 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
-    implementation(libs.navigation.fragment)
-    implementation(libs.navigation.ui)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")

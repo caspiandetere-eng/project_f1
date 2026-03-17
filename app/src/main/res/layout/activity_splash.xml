@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0A0A0A">
+
+    <!-- Racing stripe accent -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_gravity="top"
+        android:background="@drawable/gradient_red" />
+
+    <LinearLayout
+        android:id="@+id/splashContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:alpha="0">
+
+        <ImageView
+            android:id="@+id/splashLogo"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/f1"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FORMULA 1"
+            android:textColor="#FFFFFF"
+            android:textSize="32sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.2"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/barlow_condensed" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RACE COMPANION"
+            android:textColor="#E10600"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.3"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/barlow_condensed" />
+
+    </LinearLayout>
+
+    <!-- Bottom racing stripe -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/gradient_red" />
+
+</FrameLayout>

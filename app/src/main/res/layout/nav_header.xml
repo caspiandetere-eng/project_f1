@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:background="@drawable/bg_racing_gradient"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <View
+        android:layout_width="32dp"
+        android:layout_height="4dp"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/gradient_red" />
+
+    <TextView
+        android:id="@+id/tvHeaderName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/titillium_web"
+        android:textFontWeight="700"
+        android:text="Driver"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvHeaderEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/inter"
+        android:text=""
+        android:textColor="#999999"
+        android:textSize="13sp" />
+
+</LinearLayout>

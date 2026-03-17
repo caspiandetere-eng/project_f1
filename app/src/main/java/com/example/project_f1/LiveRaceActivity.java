@@ -36,6 +36,7 @@ public class LiveRaceActivity extends AppCompatActivity {
         
         ThemeManager.applyTheme(this);
         setContentView(R.layout.activity_live_race);
+        ThemeManager.applyStatusBar(this);
 
         positionsContainer = findViewById(R.id.positionsContainer);
         updatesContainer = findViewById(R.id.updatesContainer);

@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Project_f1">
         <activity
-            android:name=".LoginActivity"
+            android:name=".SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.Project_f1">
             <intent-filter>
@@ -23,14 +23,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Project_f1" />
         <activity android:name=".MainActivity" android:exported="false" />
         <activity android:name=".SignUpActivity" android:exported="false" />
         <activity android:name=".KnowledgeLevelActivity" android:exported="false" />
         <activity android:name=".F1HistoryInteractiveActivity" android:exported="false" />
         <activity android:name=".TechAnalysisActivity" android:exported="false" />
-        <activity android:name=".RaceCenterActivity" android:exported="false" />
         <activity android:name=".StandingsActivity" android:exported="false" />
         <activity android:name=".LiveRaceActivity" android:exported="false" />
+        <activity android:name=".RaceCenterActivity" android:exported="false" />
         <activity android:name=".LapDetailsActivity" android:exported="false" />
         <activity android:name=".F1ImpactActivity" android:exported="false" />
         <activity android:name=".SettingsActivity" android:exported="false" />

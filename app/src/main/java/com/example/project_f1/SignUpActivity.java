@@ -15,6 +15,7 @@ public class SignUpActivity extends AppCompatActivity {
         
         ThemeManager.applyTheme(this);
         setContentView(R.layout.activity_signup);
+        ThemeManager.applyStatusBar(this);
 
         TextInputEditText etName = findViewById(R.id.etName);
         TextInputEditText etEmail = findViewById(R.id.etEmail);

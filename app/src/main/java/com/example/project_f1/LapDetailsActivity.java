@@ -9,12 +9,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.HashMap;
 
-public class LapDetailsActivity extends AppCompatActivity {
+public class LapDetailsActivity extends BaseActivity {
 
     // ── Circuit data ──────────────────────────────────────────────────────────
 
@@ -68,11 +68,17 @@ public class LapDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeManager.applyTheme(this);
-        ThemeManager.applyStatusBar(this);
+        ThemeManager.TeamTheme theme = ThemeManager.applyFullTheme(this);
 
         ScrollView scroll = new ScrollView(this);
-        scroll.setBackgroundColor(0xFF0D0D0D);
+
+        SwipeRefreshLayout swipeRefresh = new SwipeRefreshLayout(this);
+        swipeRefresh.setColorSchemeColors(theme.accent, 0xFFFFFFFF);
+        swipeRefresh.setOnRefreshListener(() -> {
+            swipeRefresh.setRefreshing(false);
+            recreate();
+        });
+        swipeRefresh.addView(scroll);
 
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
@@ -88,12 +94,12 @@ public class LapDetailsActivity extends AppCompatActivity {
         headerParams.setMargins(0, dp(40), 0, dp(24));
         header.setLayoutParams(headerParams);
 
-        View redBar = new View(this);
+        View accentBar = new View(this);
         LinearLayout.LayoutParams barParams = new LinearLayout.LayoutParams(dp(4), dp(52));
         barParams.setMargins(0, 0, dp(14), 0);
-        redBar.setLayoutParams(barParams);
-        redBar.setBackgroundColor(0xFFE10600);
-        header.addView(redBar);
+        accentBar.setLayoutParams(barParams);
+        accentBar.setBackgroundColor(theme.accent);
+        header.addView(accentBar);
 
         LinearLayout titleCol = new LinearLayout(this);
         titleCol.setOrientation(LinearLayout.VERTICAL);
@@ -114,53 +120,53 @@ public class LapDetailsActivity extends AppCompatActivity {
         root.addView(header);
 
         // ── 2026 Calendar ─────────────────────────────────────────────────
-        addSectionLabel(root, "2026 CALENDAR");
+        addSectionLabel(root, "2026 CALENDAR", theme.accent);
 
-        addCircuitCard(root, "R1",  "ALBERT PARK",           "Australia",     "5.278 km • 58 laps", "melbourne",    true);
-        addCircuitCard(root, "R2",  "SHANGHAI INT. CIRCUIT", "China",         "5.451 km • 56 laps", "shanghai",     true);
-        addCircuitCard(root, "R3",  "SUZUKA CIRCUIT",        "Japan",         "5.807 km • 53 laps", "suzuka",       true);
-        addCircuitCard(root, "R4",  "BAHRAIN INT. CIRCUIT",  "Bahrain",       "5.412 km • 57 laps", "bahrain",      true);
-        addCircuitCard(root, "R5",  "JEDDAH CORNICHE",       "Saudi Arabia",  "6.174 km • 50 laps", "jeddah",       true);
-        addCircuitCard(root, "R6",  "MIAMI INT. AUTODROME",  "USA",           "5.412 km • 57 laps", "miami",        true);
-        addCircuitCard(root, "R7",  "GILLES-VILLENEUVE",     "Canada",        "4.361 km • 70 laps", "montreal",     true);
-        addCircuitCard(root, "R8",  "CIRCUIT DE MONACO",     "Monaco",        "3.337 km • 78 laps", "monaco",       true);
-        addCircuitCard(root, "R9",  "CIRCUIT DE BARCELONA",  "Spain",         "4.657 km • 66 laps", "barcelona",    true);
-        addCircuitCard(root, "R10", "RED BULL RING",         "Austria",       "4.318 km • 71 laps", "red bull ring",true);
-        addCircuitCard(root, "R11", "SILVERSTONE",           "UK",            "5.891 km • 52 laps", "silverstone",  true);
-        addCircuitCard(root, "R12", "SPA-FRANCORCHAMPS",     "Belgium",       "7.004 km • 44 laps", "spa",          true);
-        addCircuitCard(root, "R13", "HUNGARORING",           "Hungary",       "4.381 km • 70 laps", "hungaroring",  true);
-        addCircuitCard(root, "R14", "CIRCUIT ZANDVOORT",     "Netherlands",   "4.259 km • 72 laps", "zandvoort",    true);
-        addCircuitCard(root, "R15", "MONZA",                 "Italy",         "5.793 km • 53 laps", "monza",        true);
-        addCircuitCard(root, "R16", "CIRCUITO DE MADRID",    "Spain",         "4.657 km • 66 laps", "madrid",       true);
-        addCircuitCard(root, "R17", "BAKU CITY CIRCUIT",     "Azerbaijan",    "6.003 km • 51 laps", "baku",         true);
-        addCircuitCard(root, "R18", "MARINA BAY STREET",     "Singapore",     "4.940 km • 62 laps", "singapore",    true);
-        addCircuitCard(root, "R19", "CIRCUIT OF THE AMERICAS","USA (Austin)", "5.513 km • 56 laps", "cota",         true);
-        addCircuitCard(root, "R20", "AUTODROMO H. RODRIGUEZ","Mexico",        "4.304 km • 71 laps", "mexico",       true);
-        addCircuitCard(root, "R21", "INTERLAGOS",            "Brazil",        "4.309 km • 71 laps", "interlagos",   true);
-        addCircuitCard(root, "R22", "LAS VEGAS STRIP",       "USA",           "6.201 km • 50 laps", "las vegas",    true);
-        addCircuitCard(root, "R23", "LUSAIL INTERNATIONAL",  "Qatar",         "5.419 km • 57 laps", "lusail",       true);
-        addCircuitCard(root, "R24", "YAS MARINA",            "UAE",           "5.281 km • 58 laps", "yas marina",   true);
+        addCircuitCard(root, "R1",  "ALBERT PARK",           "Australia",     "5.278 km • 58 laps", "melbourne",    true,  theme);
+        addCircuitCard(root, "R2",  "SHANGHAI INT. CIRCUIT", "China",         "5.451 km • 56 laps", "shanghai",     true,  theme);
+        addCircuitCard(root, "R3",  "SUZUKA CIRCUIT",        "Japan",         "5.807 km • 53 laps", "suzuka",       true,  theme);
+        addCircuitCard(root, "R4",  "BAHRAIN INT. CIRCUIT",  "Bahrain",       "5.412 km • 57 laps", "bahrain",      true,  theme);
+        addCircuitCard(root, "R5",  "JEDDAH CORNICHE",       "Saudi Arabia",  "6.174 km • 50 laps", "jeddah",       true,  theme);
+        addCircuitCard(root, "R6",  "MIAMI INT. AUTODROME",  "USA",           "5.412 km • 57 laps", "miami",        true,  theme);
+        addCircuitCard(root, "R7",  "GILLES-VILLENEUVE",     "Canada",        "4.361 km • 70 laps", "montreal",     true,  theme);
+        addCircuitCard(root, "R8",  "CIRCUIT DE MONACO",     "Monaco",        "3.337 km • 78 laps", "monaco",       true,  theme);
+        addCircuitCard(root, "R9",  "CIRCUIT DE BARCELONA",  "Spain",         "4.657 km • 66 laps", "barcelona",    true,  theme);
+        addCircuitCard(root, "R10", "RED BULL RING",         "Austria",       "4.318 km • 71 laps", "red bull ring",true,  theme);
+        addCircuitCard(root, "R11", "SILVERSTONE",           "UK",            "5.891 km • 52 laps", "silverstone",  true,  theme);
+        addCircuitCard(root, "R12", "SPA-FRANCORCHAMPS",     "Belgium",       "7.004 km • 44 laps", "spa",          true,  theme);
+        addCircuitCard(root, "R13", "HUNGARORING",           "Hungary",       "4.381 km • 70 laps", "hungaroring",  true,  theme);
+        addCircuitCard(root, "R14", "CIRCUIT ZANDVOORT",     "Netherlands",   "4.259 km • 72 laps", "zandvoort",    true,  theme);
+        addCircuitCard(root, "R15", "MONZA",                 "Italy",         "5.793 km • 53 laps", "monza",        true,  theme);
+        addCircuitCard(root, "R16", "CIRCUITO DE MADRID",    "Spain",         "4.657 km • 66 laps", "madrid",       true,  theme);
+        addCircuitCard(root, "R17", "BAKU CITY CIRCUIT",     "Azerbaijan",    "6.003 km • 51 laps", "baku",         true,  theme);
+        addCircuitCard(root, "R18", "MARINA BAY STREET",     "Singapore",     "4.940 km • 62 laps", "singapore",    true,  theme);
+        addCircuitCard(root, "R19", "CIRCUIT OF THE AMERICAS","USA (Austin)", "5.513 km • 56 laps", "cota",         true,  theme);
+        addCircuitCard(root, "R20", "AUTODROMO H. RODRIGUEZ","Mexico",        "4.304 km • 71 laps", "mexico",       true,  theme);
+        addCircuitCard(root, "R21", "INTERLAGOS",            "Brazil",        "4.309 km • 71 laps", "interlagos",   true,  theme);
+        addCircuitCard(root, "R22", "LAS VEGAS STRIP",       "USA",           "6.201 km • 50 laps", "las vegas",    true,  theme);
+        addCircuitCard(root, "R23", "LUSAIL INTERNATIONAL",  "Qatar",         "5.419 km • 57 laps", "lusail",       true,  theme);
+        addCircuitCard(root, "R24", "YAS MARINA",            "UAE",           "5.281 km • 58 laps", "yas marina",   true,  theme);
 
         // ── Historic circuits ─────────────────────────────────────────────
-        addSectionLabel(root, "GIANTS OF THE PAST");
+        addSectionLabel(root, "GIANTS OF THE PAST", theme.accent);
 
-        addCircuitCard(root, null, "PESCARA CIRCUIT",         "Italy",         "25.8 km • 1957 GP",   "pescara",    false);
-        addCircuitCard(root, null, "NÜRBURGRING NORDSCHLEIFE","Germany",       "22.8 km • Until 1976", "nurburgring",false);
-        addCircuitCard(root, null, "SEPANG INTERNATIONAL",    "Malaysia",      "5.543 km • Last 2017", "sepang",     false);
-        addCircuitCard(root, null, "BUDDH INTERNATIONAL",     "India",         "5.125 km • Last 2013", "buddh",      false);
-        addCircuitCard(root, null, "KYALAMI",                 "South Africa",  "4.261 km • Last 1993", "kyalami",    false);
-        addCircuitCard(root, null, "ADELAIDE STREET CIRCUIT", "Australia",     "3.780 km • Last 1995", "adelaide",   false);
-        addCircuitCard(root, null, "ISTANBUL PARK",           "Turkey",        "5.338 km • Last 2021", "istanbul",   false);
+        addCircuitCard(root, null, "PESCARA CIRCUIT",         "Italy",         "25.8 km • 1957 GP",   "pescara",    false, theme);
+        addCircuitCard(root, null, "NÜRBURGRING NORDSCHLEIFE","Germany",       "22.8 km • Until 1976", "nurburgring",false, theme);
+        addCircuitCard(root, null, "SEPANG INTERNATIONAL",    "Malaysia",      "5.543 km • Last 2017", "sepang",     false, theme);
+        addCircuitCard(root, null, "BUDDH INTERNATIONAL",     "India",         "5.125 km • Last 2013", "buddh",      false, theme);
+        addCircuitCard(root, null, "KYALAMI",                 "South Africa",  "4.261 km • Last 1993", "kyalami",    false, theme);
+        addCircuitCard(root, null, "ADELAIDE STREET CIRCUIT", "Australia",     "3.780 km • Last 1995", "adelaide",   false, theme);
+        addCircuitCard(root, null, "ISTANBUL PARK",           "Turkey",        "5.338 km • Last 2021", "istanbul",   false, theme);
 
-        setContentView(scroll);
+        setContentView(swipeRefresh);
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 
-    private void addSectionLabel(LinearLayout parent, String text) {
+    private void addSectionLabel(LinearLayout parent, String text, int accentColor) {
         TextView tv = new TextView(this);
         tv.setText(text);
-        tv.setTextColor(0xFFE10600);
+        tv.setTextColor(accentColor);
         tv.setTextSize(13);
         tv.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed), Typeface.BOLD);
         tv.setLetterSpacing(0.15f);
@@ -173,12 +179,12 @@ public class LapDetailsActivity extends AppCompatActivity {
 
     private void addCircuitCard(LinearLayout parent, String round, String name,
                                  String location, String length,
-                                 String circuitKey, boolean isActive) {
+                                 String circuitKey, boolean isActive, ThemeManager.TeamTheme theme) {
         CircuitInfo info = INFO.get(circuitKey);
 
         LinearLayout card = new LinearLayout(this);
         card.setOrientation(LinearLayout.VERTICAL);
-        card.setBackgroundColor(0xFF1A1A1A);
+        card.setBackgroundColor(theme.cardBg);
         LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         cardParams.setMargins(0, 0, 0, dp(10));
@@ -189,7 +195,7 @@ public class LapDetailsActivity extends AppCompatActivity {
 
         View accent = new View(this);
         accent.setLayoutParams(new LinearLayout.LayoutParams(dp(3), LinearLayout.LayoutParams.MATCH_PARENT));
-        accent.setBackgroundColor(isActive ? 0xFFE10600 : 0xFF444444);
+        accent.setBackgroundColor(isActive ? theme.accent : ThemeManager.blendColors(theme.cardBg, 0xFF444444, 0.5f));
         cardInner.addView(accent);
 
         // Header row
@@ -203,7 +209,7 @@ public class LapDetailsActivity extends AppCompatActivity {
         if (round != null) {
             TextView tvRound = new TextView(this);
             tvRound.setText(round);
-            tvRound.setTextColor(isActive ? 0xFFE10600 : 0xFF666666);
+            tvRound.setTextColor(isActive ? theme.accent : 0xFF666666);
             tvRound.setTextSize(12);
             tvRound.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed), Typeface.BOLD);
             LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(dp(36), LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -252,7 +258,7 @@ public class LapDetailsActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT, dp(1));
         dlp.setMargins(0, 0, 0, dp(12));
         divLine.setLayoutParams(dlp);
-        divLine.setBackgroundColor(0xFF2A2A2A);
+        divLine.setBackgroundColor(ThemeManager.blendColors(theme.cardBg, 0xFF444444, 0.5f));
         expandable.addView(divLine);
 
         // Map + specs side by side
@@ -292,12 +298,12 @@ public class LapDetailsActivity extends AppCompatActivity {
                     LinearLayout.LayoutParams.MATCH_PARENT, dp(1));
             fdp.setMargins(0, dp(10), 0, dp(8));
             factDivider.setLayoutParams(fdp);
-            factDivider.setBackgroundColor(0xFF2A2A2A);
+            factDivider.setBackgroundColor(ThemeManager.blendColors(theme.cardBg, 0xFF444444, 0.5f));
             specsCol.addView(factDivider);
 
             TextView tvFactLabel = new TextView(this);
             tvFactLabel.setText("DID YOU KNOW");
-            tvFactLabel.setTextColor(0xFFE10600);
+            tvFactLabel.setTextColor(theme.accent);
             tvFactLabel.setTextSize(9);
             tvFactLabel.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed), Typeface.BOLD);
             tvFactLabel.setLetterSpacing(0.12f);
@@ -351,7 +357,7 @@ public class LapDetailsActivity extends AppCompatActivity {
                 });
                 animator.start();
                 tvChevron.setText("▲");
-                tvChevron.setTextColor(0xFFE10600);
+                tvChevron.setTextColor(theme.accent);
             }
         });
     }

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rootLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Animated color wash overlay -->
+    <View
+        android:id="@+id/colorWash"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0" />
+
+    <!-- Top stripe -->
+    <View
+        android:id="@+id/previewStripe"
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:translationY="-4dp" />
+
+    <!-- Center content -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <!-- Team logo -->
+        <ImageView
+            android:id="@+id/ivTeamLogo"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:scaleType="fitCenter"
+            android:alpha="0"
+            android:contentDescription="Team logo" />
+
+        <!-- Team name -->
+        <TextView
+            android:id="@+id/tvTeamName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/titillium_web"
+            android:textFontWeight="700"
+            android:textSize="26sp"
+            android:textColor="#FFFFFF"
+            android:letterSpacing="0.1"
+            android:alpha="0" />
+
+        <!-- "THEME APPLIED" label -->
+        <TextView
+            android:id="@+id/tvThemeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/barlow_condensed"
+            android:textFontWeight="700"
+            android:textSize="13sp"
+            android:letterSpacing="0.2"
+            android:textColor="#99FFFFFF"
+            android:text="THEME APPLIED"
+            android:alpha="0" />
+
+        <!-- Accent color swatch row -->
+        <LinearLayout
+            android:id="@+id/swatchRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:alpha="0">
+
+            <View
+                android:id="@+id/swatchAccent"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_margin="6dp" />
+
+            <View
+                android:id="@+id/swatchCard"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_margin="6dp" />
+
+            <View
+                android:id="@+id/swatchBg"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_margin="6dp" />
+
+        </LinearLayout>
+
+        <!-- Loading dots -->
+        <LinearLayout
+            android:id="@+id/dotsRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <View android:id="@+id/dot1"
+                android:layout_width="8dp" android:layout_height="8dp"
+                android:layout_margin="5dp" />
+            <View android:id="@+id/dot2"
+                android:layout_width="8dp" android:layout_height="8dp"
+                android:layout_margin="5dp" />
+            <View android:id="@+id/dot3"
+                android:layout_width="8dp" android:layout_height="8dp"
+                android:layout_margin="5dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

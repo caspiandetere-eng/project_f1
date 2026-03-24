@@ -45,7 +45,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-black"
+                    android:fontFamily="@font/titillium_web"
+                    android:textFontWeight="700"
                     android:letterSpacing="0.15"
                     android:shadowColor="#80000000"
                     android:shadowDx="2"
@@ -68,17 +69,102 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/headerLayout" />
 
+            <!-- Profile Picture Section -->
+            <LinearLayout
+                android:id="@+id/profilePicSection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:orientation="vertical"
+                android:gravity="center"
+                app:layout_constraintTop_toBottomOf="@id/tvSubtitle">
+
+                <!-- Avatar circle -->
+                <ImageView
+                    android:id="@+id/ivProfilePic"
+                    android:layout_width="96dp"
+                    android:layout_height="96dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_launcher_foreground"
+                    android:contentDescription="Profile picture" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="CHOOSE PROFILE PICTURE"
+                    android:textColor="#999999"
+                    android:textSize="11sp"
+                    android:fontFamily="@font/barlow_condensed"
+                    android:letterSpacing="0.15" />
+
+                <!-- 3 option buttons -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnPickDefault"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginEnd="6dp"
+                        android:text="Default"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/barlow_condensed"
+                        android:textColor="#FFFFFF"
+                        app:backgroundTint="#E10600"
+                        app:cornerRadius="10dp"
+                        app:strokeWidth="0dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnPickDriver"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginEnd="6dp"
+                        android:text="Driver"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/barlow_condensed"
+                        android:textColor="#FFFFFF"
+                        app:backgroundTint="#1A1A1A"
+                        app:strokeColor="#E10600"
+                        app:strokeWidth="1dp"
+                        app:cornerRadius="10dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnPickGallery"
+                        android:layout_width="0dp"
+                        android:layout_height="40dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="6dp"
+                        android:text="Gallery"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/barlow_condensed"
+                        android:textColor="#FFFFFF"
+                        app:backgroundTint="#1A1A1A"
+                        app:strokeColor="#E10600"
+                        app:strokeWidth="1dp"
+                        app:cornerRadius="10dp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="28dp"
                 android:hint="@string/full_name"
                 android:textColorHint="@color/text_secondary_gray"
                 app:boxBackgroundColor="@color/f1_card_dark"
                 app:boxStrokeColor="@color/f1_red_accent"
                 app:hintTextColor="@color/f1_red_accent"
-                app:layout_constraintTop_toBottomOf="@id/tvSubtitle">
+                app:layout_constraintTop_toBottomOf="@id/profilePicSection">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etName"
@@ -135,16 +221,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginTop="32dp"
-                android:background="@drawable/bg_glass_red"
-                android:fontFamily="sans-serif-black"
+                android:fontFamily="@font/barlow_condensed"
+                android:textFontWeight="700"
                 android:letterSpacing="0.1"
                 android:text="@string/continue_text"
                 android:textColor="@color/text_primary_white"
                 android:textSize="16sp"
-                android:shadowColor="#000000"
-                android:shadowDx="1"
-                android:shadowDy="1"
-                android:shadowRadius="2"
+                app:backgroundTint="#E10600"
                 app:cornerRadius="12dp"
                 app:layout_constraintTop_toBottomOf="@id/tilPassword" />
 

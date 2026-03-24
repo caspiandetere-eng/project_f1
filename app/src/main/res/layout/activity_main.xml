@@ -8,9 +8,9 @@
 
     <!-- Main content -->
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mainContentLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bg_racing_gradient">
+        android:layout_height="match_parent">
 
         <View
             android:id="@+id/topStripe"
@@ -34,14 +34,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ScrollView
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefresh"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:clipToPadding="false"
-            android:paddingBottom="24dp"
-            android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/topStripe">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingBottom="24dp"
+                android:scrollbars="none">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -62,6 +67,7 @@
                     app:layout_constraintTop_toTopOf="parent">
 
                     <View
+                        android:id="@+id/headerAccentBar"
                         android:layout_width="4dp"
                         android:layout_height="50dp"
                         android:background="@drawable/racing_stripe"
@@ -92,6 +98,15 @@
                             android:text="@string/season_year"
                             android:textColor="#999999"
                             android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/tvWelcome"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/inter"
+                            android:textColor="#66FFFFFF"
+                            android:textSize="13sp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -179,7 +194,7 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/barlow_condensed"
                                 android:textFontWeight="700"
-                                android:text="📅 UPCOMING"
+                                android:text="UPCOMING"
                                 android:textColor="#E10600"
                                 android:textSize="14sp"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -281,7 +296,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
-                                android:fontFamily="sans-serif-black"
+                                android:fontFamily="@font/barlow_condensed"
                                 android:letterSpacing="0.1"
                                 android:text="@string/hash"
                                 android:textColor="@color/text_secondary_gray"
@@ -291,7 +306,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="2"
-                                android:fontFamily="sans-serif-black"
+                                android:fontFamily="@font/barlow_condensed"
                                 android:letterSpacing="0.1"
                                 android:text="@string/driver"
                                 android:textColor="@color/text_secondary_gray"
@@ -300,7 +315,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif-black"
+                                android:fontFamily="@font/barlow_condensed"
                                 android:letterSpacing="0.1"
                                 android:text="@string/pts"
                                 android:textColor="@color/text_secondary_gray"
@@ -328,7 +343,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
-                            android:fontFamily="sans-serif-medium"
+                            android:fontFamily="@font/inter"
                             android:gravity="center"
                             android:text="@string/view_full_standings"
                             android:textColor="@color/f1_red_accent"
@@ -423,7 +438,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:fontFamily="sans-serif-black"
+                                    android:fontFamily="@font/barlow_condensed"
                                     android:text="→"
                                     android:textColor="@color/f1_red_accent"
                                     android:textSize="24sp"
@@ -500,7 +515,7 @@
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:fontFamily="sans-serif-black"
+                                    android:fontFamily="@font/barlow_condensed"
                                     android:text="→"
                                     android:textColor="@color/f1_red_accent"
                                     android:textSize="24sp"
@@ -573,7 +588,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif-black"
+                                android:fontFamily="@font/barlow_condensed"
                                 android:text="→"
                                 android:textColor="@color/f1_red_accent"
                                 android:textSize="24sp"
@@ -638,7 +653,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif-black"
+                                android:fontFamily="@font/barlow_condensed"
                                 android:text="→"
                                 android:textColor="@color/f1_red_accent"
                                 android:textSize="24sp"
@@ -649,8 +664,226 @@
                     </com.google.android.material.card.MaterialCardView>
                 </LinearLayout>
 
+                <!-- Row 3: Drivers + Teams -->
+                <LinearLayout
+                    android:id="@+id/exploreRow3"
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:layout_marginTop="16dp"
+                    android:baselineAligned="false"
+                    android:orientation="horizontal"
+                    app:layout_constraintTop_toBottomOf="@id/exploreRow1">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardDrivers"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:cardBackgroundColor="#1A1A1A"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="12dp"
+                        app:strokeColor="#E10600"
+                        app:strokeWidth="2dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="20dp">
+
+                            <View
+                                android:id="@+id/driversAccent"
+                                android:layout_width="40dp"
+                                android:layout_height="4dp"
+                                android:background="@drawable/gradient_red"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tvDriversTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:fontFamily="@font/titillium_web"
+                                android:textFontWeight="700"
+                                android:text="Drivers"
+                                android:textColor="#FFFFFF"
+                                android:textSize="18sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/driversAccent" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:fontFamily="@font/inter"
+                                android:text="2026 Grid Profiles"
+                                android:textColor="#999999"
+                                android:textSize="15sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tvDriversTitle" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/barlow_condensed"
+                                android:text="→"
+                                android:textColor="@color/f1_red_accent"
+                                android:textSize="24sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <Space android:layout_width="16dp" android:layout_height="match_parent" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardTeams"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:cardBackgroundColor="#1A1A1A"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="12dp"
+                        app:strokeColor="#E10600"
+                        app:strokeWidth="2dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="20dp">
+
+                            <View
+                                android:id="@+id/teamsAccent"
+                                android:layout_width="40dp"
+                                android:layout_height="4dp"
+                                android:background="@drawable/gradient_red"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tvTeamsTitle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:fontFamily="@font/titillium_web"
+                                android:textFontWeight="700"
+                                android:text="Teams"
+                                android:textColor="#FFFFFF"
+                                android:textSize="18sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/teamsAccent" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="6dp"
+                                android:fontFamily="@font/inter"
+                                android:text="All 11 Constructors"
+                                android:textColor="#999999"
+                                android:textSize="15sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tvTeamsTitle" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/barlow_condensed"
+                                android:text="→"
+                                android:textColor="@color/f1_red_accent"
+                                android:textSize="24sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+
+                <!-- Row 4: F1 Basics (full width) -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardBasics"
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:layout_marginTop="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="#1A1A1A"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="12dp"
+                    app:strokeColor="#E10600"
+                    app:strokeWidth="2dp"
+                    app:layout_constraintTop_toBottomOf="@id/exploreRow3">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:alpha="0.12"
+                            android:background="@drawable/checkered_pattern" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="20dp">
+
+                            <View
+                                android:id="@+id/basicsAccent"
+                                android:layout_width="40dp"
+                                android:layout_height="4dp"
+                                android:background="@drawable/gradient_red"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tvBasicsTitle"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:fontFamily="@font/titillium_web"
+                                android:textFontWeight="700"
+                                android:letterSpacing="0.05"
+                                android:text="F1 Basics"
+                                android:textColor="#FFFFFF"
+                                android:textSize="24sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/basicsAccent" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:fontFamily="@font/inter"
+                                android:text="New to F1? Start here — rules, tyres, strategy &amp; more"
+                                android:textColor="#999999"
+                                android:textSize="15sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tvBasicsTitle" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/barlow_condensed"
+                                android:text="→"
+                                android:textColor="@color/f1_red_accent"
+                                android:textSize="24sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </FrameLayout>
+                </com.google.android.material.card.MaterialCardView>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -665,7 +898,6 @@
         app:itemTextColor="#FFFFFF"
         app:itemIconTint="#E10600"
         app:itemBackground="@android:color/transparent"
-        app:itemTextAppearance="@style/NavItemTextAppearance"
-        android:background="#0D0D0D" />
+        app:itemTextAppearance="@style/NavItemTextAppearance" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

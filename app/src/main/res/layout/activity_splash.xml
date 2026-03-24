@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@drawable/gradient_dark">
+    android:background="@drawable/bg_racing_gradient">
 
     <ImageView
         android:id="@+id/ivLogo"
@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:text="Loading..."
         android:textSize="16sp"
+        android:fontFamily="@font/inter"
         android:textColor="@android:color/white"
         android:textAlignment="center" />
 

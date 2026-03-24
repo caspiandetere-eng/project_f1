@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_racing_gradient"
     android:fillViewport="true">
 
     <LinearLayout
@@ -44,14 +43,17 @@
             android:layout_marginStart="20dp"
             android:layout_marginTop="8dp" />
 
+        <!-- AUTOMOTIVE -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardAutomotive"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
+            android:clickable="true"
+            android:focusable="true"
             app:cardBackgroundColor="#1A1A1A"
             app:cardCornerRadius="20dp"
-            app:cardElevation="16dp"
+            app:cardElevation="4dp"
             app:strokeColor="#E10600"
             app:strokeWidth="2dp">
 
@@ -85,34 +87,53 @@
                         android:textSize="20sp"
                         android:letterSpacing="0.1"
                         android:layout_marginStart="12dp" />
+
+                    <ImageView
+                        android:id="@+id/arrowAutomotive"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_expand_arrow"
+                        android:tint="#E10600"
+                        android:rotation="0" />
                 </LinearLayout>
 
-                <View
+                <LinearLayout
+                    android:id="@+id/contentAutomotive"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@drawable/gradient_red"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter"
-                    android:text="• MGU-H &amp; MGU-K hybrid systems\n• 50%+ thermal efficiency engines\n• AWD torque distribution systems"
-                    android:textColor="#CCCCCC"
-                    android:textSize="15sp"
-                    android:lineSpacingExtra="4dp" />
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/gradient_red"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter"
+                        android:text="• MGU-H &amp; MGU-K hybrid systems\n• 50%+ thermal efficiency engines\n• AWD torque distribution systems\n• Brake-by-wire technology\n• Advanced aerodynamic simulation tools"
+                        android:textColor="#CCCCCC"
+                        android:textSize="15sp"
+                        android:lineSpacingExtra="4dp" />
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- MEDICAL -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardMedical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:clickable="true"
+            android:focusable="true"
             app:cardBackgroundColor="#1A1A1A"
             app:cardCornerRadius="20dp"
-            app:cardElevation="16dp"
+            app:cardElevation="4dp"
             app:strokeColor="#40E10600"
             app:strokeWidth="2dp">
 
@@ -146,34 +167,53 @@
                         android:textSize="20sp"
                         android:letterSpacing="0.1"
                         android:layout_marginStart="12dp" />
+
+                    <ImageView
+                        android:id="@+id/arrowMedical"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_expand_arrow"
+                        android:tint="#E10600"
+                        android:rotation="0" />
                 </LinearLayout>
 
-                <View
+                <LinearLayout
+                    android:id="@+id/contentMedical"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@drawable/gradient_red"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter"
-                    android:text="• Hospital handover protocols (40% error reduction)\n• Biometric monitoring gloves\n• Carbon fiber prosthetics"
-                    android:textColor="#CCCCCC"
-                    android:textSize="15sp"
-                    android:lineSpacingExtra="4dp" />
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/gradient_red"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter"
+                        android:text="• Hospital handover protocols (40% error reduction)\n• Biometric monitoring gloves\n• Carbon fiber prosthetics\n• Real-time physiological data systems\n• Impact-absorbing HANS device evolution"
+                        android:textColor="#CCCCCC"
+                        android:textSize="15sp"
+                        android:lineSpacingExtra="4dp" />
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- SUSTAINABILITY -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardSustainability"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:clickable="true"
+            android:focusable="true"
             app:cardBackgroundColor="#1A1A1A"
             app:cardCornerRadius="20dp"
-            app:cardElevation="16dp"
+            app:cardElevation="4dp"
             app:strokeColor="#40E10600"
             app:strokeWidth="2dp">
 
@@ -207,34 +247,53 @@
                         android:textSize="20sp"
                         android:letterSpacing="0.1"
                         android:layout_marginStart="12dp" />
+
+                    <ImageView
+                        android:id="@+id/arrowSustainability"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_expand_arrow"
+                        android:tint="#E10600"
+                        android:rotation="0" />
                 </LinearLayout>
 
-                <View
+                <LinearLayout
+                    android:id="@+id/contentSustainability"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@drawable/gradient_red"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter"
-                    android:text="• 100% sustainable fuels by 2026\n• Drop-in e-fuels from CO2\n• Flax fiber composites"
-                    android:textColor="#CCCCCC"
-                    android:textSize="15sp"
-                    android:lineSpacingExtra="4dp" />
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/gradient_red"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter"
+                        android:text="• 100% sustainable fuels by 2026\n• Drop-in e-fuels from CO2\n• Flax fiber composites\n• Net-zero carbon operations by 2030\n• Circular economy component mandates"
+                        android:textColor="#CCCCCC"
+                        android:textSize="15sp"
+                        android:lineSpacingExtra="4dp" />
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- ECONOMIC -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardEconomic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:clickable="true"
+            android:focusable="true"
             app:cardBackgroundColor="#1A1A1A"
             app:cardCornerRadius="20dp"
-            app:cardElevation="16dp"
+            app:cardElevation="4dp"
             app:strokeColor="#40E10600"
             app:strokeWidth="2dp">
 
@@ -268,35 +327,54 @@
                         android:textSize="20sp"
                         android:letterSpacing="0.1"
                         android:layout_marginStart="12dp" />
+
+                    <ImageView
+                        android:id="@+id/arrowEconomic"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_expand_arrow"
+                        android:tint="#E10600"
+                        android:rotation="0" />
                 </LinearLayout>
 
-                <View
+                <LinearLayout
+                    android:id="@+id/contentEconomic"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@drawable/gradient_red"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter"
-                    android:text="• €100M+ regional economic impact\n• STEM talent pipeline\n• Global tourism boost"
-                    android:textColor="#CCCCCC"
-                    android:textSize="15sp"
-                    android:lineSpacingExtra="4dp" />
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/gradient_red"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter"
+                        android:text="• €100M+ regional economic impact\n• STEM talent pipeline\n• Global tourism boost\n• $2.6B annual broadcast revenue\n• 500M+ global fan base growth"
+                        android:textColor="#CCCCCC"
+                        android:textSize="15sp"
+                        android:lineSpacingExtra="4dp" />
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- MATERIALS -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardMaterials"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
+            android:clickable="true"
+            android:focusable="true"
             app:cardBackgroundColor="#1A1A1A"
             app:cardCornerRadius="20dp"
-            app:cardElevation="16dp"
+            app:cardElevation="4dp"
             app:strokeColor="#40E10600"
             app:strokeWidth="2dp">
 
@@ -330,23 +408,39 @@
                         android:textSize="20sp"
                         android:letterSpacing="0.1"
                         android:layout_marginStart="12dp" />
+
+                    <ImageView
+                        android:id="@+id/arrowMaterials"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_expand_arrow"
+                        android:tint="#E10600"
+                        android:rotation="0" />
                 </LinearLayout>
 
-                <View
+                <LinearLayout
+                    android:id="@+id/contentMaterials"
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@drawable/gradient_red"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/inter"
-                    android:text="• Zylon anti-ballistic protection\n• Ceramic thermal coatings (1000°C)\n• Carbon fiber composites"
-                    android:textColor="#CCCCCC"
-                    android:textSize="15sp"
-                    android:lineSpacingExtra="4dp" />
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@drawable/gradient_red"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/inter"
+                        android:text="• Zylon anti-ballistic protection\n• Ceramic thermal coatings (1000°C)\n• Carbon fiber composites\n• Recycled carbon fiber mandates\n• Lightweight titanium alloy structures"
+                        android:textColor="#CCCCCC"
+                        android:textSize="15sp"
+                        android:lineSpacingExtra="4dp" />
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 

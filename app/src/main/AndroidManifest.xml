@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".F1App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -33,12 +34,22 @@
         <activity android:name=".F1HistoryInteractiveActivity" android:exported="false" />
         <activity android:name=".TechAnalysisActivity" android:exported="false" />
         <activity android:name=".StandingsActivity" android:exported="false" />
-        <activity android:name=".LiveRaceActivity" android:exported="false" />
         <activity android:name=".RaceCenterActivity" android:exported="false" />
         <activity android:name=".LapDetailsActivity" android:exported="false" />
         <activity android:name=".F1ImpactActivity" android:exported="false" />
         <activity android:name=".SettingsActivity" android:exported="false" />
         <activity android:name=".OnboardingActivity" android:exported="false" />
+        <activity android:name=".FavoriteSelectionActivity" android:exported="false" />
+        <activity android:name=".DriversActivity" android:exported="false" />
+        <activity android:name=".TeamsActivity" android:exported="false" />
+        <activity android:name=".DriverStatsActivity" android:exported="false" />
+        <activity android:name=".RaceDetailsActivity" android:exported="false" />
+        <activity android:name=".F1BasicsActivity" android:exported="false" />
+        <activity android:name=".DriverPickerActivity" android:exported="false" />
+        <activity android:name=".DriverComparisonActivity" android:exported="false" />
+        <activity android:name=".QuizIntroActivity" android:exported="false" />
+        <activity android:name=".QuizActivity" android:exported="false" />
+        <activity android:name=".QuizResultActivity" android:exported="false" />
     </application>
 
 </manifest>

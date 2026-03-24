@@ -6,13 +6,17 @@
             android:icon="@android:drawable/ic_menu_today"
             android:title="Home" />
         <item
-            android:id="@+id/nav_live_race"
-            android:icon="@android:drawable/ic_media_play"
-            android:title="Live Race" />
-        <item
             android:id="@+id/nav_standings"
             android:icon="@android:drawable/ic_menu_sort_by_size"
             android:title="Driver Standings" />
+        <item
+            android:id="@+id/nav_drivers"
+            android:icon="@android:drawable/ic_menu_myplaces"
+            android:title="Drivers" />
+        <item
+            android:id="@+id/nav_teams"
+            android:icon="@android:drawable/ic_menu_compass"
+            android:title="Teams" />
         <item
             android:id="@+id/nav_calendar"
             android:icon="@android:drawable/ic_menu_my_calendar"
@@ -26,9 +30,21 @@
             android:icon="@android:drawable/ic_menu_recent_history"
             android:title="F1 History" />
         <item
+            android:id="@+id/nav_basics"
+            android:icon="@android:drawable/ic_menu_help"
+            android:title="F1 Basics" />
+        <item
             android:id="@+id/nav_impact"
             android:icon="@android:drawable/ic_menu_directions"
             android:title="F1 Impact" />
+        <item
+            android:id="@+id/nav_driver_stats"
+            android:icon="@android:drawable/ic_menu_info_details"
+            android:title="Driver Stats" />
+        <item
+            android:id="@+id/nav_compare"
+            android:icon="@android:drawable/ic_menu_view"
+            android:title="Compare Drivers" />
     </group>
 
     <item android:title="System">

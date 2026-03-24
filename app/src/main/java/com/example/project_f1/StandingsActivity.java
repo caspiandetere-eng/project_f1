@@ -2,11 +2,13 @@ package com.example.project_f1;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.project_f1.api.JolpicaApiClient;
 import com.example.project_f1.models.JolpicaStandingsResponse;
 import java.util.ArrayList;
@@ -15,21 +17,23 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class StandingsActivity extends AppCompatActivity {
+public class StandingsActivity extends BaseActivity {
     private LinearLayout standingsContainer;
     private TextView tvSelectedYear;
     private int selectedYear = 2026;
     private Call<JolpicaStandingsResponse> currentCall;
+    private ThemeManager.TeamTheme currentTheme;
+    private SwipeRefreshLayout swipeRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        ThemeManager.applyTheme(this);
         setContentView(R.layout.activity_standings);
-        ThemeManager.applyStatusBar(this);
         standingsContainer = findViewById(R.id.standingsContainer);
         tvSelectedYear = findViewById(R.id.tvSelectedYear);
+        ThemeManager.TeamTheme theme = ThemeManager.applyFullTheme(this);
+        applyStandingsTheme(theme);
         Button btn1950s = findViewById(R.id.btn1950s);
         Button btn2000s = findViewById(R.id.btn2000s);
         Button btnCurrent = findViewById(R.id.btnCurrent);
@@ -42,7 +46,38 @@ public class StandingsActivity extends AppCompatActivity {
         btn1950s.setOnClickListener(v -> showYearPicker(1950, 2000));
         btn2000s.setOnClickListener(v -> showYearPicker(2000, 2025));
         btnCurrent.setOnClickListener(v -> loadYear(2026));
+        
+        swipeRefresh = findViewById(R.id.swipeRefresh);
+        setupSwipeRefresh(swipeRefresh, currentTheme.accent, () -> loadYear(selectedYear));
         loadYear(2026);
+    }
+
+    private void applyStandingsTheme(ThemeManager.TeamTheme theme) {
+        this.currentTheme = theme;
+        // Background
+        View root = ((android.view.ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
+        android.graphics.drawable.GradientDrawable bg = new android.graphics.drawable.GradientDrawable(
+                android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM,
+                new int[]{theme.bgTop, theme.bgBottom});
+        root.setBackground(bg);
+        // Accent views
+        View stripe = findViewById(R.id.topStripe);
+        if (stripe != null) stripe.setBackgroundColor(theme.accent);
+        View headerBar = findViewById(R.id.headerAccentBar);
+        if (headerBar != null) headerBar.setBackgroundColor(theme.accent);
+        // Year label
+        if (tvSelectedYear != null) tvSelectedYear.setTextColor(theme.accent);
+        // Era buttons
+        int[] btnIds = {R.id.btn1950s, R.id.btn2000s, R.id.btnCurrent};
+        for (int id : btnIds) {
+            com.google.android.material.button.MaterialButton btn = findViewById(id);
+            if (btn != null) btn.setBackgroundTintList(
+                    android.content.res.ColorStateList.valueOf(theme.buttonBg));
+        }
+        // Back button
+        com.google.android.material.button.MaterialButton btnBack = findViewById(R.id.btnBack);
+        if (btnBack != null) btnBack.setBackgroundTintList(
+                android.content.res.ColorStateList.valueOf(theme.buttonBg));
     }
 
     private void showYearPicker(int startYear, int endYear) {
@@ -92,6 +127,13 @@ public class StandingsActivity extends AppCompatActivity {
         tvPos.setWidth(dp(32));
         tvPos.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed), android.graphics.Typeface.BOLD);
         tvPos.setBackgroundResource(position == 1 ? R.drawable.gradient_red : R.drawable.bg_position_circle);
+        if (currentTheme != null) {
+            android.graphics.drawable.GradientDrawable posCircle = new android.graphics.drawable.GradientDrawable();
+            posCircle.setShape(android.graphics.drawable.GradientDrawable.OVAL);
+            posCircle.setColor(position == 1 ? currentTheme.accent
+                    : ThemeManager.blendColors(currentTheme.cardBg, currentTheme.accent, 0.45f));
+            tvPos.setBackground(posCircle);
+        }
         row.addView(tvPos);
 
         // Name
@@ -122,7 +164,7 @@ public class StandingsActivity extends AppCompatActivity {
         // Points
         TextView tvPts = new TextView(this);
         tvPts.setText(points + " pts");
-        tvPts.setTextColor(0xFFE10600);
+        tvPts.setTextColor(currentTheme != null ? currentTheme.accent : 0xFFE10600);
         tvPts.setTextSize(14);
         tvPts.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed), android.graphics.Typeface.BOLD);
         row.addView(tvPts);

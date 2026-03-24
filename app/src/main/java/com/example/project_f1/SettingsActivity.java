@@ -5,16 +5,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.FileObserver;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends BaseActivity {
 
     private TextView tvCacheSize;
     private ProgressBar progressCache;
@@ -25,37 +27,85 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        ThemeManager.applyTheme(this);
-        
         setContentView(R.layout.activity_settings);
-        ThemeManager.applyStatusBar(this);
-        
+        ThemeManager.TeamTheme theme = ThemeManager.applyFullTheme(this);
+        applySettingsAccents(theme);
         setTitle("Settings");
         
         Button btnLogout = findViewById(R.id.btnLogout);
         Button btnBack = findViewById(R.id.btnBack);
         Button btnClearCache = findViewById(R.id.btnClearCache);
-        SwitchCompat switchTheme = findViewById(R.id.switchTheme);
+        Button btnChangeFavorites = findViewById(R.id.btnChangeFavorites);
+        Button btnTakeQuiz = findViewById(R.id.btnTakeQuiz);
+        TextView tvCurrentLevel = findViewById(R.id.tvCurrentLevel);
+        SwitchCompat switchTeamTheme = findViewById(R.id.switchTeamTheme);
         tvCacheSize = findViewById(R.id.tvCacheSize);
         progressCache = findViewById(R.id.progressCache);
         SharedPreferences prefs = getSharedPreferences("F1Prefs", MODE_PRIVATE);
         
-        boolean isDarkTheme = prefs.getBoolean("dark_theme", true);
-        switchTheme.setChecked(isDarkTheme);
+        if (switchTeamTheme != null)
+            switchTeamTheme.setChecked(ThemeManager.isTeamTheme(this));
         
-        switchTheme.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            prefs.edit().putBoolean("dark_theme", isChecked).apply();
-            recreate();
-        });
+        if (switchTeamTheme != null) {
+            switchTeamTheme.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                String mode = isChecked ? ThemeManager.THEME_TEAM : ThemeManager.THEME_DEFAULT;
+                StateManager.get().setTheme(this, mode);
+            });
+        }
         
         btnLogout.setOnClickListener(v -> logout());
         btnClearCache.setOnClickListener(v -> clearCache());
+        btnChangeFavorites.setOnClickListener(v -> changeFavorites());
         btnBack.setOnClickListener(v -> finish());
+        if (btnTakeQuiz != null) btnTakeQuiz.setOnClickListener(v -> {
+            startActivity(new Intent(this, QuizIntroActivity.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+        });
+        if (tvCurrentLevel != null) {
+            String level = prefs.getString("knowledge_level", "rookie");
+            tvCurrentLevel.setText("Current: " + level.substring(0, 1).toUpperCase() + level.substring(1));
+        }
         
         updateCacheSize();
         startCacheMonitoring();
     }
     
+    private void applySettingsAccents(ThemeManager.TeamTheme theme) {
+        // Background
+        View root = findViewById(android.R.id.content);
+        if (root instanceof ViewGroup) {
+            android.graphics.drawable.GradientDrawable bg = new android.graphics.drawable.GradientDrawable(
+                    android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM,
+                    new int[]{theme.bgTop, theme.bgBottom});
+            ((ViewGroup) root).getChildAt(0).setBackground(bg);
+        }
+        // Top stripe
+        View topStripe = findViewById(R.id.topStripe);
+        if (topStripe != null) topStripe.setBackgroundColor(theme.accent);
+        // Header accent bar
+        View headerBar = findViewById(R.id.headerAccentBar);
+        if (headerBar != null) headerBar.setBackgroundColor(theme.accent);
+        // All cards
+        int[] cardIds = {R.id.cardAccount, R.id.cardFavorites, R.id.cardQuiz, R.id.cardDisplay, R.id.cardStorage};
+        for (int id : cardIds) {
+            com.google.android.material.card.MaterialCardView card = findViewById(id);
+            if (card != null) {
+                card.setCardBackgroundColor(theme.cardBg);
+                card.setStrokeColor(theme.cardStroke);
+            }
+        }
+        // All buttons
+        int[] btnIds = {R.id.btnLogout, R.id.btnChangeFavorites, R.id.btnClearCache, R.id.btnBack};
+        for (int id : btnIds) {
+            com.google.android.material.button.MaterialButton btn = findViewById(id);
+            if (btn != null) btn.setBackgroundTintList(
+                    android.content.res.ColorStateList.valueOf(theme.buttonBg));
+        }
+        // Cache size text color
+        TextView tvCache = findViewById(R.id.tvCacheSize);
+        if (tvCache != null) tvCache.setTextColor(theme.accent);
+    }
+
     private void startCacheMonitoring() {
         File cacheDir = getCacheDir();
         if (cacheDir.exists()) {
@@ -131,8 +181,23 @@ public class SettingsActivity extends AppCompatActivity {
     private void logout() {
         SharedPreferences prefs = getSharedPreferences("F1Prefs", MODE_PRIVATE);
         prefs.edit().clear().apply();
-        startActivity(new Intent(this, LoginActivity.class));
-        finish();
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        overridePendingTransition(R.anim.fade_in, R.anim.slide_out_right);
+    }
+    
+    private void changeFavorites() {
+        Intent intent = new Intent(this, FavoriteSelectionActivity.class);
+        intent.putExtra("from_onboarding", false);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
     
     @Override

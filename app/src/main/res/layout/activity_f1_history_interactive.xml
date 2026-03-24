@@ -3,8 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/f1_black_background">
+    android:layout_height="match_parent">
 
     <View
         android:id="@+id/topStripe"
@@ -143,14 +142,14 @@
                                     android:textSize="13sp" />
                             </LinearLayout>
 
-                            <TextView
+                            <ImageView
                                 android:id="@+id/tvArrowEra1950"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
                                 android:layout_gravity="center_vertical"
-                                android:text="▼"
-                                android:textColor="@color/f1_red_accent"
-                                android:textSize="22sp" />
+                                android:src="@drawable/ic_expand_arrow"
+                                android:tint="@color/f1_red_accent"
+                                android:rotation="0" />
                         </LinearLayout>
 
                     <LinearLayout
@@ -253,14 +252,14 @@
                                 android:textSize="13sp" />
                         </LinearLayout>
 
-                        <TextView
+                        <ImageView
                             android:id="@+id/tvArrowEra1970"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
                             android:layout_gravity="center_vertical"
-                            android:text="▼"
-                            android:textColor="@color/f1_red_accent"
-                            android:textSize="22sp" />
+                            android:src="@drawable/ic_expand_arrow"
+                            android:tint="@color/f1_red_accent"
+                            android:rotation="0" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -362,14 +361,14 @@
                                 android:textSize="13sp" />
                         </LinearLayout>
 
-                        <TextView
+                        <ImageView
                             android:id="@+id/tvArrowEra2000"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
                             android:layout_gravity="center_vertical"
-                            android:text="▼"
-                            android:textColor="@color/f1_red_accent"
-                            android:textSize="22sp" />
+                            android:src="@drawable/ic_expand_arrow"
+                            android:tint="@color/f1_red_accent"
+                            android:rotation="0" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -428,6 +427,139 @@
                 android:textSize="13sp" />
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardLegendLauda"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/f1_card_dark"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/f1_card_lighter"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:layout_marginEnd="14dp"
+                            android:src="@drawable/niki_lauda"
+                            android:scaleType="centerCrop"
+                            app:shapeAppearanceOverlay="@style/CircleImageView"
+                            app:strokeColor="#33E10600"
+                            app:strokeWidth="1dp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-bold"
+                                android:text="@string/niki_lauda"
+                                android:textColor="@color/text_primary_white"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/lauda_years"
+                                android:textColor="@color/text_secondary_gray"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/tvArrowLauda"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_expand_arrow"
+                            android:tint="@color/f1_red_accent"
+                            android:rotation="0" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/contentLegendLauda"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/lauda_desc_full"
+                            android:textColor="@color/text_secondary_gray"
+                            android:textSize="14sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="sans-serif-medium"
+                                android:text="@string/championships"
+                                android:textColor="@color/f1_red_accent"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-bold"
+                                android:text="@string/lauda_championships"
+                                android:textColor="@color/text_primary_white"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="sans-serif-medium"
+                                android:text="@string/race_wins"
+                                android:textColor="@color/f1_red_accent"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-bold"
+                                android:text="@string/lauda_wins"
+                                android:textColor="@color/text_primary_white"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cardLegendSenna"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -449,7 +581,18 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:layout_marginEnd="14dp"
+                            android:src="@drawable/ayrton_senna"
+                            android:scaleType="centerCrop"
+                            app:shapeAppearanceOverlay="@style/CircleImageView"
+                            app:strokeColor="#33E10600"
+                            app:strokeWidth="1dp" />
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -474,13 +617,13 @@
                                 android:textSize="12sp" />
                         </LinearLayout>
 
-                        <TextView
+                        <ImageView
                             android:id="@+id/tvArrowSenna"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="▼"
-                            android:textColor="@color/f1_red_accent"
-                            android:textSize="20sp" />
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_expand_arrow"
+                            android:tint="@color/f1_red_accent"
+                            android:rotation="0" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -494,7 +637,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/senna_desc"
+                            android:text="@string/senna_desc_full"
                             android:textColor="@color/text_secondary_gray"
                             android:textSize="14sp" />
 
@@ -571,7 +714,18 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:layout_marginEnd="14dp"
+                            android:src="@drawable/michael_schumacher"
+                            android:scaleType="centerCrop"
+                            app:shapeAppearanceOverlay="@style/CircleImageView"
+                            app:strokeColor="#33E10600"
+                            app:strokeWidth="1dp" />
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -596,13 +750,13 @@
                                 android:textSize="12sp" />
                         </LinearLayout>
 
-                        <TextView
+                        <ImageView
                             android:id="@+id/tvArrowSchumacher"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="▼"
-                            android:textColor="@color/f1_red_accent"
-                            android:textSize="20sp" />
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_expand_arrow"
+                            android:tint="@color/f1_red_accent"
+                            android:rotation="0" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -616,7 +770,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/schumacher_desc"
+                            android:text="@string/schumacher_desc_full"
                             android:textColor="@color/text_secondary_gray"
                             android:textSize="14sp" />
 
@@ -693,7 +847,18 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:layout_marginEnd="14dp"
+                            android:src="@drawable/lewis_hamilton"
+                            android:scaleType="centerCrop"
+                            app:shapeAppearanceOverlay="@style/CircleImageView"
+                            app:strokeColor="#33E10600"
+                            app:strokeWidth="1dp" />
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -718,13 +883,13 @@
                                 android:textSize="12sp" />
                         </LinearLayout>
 
-                        <TextView
+                        <ImageView
                             android:id="@+id/tvArrowHamilton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="▼"
-                            android:textColor="@color/f1_red_accent"
-                            android:textSize="20sp" />
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_expand_arrow"
+                            android:tint="@color/f1_red_accent"
+                            android:rotation="0" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -738,7 +903,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/hamilton_desc"
+                            android:text="@string/hamilton_desc_full"
                             android:textColor="@color/text_secondary_gray"
                             android:textSize="14sp" />
 
@@ -786,6 +951,149 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif-bold"
                                 android:text="@string/one_hundred_five"
+                                android:textColor="@color/text_primary_white"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:fontFamily="sans-serif-black"
+                android:letterSpacing="0.15"
+                android:text="@string/upcoming_legend"
+                android:textColor="@color/f1_red_accent"
+                android:textSize="13sp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardLegendMax"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                app:cardBackgroundColor="@color/f1_card_dark"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="2dp"
+                app:strokeColor="#40E10600"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:layout_width="56dp"
+                            android:layout_height="56dp"
+                            android:layout_marginEnd="14dp"
+                            android:src="@drawable/max_verstappen"
+                            android:scaleType="centerCrop"
+                            app:shapeAppearanceOverlay="@style/CircleImageView"
+                            app:strokeColor="#33E10600"
+                            app:strokeWidth="1dp" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-bold"
+                                android:text="@string/max_verstappen"
+                                android:textColor="@color/text_primary_white"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:text="@string/max_years"
+                                android:textColor="@color/text_secondary_gray"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/tvArrowMax"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_expand_arrow"
+                            android:tint="@color/f1_red_accent"
+                            android:rotation="0" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/contentLegendMax"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/max_desc_full"
+                            android:textColor="@color/text_secondary_gray"
+                            android:textSize="14sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="sans-serif-medium"
+                                android:text="@string/championships"
+                                android:textColor="@color/f1_red_accent"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-bold"
+                                android:text="@string/max_championships"
+                                android:textColor="@color/text_primary_white"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="sans-serif-medium"
+                                android:text="@string/race_wins"
+                                android:textColor="@color/f1_red_accent"
+                                android:textSize="12sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-bold"
+                                android:text="@string/max_wins"
                                 android:textColor="@color/text_primary_white"
                                 android:textSize="16sp" />
                         </LinearLayout>

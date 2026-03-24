@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardBasicsItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="14dp"
+    app:cardBackgroundColor="#0D0D0D"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="4dp"
+    app:strokeColor="#333333"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Accent bar (used by both adapters) -->
+        <View
+            android:id="@+id/basicsAccentBar"
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="#E10600" />
+
+        <!-- Alias for F1BasicsActivity -->
+        <View
+            android:id="@+id/basicsAccent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Level badge (BasicsCardAdapter) -->
+            <TextView
+                android:id="@+id/basicsLevelBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/titillium_web"
+                android:letterSpacing="0.1"
+                android:text="BEGINNER FRIENDLY"
+                android:textColor="#E10600"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <!-- Title + Arrow row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/basicsCardTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/titillium_web"
+                    android:text="Title"
+                    android:textColor="#FFFFFF"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <!-- Alias for F1BasicsActivity -->
+                <TextView
+                    android:id="@+id/tvBasicsTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/basicsCardArrow"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_expand_arrow"
+                    android:tint="#E10600" />
+            </LinearLayout>
+
+            <!-- Preview / subtitle -->
+            <TextView
+                android:id="@+id/basicsCardPreview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/inter"
+                android:maxLines="2"
+                android:text="Preview"
+                android:textColor="#999999"
+                android:textSize="14sp" />
+
+            <!-- Alias for F1BasicsActivity -->
+            <TextView
+                android:id="@+id/tvBasicsSubtitle"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone" />
+
+            <!-- Divider -->
+            <View
+                android:id="@+id/basicsCardDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:background="#33E10600"
+                android:visibility="gone" />
+
+            <!-- Expandable content (BasicsCardAdapter) -->
+            <LinearLayout
+                android:id="@+id/basicsExpandableContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/basicsCardImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:layout_marginTop="16dp"
+                    android:contentDescription="@null"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+
+                <!-- Full description (BasicsCardAdapter) -->
+                <TextView
+                    android:id="@+id/basicsCardFullDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/inter"
+                    android:lineSpacingExtra="4dp"
+                    android:textColor="#CCCCCC"
+                    android:textSize="14sp" />
+
+                <!-- Details alias for F1BasicsActivity -->
+                <TextView
+                    android:id="@+id/tvBasicsDetails"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="gone" />
+
+                <!-- Video button (BasicsCardAdapter) -->
+                <LinearLayout
+                    android:id="@+id/basicsVideoBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/btn_video_bg"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="10dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_check_circle"
+                        android:tint="#FFFFFF" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:fontFamily="@font/titillium_web"
+                        android:text="Watch Video"
+                        android:textColor="#FFFFFF"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- YouTubePlayerView for F1BasicsActivity -->
+                <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+                    android:id="@+id/youtubePlayerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:autoPlay="false" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/expandableCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="14dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardBackgroundColor="@color/f1_card_dark"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="8dp"
+    app:strokeColor="@color/f1_card_lighter"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Image banner -->
+        <ImageView
+            android:id="@+id/cardImage"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:scaleType="centerCrop" />
+
+        <!-- Accent bar (tinted per card) -->
+        <View
+            android:id="@+id/cardAccentBar"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="@color/f1_red_accent" />
+
+        <!-- Header row: title + regulation label + arrow -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="18dp"
+            android:paddingBottom="18dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/cardTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_primary_white"
+                    android:textSize="19sp"
+                    android:fontFamily="@font/titillium_web"
+                    android:textFontWeight="700"
+                    android:letterSpacing="0.02" />
+
+                <TextView
+                    android:id="@+id/cardLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="2026 REGULATION"
+                    android:textSize="11sp"
+                    android:fontFamily="@font/barlow_condensed"
+                    android:textFontWeight="700"
+                    android:letterSpacing="0.1"
+                    android:textColor="@color/f1_red_accent" />
+
+                <!-- Preview: shown when collapsed -->
+                <TextView
+                    android:id="@+id/cardPreview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    android:textColor="@color/text_secondary_gray"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/inter"
+                    android:lineSpacingMultiplier="1.4" />
+
+            </LinearLayout>
+
+            <!-- Expand/collapse arrow -->
+            <ImageView
+                android:id="@+id/cardArrow"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginStart="12dp"
+                android:src="@drawable/ic_expand_arrow"
+                android:tint="@color/f1_red_accent"
+                android:rotation="0" />
+
+        </LinearLayout>
+
+        <!-- Divider (fades in with content) -->
+        <View
+            android:id="@+id/cardDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#20E10600"
+            android:visibility="gone"
+            android:alpha="0" />
+
+        <!-- Expandable full content -->
+        <LinearLayout
+            android:id="@+id/cardExpandableContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="22dp"
+            android:paddingEnd="22dp"
+            android:paddingBottom="22dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/cardFullDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_secondary_gray"
+                android:textSize="14sp"
+                android:fontFamily="@font/inter"
+                android:lineSpacingMultiplier="1.6" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

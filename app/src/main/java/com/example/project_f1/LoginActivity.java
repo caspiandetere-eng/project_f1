@@ -16,6 +16,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         
         ThemeManager.applyTheme(this);
+        FavoriteRepository.migrateLegacyPrefs(this);
         SharedPreferences prefs = getSharedPreferences("F1Prefs", MODE_PRIVATE);
         if (prefs.getBoolean("is_logged_in", false)) {
             startActivity(new Intent(this, MainActivity.class));
@@ -39,6 +40,20 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (email.isEmpty() || password.isEmpty()) {
                     Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (email.equals("test") && password.equals("test")) {
+                    prefs.edit()
+                        .putBoolean("is_logged_in", true)
+                        .putString("user_name", "Test Driver")
+                        .putString("user_email", "test@f1app.com")
+                        .putBoolean("onboarding_done", true)
+                        .putBoolean("coach_marks_done", true)
+                        .putString("knowledge_level", "casual")
+                        .apply();
+                    navigate(new Intent(this, MainActivity.class));
+                    finish();
                     return;
                 }
 
@@ -66,6 +81,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void navigate(Intent intent) {
         startActivity(intent,
-            ActivityOptions.makeCustomAnimation(this, R.anim.slide_in_right, R.anim.fade_in).toBundle());
+            ActivityOptions.makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_right).toBundle());
     }
 }

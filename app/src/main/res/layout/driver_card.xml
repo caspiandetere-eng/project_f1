@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/driverCard"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_margin="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground"
+    app:cardBackgroundColor="#1A1A1A"
+    app:cardCornerRadius="24dp"
+    app:cardElevation="12dp"
+    app:strokeWidth="2dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#1A1A1A">
+
+        <!-- Gradient overlay (left to right fade) -->
+        <View
+            android:id="@+id/gradientOverlay"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- Racing texture overlay (optional, subtle) -->
+        <View
+            android:id="@+id/textureOverlay"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0.08"
+            android:background="@drawable/checkered_pattern"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- Large background driver number (low opacity) -->
+        <TextView
+            android:id="@+id/tvBackgroundNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.15"
+            android:fontFamily="@font/barlow_condensed"
+            android:textFontWeight="700"
+            android:textColor="#FFFFFF"
+            android:textSize="140sp"
+            android:lineHeight="120sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <!-- LEFT SIDE: Driver info -->
+        <LinearLayout
+            android:id="@+id/infoContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ivDriverImage"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.3">
+
+            <!-- Driver name -->
+            <TextView
+                android:id="@+id/tvDriverName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/titillium_web"
+                android:textFontWeight="700"
+                android:textColor="#FFFFFF"
+                android:textSize="22sp"
+                android:letterSpacing="0.05"
+                android:text="George Russell" />
+
+            <!-- Team name -->
+            <TextView
+                android:id="@+id/tvTeamName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/barlow_condensed"
+                android:textFontWeight="700"
+                android:textColor="#00D2BE"
+                android:textSize="13sp"
+                android:letterSpacing="0.1"
+                android:text="MERCEDES-AMG" />
+
+        </LinearLayout>
+
+        <!-- BOTTOM LEFT: Flag icon -->
+        <ImageView
+            android:id="@+id/ivFlag"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_margin="16dp"
+            android:scaleType="centerInside"
+            android:contentDescription="Country flag"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <!-- RIGHT SIDE: Driver image with glow -->
+        <View
+            android:id="@+id/glowBehind"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_margin="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageView
+            android:id="@+id/ivDriverImage"
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_margin="12dp"
+            android:scaleType="centerInside"
+            android:adjustViewBounds="true"
+            android:contentDescription="Driver photo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

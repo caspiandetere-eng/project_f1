@@ -57,6 +57,10 @@ public class KnowledgeLevelActivity extends AppCompatActivity {
 
         if (needsOnboarding) {
             startActivity(new Intent(this, OnboardingActivity.class));
+        } else if (!FavoriteRepository.hasBothFavorites(this)) {
+            Intent intent = new Intent(this, FavoriteSelectionActivity.class);
+            intent.putExtra("from_onboarding", true);
+            startActivity(intent);
         } else {
             startActivity(new Intent(this, MainActivity.class));
         }

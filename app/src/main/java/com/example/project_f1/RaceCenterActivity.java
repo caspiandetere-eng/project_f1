@@ -1,14 +1,22 @@
 package com.example.project_f1;
 
 import android.app.ActivityOptions;
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.project_f1.api.JolpicaApiClient;
 import com.example.project_f1.models.JolpicaScheduleResponse;
 import com.example.project_f1.models.JolpicaScheduleResponse.Race;
@@ -21,21 +29,38 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RaceCenterActivity extends AppCompatActivity {
+public class RaceCenterActivity extends BaseActivity {
 
     private LinearLayout racesContainer;
     private Call<JolpicaScheduleResponse> scheduleCall;
+    private ThemeManager.TeamTheme currentTheme;
+    private SwipeRefreshLayout swipeRefresh;
     private static final DateTimeFormatter IN_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private static final DateTimeFormatter OUT_FMT = DateTimeFormatter.ofPattern("MMM dd");
+    private static final DateTimeFormatter OUT_FMT = DateTimeFormatter.ofPattern("dd MMM");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeManager.applyTheme(this);
         setContentView(R.layout.activity_race_center);
-        ThemeManager.applyStatusBar(this);
+        ThemeManager.TeamTheme theme = ThemeManager.applyFullTheme(this);
         racesContainer = findViewById(R.id.racesContainer);
-        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
+        swipeRefresh = findViewById(R.id.swipeRefresh);
+        
+        // Tint back button and accent views
+        View stripe = findViewById(R.id.topStripe);
+        if (stripe != null) stripe.setBackgroundColor(theme.accent);
+        android.widget.ImageButton btnBack = findViewById(R.id.btnBack);
+        if (btnBack != null) {
+            btnBack.setBackgroundTintList(
+                    ColorStateList.valueOf(theme.buttonBg));
+            btnBack.setOnClickListener(v -> finish());
+        }
+        
+        swipeRefresh.setOnRefreshListener(this::loadSchedule);
+        swipeRefresh.setColorSchemeColors(theme.accent, 0xFFFFFFFF);
+        
+        // Store theme for card building
+        this.currentTheme = theme;
         loadSchedule();
     }
 
@@ -50,11 +75,13 @@ public class RaceCenterActivity extends AppCompatActivity {
                 } else {
                     showError();
                 }
+                swipeRefresh.setRefreshing(false);
             }
 
             @Override
             public void onFailure(Call<JolpicaScheduleResponse> call, Throwable t) {
                 showError();
+                swipeRefresh.setRefreshing(false);
             }
         });
     }
@@ -83,8 +110,15 @@ public class RaceCenterActivity extends AppCompatActivity {
         for (int i = 0; i < upcoming.size(); i++) {
             MaterialCardView card = buildRaceCard(upcoming.get(i), i == 0);
             card.setAlpha(0f);
+            card.setTranslationY(dp(20));
             racesContainer.addView(card);
-            card.animate().alpha(1f).setDuration(300).setStartDelay(i * 60L).start();
+            card.animate()
+                .alpha(1f)
+                .translationY(0f)
+                .setDuration(400)
+                .setStartDelay(i * 50L)
+                .setInterpolator(new android.view.animation.DecelerateInterpolator())
+                .start();
         }
     }
 
@@ -92,130 +126,141 @@ public class RaceCenterActivity extends AppCompatActivity {
         MaterialCardView card = new MaterialCardView(this);
         LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        cardParams.setMargins(0, 0, 0, dp(12));
+        cardParams.setMargins(0, 0, 0, dp(16));
         card.setLayoutParams(cardParams);
-        card.setCardBackgroundColor(0xFF1A1A1A);
-        card.setRadius(dp(16));
-        card.setCardElevation(dp(8));
-        card.setStrokeColor(isNext ? 0xFFE10600 : 0x33E10600);
+        
+        int accentColor = currentTheme != null ? currentTheme.accent : 0xFFE10600;
+        int bgColor = currentTheme != null ? currentTheme.cardBg : 0xFF1A1A1A;
+        
+        card.setCardBackgroundColor(ThemeManager.blendColors(bgColor, isNext ? accentColor : bgColor, isNext ? 0.05f : 0f));
+        card.setRadius(dp(20));
+        card.setCardElevation(isNext ? dp(12) : dp(4));
+        card.setStrokeColor(isNext ? accentColor : 0xFF333333);
         card.setStrokeWidth(isNext ? dp(2) : dp(1));
+        
+        card.setOnClickListener(v -> navigateToRaceDetails(race));
 
+        // Horizontal layout with 3 main sections: Date/Round, Info, Circuit
         LinearLayout inner = new LinearLayout(this);
         inner.setOrientation(LinearLayout.HORIZONTAL);
         inner.setGravity(Gravity.CENTER_VERTICAL);
-        inner.setPadding(dp(16), dp(16), dp(16), dp(16));
+        inner.setPadding(dp(16), dp(18), dp(16), dp(18));
         card.addView(inner);
 
-        // Round badge
+        // Section 1: Date & Round
+        LinearLayout dateCol = new LinearLayout(this);
+        dateCol.setOrientation(LinearLayout.VERTICAL);
+        dateCol.setGravity(Gravity.CENTER);
+        dateCol.setLayoutParams(new LinearLayout.LayoutParams(dp(65), LinearLayout.LayoutParams.WRAP_CONTENT));
+        
+        TextView tvMonth = new TextView(this);
+        TextView tvDay = new TextView(this);
+        try {
+            LocalDate d = LocalDate.parse(race.date, IN_FMT);
+            tvMonth.setText(d.format(DateTimeFormatter.ofPattern("MMM")).toUpperCase());
+            tvDay.setText(d.format(DateTimeFormatter.ofPattern("dd")));
+        } catch (Exception e) {
+            tvDay.setText("??");
+        }
+        
+        tvMonth.setTextColor(isNext ? accentColor : 0xFF999999);
+        tvMonth.setTextSize(11);
+        tvMonth.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed), Typeface.BOLD);
+        tvMonth.setLetterSpacing(0.1f);
+        dateCol.addView(tvMonth);
+
+        tvDay.setTextColor(0xFFFFFFFF);
+        tvDay.setTextSize(24);
+        tvDay.setTypeface(ResourcesCompat.getFont(this, R.font.titillium_web), Typeface.BOLD);
+        dateCol.addView(tvDay);
+
         TextView tvRound = new TextView(this);
-        tvRound.setText("R" + race.round);
-        tvRound.setTextColor(isNext ? 0xFFE10600 : 0xFF666666);
-        tvRound.setTextSize(13);
-        tvRound.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed), android.graphics.Typeface.BOLD);
-        tvRound.setGravity(Gravity.CENTER);
-        tvRound.setMinWidth(dp(40));
-        inner.addView(tvRound);
+        tvRound.setText("ROUND " + race.round);
+        tvRound.setTextColor(isNext ? accentColor : 0xFF555555);
+        tvRound.setTextSize(9);
+        tvRound.setTypeface(ResourcesCompat.getFont(this, R.font.jetbrains_mono), Typeface.BOLD);
+        tvRound.setPadding(0, dp(2), 0, 0);
+        dateCol.addView(tvRound);
+        
+        inner.addView(dateCol);
 
-        // Divider
-        View divider = new View(this);
-        LinearLayout.LayoutParams divParams = new LinearLayout.LayoutParams(dp(2), dp(40));
-        divParams.setMargins(dp(12), 0, dp(12), 0);
-        divider.setBackgroundColor(isNext ? 0xFFE10600 : 0xFF333333);
-        divider.setLayoutParams(divParams);
-        inner.addView(divider);
+        // Subtle vertical divider
+        View sep = new View(this);
+        LinearLayout.LayoutParams sepP = new LinearLayout.LayoutParams(dp(1), dp(45));
+        sepP.setMargins(dp(12), 0, dp(16), 0);
+        sep.setBackgroundColor(0xFF333333);
+        sep.setLayoutParams(sepP);
+        inner.addView(sep);
 
-        // Info column
+        // Section 2: Info column
         LinearLayout info = new LinearLayout(this);
         info.setOrientation(LinearLayout.VERTICAL);
-        info.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
+        info.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
         inner.addView(info);
 
         TextView tvName = new TextView(this);
-        tvName.setText(race.raceName);
+        tvName.setText(race.raceName.toUpperCase().replace(" GRAND PRIX", ""));
         tvName.setTextColor(0xFFFFFFFF);
-        tvName.setTextSize(15);
-        tvName.setTypeface(ResourcesCompat.getFont(this, R.font.titillium_web), android.graphics.Typeface.BOLD);
+        tvName.setTextSize(16);
+        tvName.setTypeface(ResourcesCompat.getFont(this, R.font.titillium_web), Typeface.BOLD);
+        tvName.setLetterSpacing(0.02f);
         info.addView(tvName);
 
         if (race.circuit != null && race.circuit.location != null) {
             TextView tvLocation = new TextView(this);
             tvLocation.setText(race.circuit.location.locality + ", " + race.circuit.location.country);
-            tvLocation.setTextColor(0xFF999999);
-            tvLocation.setTextSize(13);
-            tvLocation.setTypeface(ResourcesCompat.getFont(this, R.font.inter), android.graphics.Typeface.NORMAL);
+            tvLocation.setTextColor(0xFF888888);
+            tvLocation.setTextSize(12);
+            tvLocation.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed), Typeface.NORMAL);
+            tvLocation.setPadding(0, dp(1), 0, 0);
             info.addView(tvLocation);
         }
 
-        // Session pills row
-        LinearLayout pills = new LinearLayout(this);
-        pills.setOrientation(LinearLayout.HORIZONTAL);
-        LinearLayout.LayoutParams pillsParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        pillsParams.setMargins(0, dp(6), 0, 0);
-        pills.setLayoutParams(pillsParams);
-        info.addView(pills);
-
-        addSessionPill(pills, "FP1", race.firstPractice);
+        // Sprint indicator if applicable
         if (race.sprint != null) {
-            addSessionPill(pills, "SPR", race.sprint);
-        } else {
-            addSessionPill(pills, "FP2", race.secondPractice);
-            addSessionPill(pills, "FP3", race.thirdPractice);
+            TextView sprintTag = new TextView(this);
+            sprintTag.setText("SPRINT WEEKEND");
+            sprintTag.setTextColor(0xFF00FFCC);
+            sprintTag.setTextSize(9);
+            sprintTag.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed), Typeface.BOLD);
+            sprintTag.setLetterSpacing(0.1f);
+            sprintTag.setPadding(0, dp(4), 0, 0);
+            info.addView(sprintTag);
         }
-        addSessionPill(pills, "QUAL", race.qualifying);
 
-        // Circuit outline — left of date
+        // Section 3: Circuit Outline
         String country = (race.circuit != null && race.circuit.location != null)
                 ? race.circuit.location.country : null;
         String locality = (race.circuit != null && race.circuit.location != null)
                 ? race.circuit.location.locality : null;
         Integer circuitRes = CircuitAssets.getCircuitDrawable(locality);
         if (circuitRes == null) circuitRes = CircuitAssets.getCircuitDrawable(country);
+        
         if (circuitRes != null) {
+            FrameLayout circuitFrame = new FrameLayout(this);
+            LinearLayout.LayoutParams cfp = new LinearLayout.LayoutParams(dp(65), dp(65));
+            cfp.setMargins(dp(8), 0, 0, 0);
+            circuitFrame.setLayoutParams(cfp);
+            
             ImageView ivCircuit = new ImageView(this);
-            LinearLayout.LayoutParams ivParams = new LinearLayout.LayoutParams(dp(56), dp(56));
-            ivParams.setMargins(dp(8), 0, dp(8), 0);
-            ivCircuit.setLayoutParams(ivParams);
+            ivCircuit.setLayoutParams(new FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             ivCircuit.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            ivCircuit.setAdjustViewBounds(true);
             ivCircuit.setImageResource(circuitRes);
-            inner.addView(ivCircuit);
+            ivCircuit.setAlpha(isNext ? 1.0f : 0.4f);
+            
+            // Neon glow for the next race circuit
+            if (isNext) {
+                ivCircuit.setColorFilter(accentColor);
+            } else {
+                ivCircuit.setColorFilter(0xFFAAAAAA);
+            }
+            
+            circuitFrame.addView(ivCircuit);
+            inner.addView(circuitFrame);
         }
-
-        // Date
-        TextView tvDate = new TextView(this);
-        try {
-            tvDate.setText(LocalDate.parse(race.date, IN_FMT).format(OUT_FMT));
-        } catch (Exception e) {
-            tvDate.setText(race.date);
-        }
-        tvDate.setTextColor(isNext ? 0xFFE10600 : 0xFF999999);
-        tvDate.setTextSize(14);
-        tvDate.setTypeface(ResourcesCompat.getFont(this, R.font.jetbrains_mono), android.graphics.Typeface.NORMAL);
-        tvDate.setGravity(Gravity.END);
-        inner.addView(tvDate);
 
         return card;
-    }
-
-    private void addSessionPill(LinearLayout parent, String label, JolpicaScheduleResponse.Session session) {
-        if (session == null) return;
-        TextView pill = new TextView(this);
-        String dateStr = "";
-        try {
-            dateStr = " " + LocalDate.parse(session.date, IN_FMT).format(OUT_FMT);
-        } catch (Exception ignored) {}
-        pill.setText(label + dateStr);
-        pill.setTextColor(0xFF999999);
-        pill.setTextSize(11);
-        pill.setTypeface(ResourcesCompat.getFont(this, R.font.jetbrains_mono), android.graphics.Typeface.NORMAL);
-        pill.setBackgroundColor(0xFF2A2A2A);
-        pill.setPadding(dp(6), dp(2), dp(6), dp(2));
-        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        p.setMargins(0, 0, dp(6), 0);
-        pill.setLayoutParams(p);
-        parent.addView(pill);
     }
 
     private void showError() {
@@ -226,6 +271,26 @@ public class RaceCenterActivity extends AppCompatActivity {
         tv.setTextSize(14);
         tv.setPadding(dp(8), dp(8), dp(8), dp(8));
         racesContainer.addView(tv);
+    }
+
+    private void navigateToRaceDetails(Race race) {
+        Intent intent = new Intent(this, RaceDetailsActivity.class);
+        intent.putExtra("raceName", race.raceName != null ? race.raceName : "Race");
+        intent.putExtra("raceDate", race.date != null ? race.date : "");
+        String location = "";
+        String circuitName = "";
+        if (race.circuit != null && race.circuit.location != null) {
+            location = (race.circuit.location.locality != null ? race.circuit.location.locality : "") + ", " +
+                      (race.circuit.location.country != null ? race.circuit.location.country : "");
+            circuitName = race.circuit.circuitName != null ? race.circuit.circuitName : "";
+        }
+        intent.putExtra("location", location);
+        intent.putExtra("circuitName", circuitName);
+        String locality = race.circuit != null && race.circuit.location != null ? race.circuit.location.locality : "";
+        String country  = race.circuit != null && race.circuit.location != null ? race.circuit.location.country  : "";
+        intent.putExtra("locality", locality);
+        intent.putExtra("country", country);
+        startActivity(intent, ActivityOptions.makeCustomAnimation(this, R.anim.slide_in_right, R.anim.slide_out_left).toBundle());
     }
 
     private int dp(int val) {

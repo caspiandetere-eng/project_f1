@@ -19,4 +19,24 @@
         <item name="android:fontFamily">@font/inter</item>
         <item name="android:textColor">#FFFFFF</item>
     </style>
+    <style name="BottomSheetTheme" parent="Theme.Material3.DayNight.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+
+    <style name="BottomSheetStyle" parent="Widget.Material3.BottomSheet">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="backgroundTint">#1A1A1A</item>
+        <item name="shapeAppearance">@style/BottomSheetShape</item>
+    </style>
+
+    <style name="BottomSheetShape" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerSizeTopLeft">20dp</item>
+        <item name="cornerSizeTopRight">20dp</item>
+    </style>
+
+    <style name="CircleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

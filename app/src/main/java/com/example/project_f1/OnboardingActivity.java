@@ -107,7 +107,17 @@ public class OnboardingActivity extends AppCompatActivity {
     private void finishOnboarding() {
         SharedPreferences prefs = getSharedPreferences("F1Prefs", MODE_PRIVATE);
         prefs.edit().putBoolean("onboarding_done", true).apply();
-        startActivity(new Intent(this, MainActivity.class));
+        
+        // Check if favorites are already selected
+        if (!FavoriteRepository.hasBothFavorites(this)) {
+            // Navigate to favorite selection
+            Intent intent = new Intent(this, FavoriteSelectionActivity.class);
+            intent.putExtra("from_onboarding", true);
+            startActivity(intent);
+        } else {
+            // Go directly to MainActivity
+            startActivity(new Intent(this, MainActivity.class));
+        }
         finish();
     }
 }

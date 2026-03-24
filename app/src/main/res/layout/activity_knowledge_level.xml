@@ -111,10 +111,12 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@drawable/gradient_red"
-                        android:fontFamily="sans-serif-black"
+                        android:fontFamily="@font/barlow_condensed"
                         android:gravity="center"
-                        android:text="🏁"
-                        android:textSize="24sp" />
+                        android:text="R"
+                        android:textColor="#FFFFFF"
+                        android:textSize="22sp"
+                        android:textFontWeight="700" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -126,7 +128,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-black"
+                            android:fontFamily="@font/titillium_web"
+                            android:textFontWeight="700"
                             android:text="@string/rookie"
                             android:textColor="@color/text_primary_white"
                             android:textSize="20sp" />
@@ -135,6 +138,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
+                            android:fontFamily="@font/inter"
                             android:text="@string/rookie_desc"
                             android:textColor="@color/text_secondary_gray"
                             android:textSize="13sp" />
@@ -165,10 +169,12 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@drawable/gradient_red"
-                        android:fontFamily="sans-serif-black"
+                        android:fontFamily="@font/barlow_condensed"
                         android:gravity="center"
-                        android:text="🏎️"
-                        android:textSize="24sp" />
+                        android:text="C"
+                        android:textColor="#FFFFFF"
+                        android:textSize="22sp"
+                        android:textFontWeight="700" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -180,7 +186,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-black"
+                            android:fontFamily="@font/titillium_web"
+                            android:textFontWeight="700"
                             android:text="@string/casual_fan"
                             android:textColor="@color/text_primary_white"
                             android:textSize="20sp" />
@@ -189,6 +196,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
+                            android:fontFamily="@font/inter"
                             android:text="@string/casual_desc"
                             android:textColor="@color/text_secondary_gray"
                             android:textSize="13sp" />
@@ -219,10 +227,12 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@drawable/gradient_red"
-                        android:fontFamily="sans-serif-black"
+                        android:fontFamily="@font/barlow_condensed"
                         android:gravity="center"
-                        android:text="🏆"
-                        android:textSize="24sp" />
+                        android:text="E"
+                        android:textColor="#FFFFFF"
+                        android:textSize="22sp"
+                        android:textFontWeight="700" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -234,7 +244,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-black"
+                            android:fontFamily="@font/titillium_web"
+                            android:textFontWeight="700"
                             android:text="@string/enthusiast"
                             android:textColor="@color/text_primary_white"
                             android:textSize="20sp" />
@@ -243,6 +254,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
+                            android:fontFamily="@font/inter"
                             android:text="@string/enthusiast_desc"
                             android:textColor="@color/text_secondary_gray"
                             android:textSize="13sp" />
@@ -273,10 +285,12 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="@drawable/gradient_red"
-                        android:fontFamily="sans-serif-black"
+                        android:fontFamily="@font/barlow_condensed"
                         android:gravity="center"
-                        android:text="🎯"
-                        android:textSize="24sp" />
+                        android:text="P"
+                        android:textColor="#FFFFFF"
+                        android:textSize="22sp"
+                        android:textFontWeight="700" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -288,7 +302,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-black"
+                            android:fontFamily="@font/titillium_web"
+                            android:textFontWeight="700"
                             android:text="@string/paddock_insider"
                             android:textColor="@color/text_primary_white"
                             android:textSize="20sp" />
@@ -297,6 +312,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
+                            android:fontFamily="@font/inter"
                             android:text="@string/insider_desc"
                             android:textColor="@color/text_secondary_gray"
                             android:textSize="13sp" />

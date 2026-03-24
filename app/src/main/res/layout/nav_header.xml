@@ -1,17 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="180dp"
-    android:background="@drawable/bg_racing_gradient"
+    android:layout_height="220dp"
     android:gravity="bottom"
     android:orientation="vertical"
     android:padding="20dp">
 
     <View
+        android:id="@+id/viewHeaderAccent"
         android:layout_width="32dp"
         android:layout_height="4dp"
         android:layout_marginBottom="12dp"
         android:background="@drawable/gradient_red" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="8dp">
+
+        <FrameLayout
+            android:layout_width="72dp"
+            android:layout_height="72dp">
+
+            <ImageView
+                android:id="@+id/ivHeaderDriverPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_circle_profile"
+                android:clipToOutline="true"
+                android:contentDescription="Profile photo" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/bg_team_logo_badge">
+
+            <ImageView
+                android:id="@+id/ivHeaderTeamLogo"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
+                android:contentDescription="Favorite team" />
+
+        </FrameLayout>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvHeaderName"

@@ -1,0 +1,34 @@
+driver_id,driver_name,record_type,record_title,value,year
+VER,Max Verstappen,season,Most wins in a season,19,2023
+VER,Max Verstappen,streak,Most consecutive wins,10,2023
+VER,Max Verstappen,season,Most points in a season,575,2023
+VER,Max Verstappen,age,Youngest F1 driver,17y 166d,2015
+VER,Max Verstappen,season,Most laps led in a season,1003,2023
+VER,Max Verstappen,season,Highest win percentage in a season,86.36%,2023
+HAM,Lewis Hamilton,career,Most wins,103,-
+HAM,Lewis Hamilton,career,Most poles,104,-
+HAM,Lewis Hamilton,career,Most podiums,197,-
+HAM,Lewis Hamilton,career,Most points,4700+,-
+HAM,Lewis Hamilton,career,Most front row starts,176,-
+HAM,Lewis Hamilton,circuit,Most wins at Silverstone,9,-
+HAM,Lewis Hamilton,career,Most consecutive points finishes,48,-
+ALO,Fernando Alonso,career,Longest F1 career span,20+ years,-
+ALO,Fernando Alonso,career,Most starts,400+,-
+ALO,Fernando Alonso,age,Oldest race winner (modern era),32+,-
+HUL,Nico Hulkenberg,career,Most races without podium,200+,-
+PER,Sergio Perez,career,First Mexican modern F1 winner,1st,2020
+PER,Sergio Perez,career,Race wins,13,-
+LEC,Charles Leclerc,career,Most poles without title (active),23,-
+NOR,Lando Norris,career,World Champion,1,2025
+NOR,Lando Norris,age,Young British podium finisher,20y,2020
+OCO,Esteban Ocon,career,First French winner since 1996,1,2021
+GAS,Pierre Gasly,career,First AlphaTauri win,1,2020
+BOT,Valtteri Bottas,career,Most poles without championship,20,-
+BOT,Valtteri Bottas,career,Race wins,10,-
+RUS,George Russell,career,First win for Mercedes junior,1,2022
+ANT,Kimi Antonelli,career,Youngest Mercedes race driver,18y,2025
+COL,Franco Colapinto,career,First Argentine driver since 2001,1st,2024
+HAD,Isack Hadjar,career,F2 Champion,1st,2024
+BOR,Gabriel Bortoleto,career,F2 Champion,1st,2024
+LIN,Arvid Lindblad,career,Youngest British F1 driver,18y,2026
+LAW,Liam Lawson,career,Debut race points finish,1,2023

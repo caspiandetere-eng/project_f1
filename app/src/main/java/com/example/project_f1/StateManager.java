@@ -40,9 +40,8 @@ public class StateManager {
         String theme = prefs.getString(KEY_THEME_MODE, ThemeManager.THEME_DEFAULT);
         sm.currentTheme.setValue(theme);
 
-        KnowledgeLevelManager.KnowledgeLevel level = KnowledgeLevelManager.getKnowledgeLevel(ctx);
-        boolean detailed = level == KnowledgeLevelManager.KnowledgeLevel.ENTHUSIAST
-                || level == KnowledgeLevelManager.KnowledgeLevel.INSIDER
+        boolean detailed = KnowledgeLevelManager.isEnthusiast(ctx)
+                || KnowledgeLevelManager.isInsider(ctx)
                 || prefs.getBoolean(KEY_DETAILED_MODE, false);
         sm.isDetailedMode.setValue(detailed);
 

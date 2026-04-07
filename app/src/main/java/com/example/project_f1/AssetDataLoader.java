@@ -45,6 +45,17 @@ public class AssetDataLoader {
         public int maxSpeedYear;
     }
 
+    // ── Per-circuit telemetry for a driver ────────────────────────────────────
+    public static class CircuitTelemetry {
+        public String raceName;       // e.g. "Bahrain Grand Prix"
+        public double avgSpeed;
+        public double maxSpeed;
+        public double avgThrottle;    // 0-100
+        public double avgBrake;       // 0-1
+        public int sampleCount;
+        public int[] speedBuckets;    // 10 buckets: 0-50, 50-100, ..., 450-500 km/h
+    }
+
     // ── Static caches ─────────────────────────────────────────────────────────
     // Key: driver name (lowercase, trimmed) → stats
     private static Map<String, DriverCareerStats> driverStatsCache;
@@ -54,6 +65,8 @@ public class AssetDataLoader {
     private static Map<String, TeamStats> teamStatsCache;
     // Key: driver number string → aggregated telemetry
     private static Map<String, DriverTelemetry> telemetryCache;
+    // Key: "driverNum_raceName" → CircuitTelemetry
+    private static Map<String, CircuitTelemetry> circuitTelemetryCache;
 
     // ── Driver number → car name mapping ────────────────────────────────────
     private static final Map<String, String> NUMBER_TO_CAR = new HashMap<String, String>() {{
@@ -92,6 +105,9 @@ public class AssetDataLoader {
         put("7",  "raikkonen");  put("99", "giovinazzi");
         put("88", "kubica");     put("20", "magnussen");
         put("24", "zhou");       put("2",  "sargeant");
+        // Russell also raced as #63 in 2020 (Williams) — same number, already mapped
+        // Ocon raced as #31 in earlier seasons
+        put("31", "ocon");
     }};
 
     // ── Driver code → driver id mapping ──────────────────────────────────────
@@ -152,6 +168,52 @@ public class AssetDataLoader {
             }
         }
         return null;
+    }
+
+    /**
+     * Returns a list of CircuitTelemetry entries for the given driver,
+     * sorted by avgSpeed descending (fastest circuit first).
+     */
+    public static List<CircuitTelemetry> getCircuitTelemetry(Context ctx, String driverId) {
+        ensureCircuitTelemetry(ctx);
+        // Collect all driver numbers for this driverId
+        List<String> nums = new ArrayList<>();
+        for (Map.Entry<String, String> e : NUMBER_TO_ID.entrySet()) {
+            if (e.getValue().equals(driverId)) nums.add(e.getKey());
+        }
+        // Merge across all numbers (same driver, different seasons)
+        Map<String, double[]> merged = new HashMap<>(); // raceName -> [sumSpeed, maxSpeed, sumThrottle, sumBrake, count, sumBuckets*10]
+        for (String num : nums) {
+            for (Map.Entry<String, CircuitTelemetry> e : circuitTelemetryCache.entrySet()) {
+                if (!e.getKey().startsWith(num + "|")) continue;
+                CircuitTelemetry ct = e.getValue();
+                double[] acc = merged.get(ct.raceName);
+                if (acc == null) { acc = new double[15]; merged.put(ct.raceName, acc); }
+                acc[0] += ct.avgSpeed * ct.sampleCount;
+                acc[1] = Math.max(acc[1], ct.maxSpeed);
+                acc[2] += ct.avgThrottle * ct.sampleCount;
+                acc[3] += ct.avgBrake * ct.sampleCount;
+                acc[4] += ct.sampleCount;
+                for (int b = 0; b < 10; b++) acc[5 + b] += ct.speedBuckets[b];
+            }
+        }
+        List<CircuitTelemetry> result = new ArrayList<>();
+        for (Map.Entry<String, double[]> e : merged.entrySet()) {
+            double[] acc = e.getValue();
+            if (acc[4] == 0) continue;
+            CircuitTelemetry ct = new CircuitTelemetry();
+            ct.raceName    = e.getKey();
+            ct.avgSpeed    = acc[0] / acc[4];
+            ct.maxSpeed    = acc[1];
+            ct.avgThrottle = acc[2] / acc[4];
+            ct.avgBrake    = acc[3] / acc[4];
+            ct.sampleCount = (int) acc[4];
+            ct.speedBuckets = new int[10];
+            for (int b = 0; b < 10; b++) ct.speedBuckets[b] = (int) acc[5 + b];
+            result.add(ct);
+        }
+        result.sort((a, b) -> Double.compare(b.avgSpeed, a.avgSpeed));
+        return result;
     }
 
     // ── Loaders ───────────────────────────────────────────────────────────────
@@ -225,6 +287,57 @@ public class AssetDataLoader {
                 teamStatsCache.put(s.name.toLowerCase(), s);
             }
         } catch (Exception ignored) {}
+    }
+
+    private static void ensureCircuitTelemetry(Context ctx) {
+        if (circuitTelemetryCache != null) return;
+        circuitTelemetryCache = new HashMap<>();
+        // Accumulate: key = "driverNum|raceName"
+        // acc = [sumSpeed, maxSpeed, sumThrottle, sumBrake, count, bucket0..9]
+        Map<String, double[]> acc = new HashMap<>();
+        try {
+            StringBuilder sb = new StringBuilder();
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(ctx.getAssets().open("f1_data.json")));
+            String line;
+            while ((line = br.readLine()) != null) sb.append(line);
+            br.close();
+            JSONObject root = new JSONObject(sb.toString());
+            JSONArray telemetry = root.getJSONArray("telemetry");
+            for (int i = 0; i < telemetry.length(); i++) {
+                JSONObject t = telemetry.getJSONObject(i);
+                String drv   = t.getString("driver");
+                String race  = t.getString("race");
+                double speed    = t.getDouble("speed");
+                double throttle = t.getDouble("throttle");
+                double brake    = t.getDouble("brake");
+                String key = drv + "|" + race;
+                double[] a = acc.get(key);
+                if (a == null) { a = new double[15]; acc.put(key, a); }
+                a[0] += speed;
+                if (speed > a[1]) a[1] = speed;
+                a[2] += throttle;
+                a[3] += brake;
+                a[4]++;
+                int bucket = Math.min(9, (int)(speed / 50.0));
+                a[5 + bucket]++;
+            }
+        } catch (Exception ignored) {}
+        for (Map.Entry<String, double[]> e : acc.entrySet()) {
+            double[] a = e.getValue();
+            if (a[4] == 0) continue;
+            String[] parts = e.getKey().split("\\|", 2);
+            CircuitTelemetry ct = new CircuitTelemetry();
+            ct.raceName    = parts.length > 1 ? parts[1] : e.getKey();
+            ct.avgSpeed    = a[0] / a[4];
+            ct.maxSpeed    = a[1];
+            ct.avgThrottle = a[2] / a[4];
+            ct.avgBrake    = a[3] / a[4];
+            ct.sampleCount = (int) a[4];
+            ct.speedBuckets = new int[10];
+            for (int b = 0; b < 10; b++) ct.speedBuckets[b] = (int) a[5 + b];
+            circuitTelemetryCache.put(e.getKey(), ct);
+        }
     }
 
     private static void ensureTelemetry(Context ctx) {

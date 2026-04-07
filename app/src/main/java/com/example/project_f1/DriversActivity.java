@@ -51,9 +51,8 @@ public class DriversActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         theme = ThemeManager.applyFullTheme(this);
-        KnowledgeLevelManager.KnowledgeLevel lvl = KnowledgeLevelManager.getKnowledgeLevel(this);
-        isEnthusiast = lvl.level >= KnowledgeLevelManager.KnowledgeLevel.ENTHUSIAST.level;
-        isInsider    = lvl.level >= KnowledgeLevelManager.KnowledgeLevel.INSIDER.level;
+        isEnthusiast = KnowledgeLevelManager.isEnthusiast(this) || KnowledgeLevelManager.isInsider(this);
+        isInsider    = KnowledgeLevelManager.isInsider(this);
 
         androidx.core.widget.NestedScrollView scroll = new androidx.core.widget.NestedScrollView(this);
         scroll.setFillViewport(true);
@@ -214,7 +213,7 @@ public class DriversActivity extends BaseActivity {
         summary.addView(bgView, bgLp);
 
         // LAYER 2 — large faded driver number (behind everything)
-        String driverNumber = getDriverNumber(driver.id);
+        String driverNumber = driver.number > 0 ? String.valueOf(driver.number) : "";
         TextView tvNumber = new TextView(this);
         tvNumber.setId(View.generateViewId());
         tvNumber.setText(driverNumber);
@@ -398,35 +397,7 @@ public class DriversActivity extends BaseActivity {
         root.addView(card);
     }
 
-    private static String getDriverNumber(String driverId) {
-        switch (driverId) {
-            case "verstappen": return "1";
-            case "hamilton":   return "44";
-            case "leclerc":    return "16";
-            case "norris":     return "4";
-            case "piastri":    return "81";
-            case "russell":    return "63";
-            case "antonelli":  return "12";
-            case "alonso":     return "14";
-            case "stroll":     return "18";
-            case "sainz":      return "55";
-            case "albon":      return "23";
-            case "gasly":      return "10";
-            case "colapinto":  return "43";
-            case "hulkenberg": return "27";
-            case "bortoleto":  return "5";
-            case "ocon":       return "31";
-            case "bearman":    return "87";
-            case "hadjar":     return "6";
-            case "lawson":     return "30";
-            case "lindblad":   return "8";
-            case "perez":      return "11";
-            case "bottas":     return "77";
-            default:           return "";
-        }
-    }
-
-    private static String nationalityCode(String nationality) {
+private static String nationalityCode(String nationality) {
         if (nationality == null) return "";
         switch (nationality) {
             case "British":     return "GBR";
@@ -449,7 +420,7 @@ public class DriversActivity extends BaseActivity {
         }
     }
 
-    // ── Cache-first fetch: bio + 5 years of standings ─────────────────────────
+    //Cache-first fetch: bio and 5 years of standings
 
     private void fetchAndPopulateDetail(LinearLayout detail, Driver driver, Team team, int teamColor) {
         ProgressBar spinner = new ProgressBar(this);
@@ -546,7 +517,7 @@ public class DriversActivity extends BaseActivity {
         } catch (Exception e) { return null; }
     }
 
-    // ── Detail content ────────────────────────────────────────────────────────
+    // Detail content
 
     private void buildDetailContent(LinearLayout detail, Driver driver, Team team,
                                     int teamColor, JolpicaDriverResponse.DriverInfo info,
@@ -581,6 +552,12 @@ public class DriversActivity extends BaseActivity {
             if (info.code != null)            addChip(row1, "CODE", info.code, teamColor);
             if (info.dateOfBirth != null)     addChip(row1, "DATE OF BIRTH", formatDob(info.dateOfBirth), teamColor);
             if (row1.getChildCount() > 0) detail.addView(row1);
+        } else {
+            // Fallback: show number from local data when API unavailable
+            LinearLayout row1 = chipRow();
+            addChip(row1, "NUMBER", "#" + driver.number, teamColor);
+            addChip(row1, "NATIONALITY", driver.nationality, teamColor);
+            detail.addView(row1);
         }
 
         // Row 2: Nationality · Team
@@ -602,36 +579,41 @@ public class DriversActivity extends BaseActivity {
         histHeader.setLayoutParams(hhP);
         detail.addView(histHeader);
 
-        // One row per year
+        // One row per year — skip years with no data for rookies
+        boolean anyStandingFound = false;
         for (int i = 0; i < YEARS.length; i++) {
             int year = YEARS[i];
             JolpicaStandingsResponse.DriverStanding s = standings[i];
             LinearLayout yearRow = chipRow();
             if (s != null) {
+                anyStandingFound = true;
                 addChip(yearRow, String.valueOf(year), "P" + s.position, teamColor);
                 addChip(yearRow, "POINTS", s.points, teamColor);
                 addChip(yearRow, "WINS", s.wins, teamColor);
-            } else {
-                addChip(yearRow, String.valueOf(year), "No data", 0xFF444444);
+                detail.addView(yearRow);
             }
-            detail.addView(yearRow);
+        }
+        if (!anyStandingFound) {
+            LinearLayout noDataRow = chipRow();
+            addChip(noDataRow, "HISTORY", "Rookie — no prior seasons", 0xFF444444);
+            detail.addView(noDataRow);
         }
 
-        // ── ALL USERS : points/wins history + top speed from telemetry ──────
+        // ALL USERS : points/wins history + top speed from telemetry
         addBasicTelemetry(detail, driver, teamColor);
 
-        // ── ENTHUSIAST+ : career stats & records from CSV ──────────────────
+        //ENTHUSIAST+ : career stats & records from CSV
         if (isEnthusiast) {
             addCsvDriverData(detail, driver, teamColor);
         }
 
-        // ── INSIDER only : full telemetry analysis from JSON ───────────────
+        //INSIDER only : full telemetry analysis from JSON
         if (isInsider) {
             addTelemetryData(detail, driver, teamColor);
         }
     }
 
-    // ── Basic telemetry: points/wins history + top speed (ALL users) ──────────
+    // Basic telemetry: points/wins history + top speed (ALL users)
 
     private void addBasicTelemetry(LinearLayout detail, Driver driver, int teamColor) {
         AssetDataLoader.DriverTelemetry t = AssetDataLoader.getDriverTelemetry(this, driver.id);
@@ -652,7 +634,7 @@ public class DriversActivity extends BaseActivity {
         }
     }
 
-    // ── CSV career stats + records (ENTHUSIAST+) ─────────────────────────────
+    // CSV career stats + records (ENTHUSIAST+)
 
     private void addCsvDriverData(LinearLayout detail, Driver driver, int teamColor) {
         AssetDataLoader.DriverCareerStats stats = AssetDataLoader.getDriverStats(this, driver.id);
@@ -683,7 +665,7 @@ public class DriversActivity extends BaseActivity {
         }
     }
 
-    // ── Telemetry analysis (INSIDER only) ─────────────────────────────────────
+    //  Telemetry analysis (INSIDER only)
 
     private void addTelemetryData(LinearLayout detail, Driver driver, int teamColor) {
         AssetDataLoader.DriverTelemetry t = AssetDataLoader.getDriverTelemetry(this, driver.id);
@@ -713,7 +695,7 @@ public class DriversActivity extends BaseActivity {
         parent.addView(tv);
     }
 
-    // ── Chip helpers ──────────────────────────────────────────────────────────
+    // Chip helpers
 
     private LinearLayout chipRow() {
         LinearLayout row = new LinearLayout(this);
@@ -757,7 +739,7 @@ public class DriversActivity extends BaseActivity {
         parent.addView(chip);
     }
 
-    // ── Expand / collapse ─────────────────────────────────────────────────────
+    // Expand / collapse
 
     private void toggleExpand(LinearLayout detail, TextView chevron, int accentColor) {
         boolean expanding = detail.getVisibility() == View.GONE;
@@ -794,7 +776,7 @@ public class DriversActivity extends BaseActivity {
         }
     }
 
-    // ── Utilities ─────────────────────────────────────────────────────────────
+    //  Utilities
 
     private static int getCarRes(String teamId) {
         if (teamId == null) return 0;

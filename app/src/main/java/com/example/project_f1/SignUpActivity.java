@@ -15,12 +15,14 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +30,8 @@ import com.example.project_f1.models.Driver;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -40,7 +44,8 @@ public class SignUpActivity extends AppCompatActivity {
     private static final int PROFILE_TYPE_GALLERY = 2;
 
     private ImageView ivProfilePic;
-    private MaterialButton btnPickDefault, btnPickDriver, btnPickGallery;
+    private MaterialButton btnPickDriver, btnPickGallery;
+    private FirebaseAuth mAuth;
 
     // Current selection state
     private int profileType = PROFILE_TYPE_DEFAULT;
@@ -56,15 +61,17 @@ public class SignUpActivity extends AppCompatActivity {
         setContentView(R.layout.activity_signup);
         ThemeManager.applyStatusBar(this);
 
+        mAuth = FirebaseAuth.getInstance();
+
         ivProfilePic    = findViewById(R.id.ivProfilePic);
-        btnPickDefault  = findViewById(R.id.btnPickDefault);
         btnPickDriver   = findViewById(R.id.btnPickDriver);
         btnPickGallery  = findViewById(R.id.btnPickGallery);
 
         TextInputEditText etName     = findViewById(R.id.etName);
         TextInputEditText etEmail    = findViewById(R.id.etEmail);
         TextInputEditText etPassword = findViewById(R.id.etPassword);
-        MaterialButton    btnContinue = findViewById(R.id.btnContinue);
+        MaterialButton    btnContinue    = findViewById(R.id.btnContinue);
+        MaterialButton    btnForgotPassword = findViewById(R.id.btnForgotPassword);
 
         // Style avatar circle
         ivProfilePic.setBackground(new GradientDrawable() {{
@@ -73,6 +80,7 @@ public class SignUpActivity extends AppCompatActivity {
             setStroke(dpToPx(2), 0xFFE10600);
         }});
         setAvatarDefault();
+        SpringAnimationHelper.popIn(ivProfilePic);
 
         // Gallery launcher
         galleryLauncher = registerForActivityResult(
@@ -93,24 +101,16 @@ public class SignUpActivity extends AppCompatActivity {
                     }
                 });
 
-        btnPickDefault.setOnClickListener(v -> {
-            profileType = PROFILE_TYPE_DEFAULT;
-            selectedDriverResId = 0;
-            galleryUri = null;
-            setAvatarDefault();
-            highlightButton(btnPickDefault);
-        });
-
+        SpringAnimationHelper.attachPressSpring(btnPickDriver);
         btnPickDriver.setOnClickListener(v -> showDriverPicker());
 
+        SpringAnimationHelper.attachPressSpring(btnPickGallery);
         btnPickGallery.setOnClickListener(v -> {
             Intent pick = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
             galleryLauncher.launch(pick);
         });
 
-        // Default is pre-selected
-        highlightButton(btnPickDefault);
-
+        SpringAnimationHelper.attachPressSpring(btnContinue, 0.96);
         btnContinue.setOnClickListener(v -> {
             String name     = etName.getText().toString().trim();
             String email    = etEmail.getText().toString().trim();
@@ -121,25 +121,64 @@ public class SignUpActivity extends AppCompatActivity {
                 return;
             }
 
-            long userId = UserRepository.register(this, name, email, password);
-            if (userId == -1) {
-                Toast.makeText(this, "Email already registered", Toast.LENGTH_SHORT).show();
-                return;
-            }
+            btnContinue.setEnabled(false);
+            mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        btnContinue.setEnabled(true);
+                        String msg = task.getException() != null ? task.getException().getMessage() : "Registration failed";
+                        Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+                        return;
+                    }
 
-            // Save profile pic
-            String savedPicPath = saveProfilePic(userId);
-            UserProfileRepository.save(this, profileType, selectedDriverResId, savedPicPath);
+                    // Set display name
+                    mAuth.getCurrentUser().updateProfile(
+                        new UserProfileChangeRequest.Builder().setDisplayName(name).build());
 
-            getSharedPreferences("F1Prefs", MODE_PRIVATE).edit()
-                    .putInt("user_id", (int) userId)
-                    .putString("user_email", email)
-                    .putString("user_name", name)
-                    .apply();
+                    // Send verification email
+                    mAuth.getCurrentUser().sendEmailVerification()
+                        .addOnCompleteListener(verifyTask -> {
+                            if (verifyTask.isSuccessful()) {
+                                Toast.makeText(this, "Verification email sent to " + email, Toast.LENGTH_LONG).show();
+                            }
+                        });
 
-            Intent intent = new Intent(this, KnowledgeLevelActivity.class);
-            intent.putExtra("user_id", (int) userId);
-            startActivity(intent);
+                    String uid = mAuth.getCurrentUser().getUid();
+                    String savedPicPath = saveProfilePic(uid.hashCode());
+                    UserProfileRepository.save(this, profileType, selectedDriverResId, savedPicPath);
+
+                    getSharedPreferences("F1Prefs", MODE_PRIVATE).edit()
+                        .putString("user_email", email)
+                        .putString("user_name", name)
+                        .apply();
+
+                    mAuth.signOut(); // require email verification before login
+                    Intent intent = new Intent(this, KnowledgeLevelActivity.class);
+                    startActivity(intent);
+                });
+        });
+
+        btnForgotPassword.setOnClickListener(v -> {
+            EditText input = new EditText(this);
+            input.setHint("Enter your email");
+            input.setInputType(android.text.InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+            new AlertDialog.Builder(this)
+                .setTitle("Reset Password")
+                .setMessage("We'll send a reset link to your email.")
+                .setView(input)
+                .setPositiveButton("Send", (d, w) -> {
+                    String email = input.getText().toString().trim();
+                    if (email.isEmpty()) {
+                        Toast.makeText(this, "Enter an email address", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    mAuth.sendPasswordResetEmail(email)
+                        .addOnCompleteListener(task -> Toast.makeText(this,
+                            task.isSuccessful() ? "Reset email sent" : "Failed to send reset email",
+                            Toast.LENGTH_SHORT).show());
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
         });
     }
 
@@ -199,6 +238,8 @@ public class SignUpActivity extends AppCompatActivity {
                 border.setStroke(dpToPx(sel ? 3 : 1), sel ? 0xFFE10600 : 0x44FFFFFF);
                 h.photo.setBackground(border);
 
+                SpringAnimationHelper.popIn(h.itemView);
+                SpringAnimationHelper.attachPressSpring(h.itemView, 0.88);
                 h.itemView.setOnClickListener(v -> {
                     profileType = PROFILE_TYPE_DRIVER;
                     selectedDriverResId = d.photoResId;
@@ -253,7 +294,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void highlightButton(MaterialButton active) {
-        for (MaterialButton btn : new MaterialButton[]{btnPickDefault, btnPickDriver, btnPickGallery}) {
+        for (MaterialButton btn : new MaterialButton[]{btnPickDriver, btnPickGallery}) {
             boolean isActive = btn == active;
             btn.setBackgroundTintList(ColorStateList.valueOf(isActive ? 0xFFE10600 : 0xFF1A1A1A));
             btn.setStrokeColor(ColorStateList.valueOf(isActive ? 0xFFE10600 : 0x66E10600));

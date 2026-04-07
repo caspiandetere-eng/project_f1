@@ -880,6 +880,83 @@
                     </FrameLayout>
                 </com.google.android.material.card.MaterialCardView>
 
+                <!-- Row 5: Quiz (full width) -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardQuiz"
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:layout_marginTop="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:cardBackgroundColor="@color/f1_card_dark"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="12dp"
+                    app:strokeColor="@color/f1_red_accent"
+                    app:strokeWidth="2dp"
+                    app:layout_constraintTop_toBottomOf="@id/cardBasics">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:alpha="0.08"
+                            android:background="@drawable/checkered_pattern" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:padding="20dp">
+
+                            <View
+                                android:id="@+id/quizAccent"
+                                android:layout_width="40dp"
+                                android:layout_height="4dp"
+                                android:background="@drawable/gradient_red"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/tvQuizTitle"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:fontFamily="@font/titillium_web"
+                                android:textFontWeight="700"
+                                android:letterSpacing="0.05"
+                                android:text="F1 Knowledge Quiz"
+                                android:textColor="@color/text_primary_white"
+                                android:textSize="24sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/quizAccent" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:fontFamily="@font/inter"
+                                android:text="Test your F1 knowledge &amp; earn XP"
+                                android:textColor="@color/text_secondary_gray"
+                                android:textSize="15sp"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@id/tvQuizTitle" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/barlow_condensed"
+                                android:text="→"
+                                android:textColor="@color/f1_red_accent"
+                                android:textSize="24sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </FrameLayout>
+                </com.google.android.material.card.MaterialCardView>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </ScrollView>
 

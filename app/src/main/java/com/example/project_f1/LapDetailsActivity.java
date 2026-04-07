@@ -7,11 +7,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import java.util.HashMap;
 
 public class LapDetailsActivity extends BaseActivity {
@@ -63,110 +61,68 @@ public class LapDetailsActivity extends BaseActivity {
         INFO.put("istanbul",     new CircuitInfo(14, 2, "315 km/h", "1:24.770 – Montoya (2005)",    "Turn 8 is a quadruple-apex left-hander — widely considered the greatest corner in F1."));
     }
 
-    // ── Activity ──────────────────────────────────────────────────────────────
+    private ThemeManager.TeamTheme theme;
+    private LinearLayout circuitsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeManager.TeamTheme theme = ThemeManager.applyFullTheme(this);
+        setContentView(R.layout.activity_lap_details);
+        theme = ThemeManager.applyFullTheme(this);
 
-        ScrollView scroll = new ScrollView(this);
+        SwipeRefreshLayout swipeRefresh = findViewById(R.id.swipeRefresh);
+        circuitsList = findViewById(R.id.circuitsList);
+        View headerBar = findViewById(R.id.headerAccentBar);
+        if (headerBar != null) headerBar.setBackgroundColor(theme.accent);
 
-        SwipeRefreshLayout swipeRefresh = new SwipeRefreshLayout(this);
-        swipeRefresh.setColorSchemeColors(theme.accent, 0xFFFFFFFF);
-        swipeRefresh.setOnRefreshListener(() -> {
-            swipeRefresh.setRefreshing(false);
-            recreate();
-        });
-        swipeRefresh.addView(scroll);
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
+        setupSwipeRefresh(swipeRefresh, theme.accent, this::recreate);
 
-        LinearLayout root = new LinearLayout(this);
-        root.setOrientation(LinearLayout.VERTICAL);
-        root.setPadding(dp(16), dp(20), dp(16), dp(32));
-        scroll.addView(root);
-
-        // ── Header ────────────────────────────────────────────────────────
-        LinearLayout header = new LinearLayout(this);
-        header.setOrientation(LinearLayout.HORIZONTAL);
-        header.setGravity(Gravity.CENTER_VERTICAL);
-        LinearLayout.LayoutParams headerParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        headerParams.setMargins(0, dp(40), 0, dp(24));
-        header.setLayoutParams(headerParams);
-
-        View accentBar = new View(this);
-        LinearLayout.LayoutParams barParams = new LinearLayout.LayoutParams(dp(4), dp(52));
-        barParams.setMargins(0, 0, dp(14), 0);
-        accentBar.setLayoutParams(barParams);
-        accentBar.setBackgroundColor(theme.accent);
-        header.addView(accentBar);
-
-        LinearLayout titleCol = new LinearLayout(this);
-        titleCol.setOrientation(LinearLayout.VERTICAL);
-        TextView tvTitle = new TextView(this);
-        tvTitle.setText("CIRCUIT DATABASE");
-        tvTitle.setTextColor(0xFFFFFFFF);
-        tvTitle.setTextSize(26);
-        tvTitle.setTypeface(ResourcesCompat.getFont(this, R.font.titillium_web), Typeface.BOLD);
-        tvTitle.setLetterSpacing(0.08f);
-        titleCol.addView(tvTitle);
-        TextView tvSub = new TextView(this);
-        tvSub.setText("Tap any circuit to reveal the track map");
-        tvSub.setTextColor(0xFF999999);
-        tvSub.setTextSize(13);
-        tvSub.setTypeface(ResourcesCompat.getFont(this, R.font.inter), Typeface.NORMAL);
-        titleCol.addView(tvSub);
-        header.addView(titleCol);
-        root.addView(header);
-
-        // ── 2026 Calendar ─────────────────────────────────────────────────
-        addSectionLabel(root, "2026 CALENDAR", theme.accent);
-
-        addCircuitCard(root, "R1",  "ALBERT PARK",           "Australia",     "5.278 km • 58 laps", "melbourne",    true,  theme);
-        addCircuitCard(root, "R2",  "SHANGHAI INT. CIRCUIT", "China",         "5.451 km • 56 laps", "shanghai",     true,  theme);
-        addCircuitCard(root, "R3",  "SUZUKA CIRCUIT",        "Japan",         "5.807 km • 53 laps", "suzuka",       true,  theme);
-        addCircuitCard(root, "R4",  "BAHRAIN INT. CIRCUIT",  "Bahrain",       "5.412 km • 57 laps", "bahrain",      true,  theme);
-        addCircuitCard(root, "R5",  "JEDDAH CORNICHE",       "Saudi Arabia",  "6.174 km • 50 laps", "jeddah",       true,  theme);
-        addCircuitCard(root, "R6",  "MIAMI INT. AUTODROME",  "USA",           "5.412 km • 57 laps", "miami",        true,  theme);
-        addCircuitCard(root, "R7",  "GILLES-VILLENEUVE",     "Canada",        "4.361 km • 70 laps", "montreal",     true,  theme);
-        addCircuitCard(root, "R8",  "CIRCUIT DE MONACO",     "Monaco",        "3.337 km • 78 laps", "monaco",       true,  theme);
-        addCircuitCard(root, "R9",  "CIRCUIT DE BARCELONA",  "Spain",         "4.657 km • 66 laps", "barcelona",    true,  theme);
-        addCircuitCard(root, "R10", "RED BULL RING",         "Austria",       "4.318 km • 71 laps", "red bull ring",true,  theme);
-        addCircuitCard(root, "R11", "SILVERSTONE",           "UK",            "5.891 km • 52 laps", "silverstone",  true,  theme);
-        addCircuitCard(root, "R12", "SPA-FRANCORCHAMPS",     "Belgium",       "7.004 km • 44 laps", "spa",          true,  theme);
-        addCircuitCard(root, "R13", "HUNGARORING",           "Hungary",       "4.381 km • 70 laps", "hungaroring",  true,  theme);
-        addCircuitCard(root, "R14", "CIRCUIT ZANDVOORT",     "Netherlands",   "4.259 km • 72 laps", "zandvoort",    true,  theme);
-        addCircuitCard(root, "R15", "MONZA",                 "Italy",         "5.793 km • 53 laps", "monza",        true,  theme);
-        addCircuitCard(root, "R16", "CIRCUITO DE MADRID",    "Spain",         "4.657 km • 66 laps", "madrid",       true,  theme);
-        addCircuitCard(root, "R17", "BAKU CITY CIRCUIT",     "Azerbaijan",    "6.003 km • 51 laps", "baku",         true,  theme);
-        addCircuitCard(root, "R18", "MARINA BAY STREET",     "Singapore",     "4.940 km • 62 laps", "singapore",    true,  theme);
-        addCircuitCard(root, "R19", "CIRCUIT OF THE AMERICAS","USA (Austin)", "5.513 km • 56 laps", "cota",         true,  theme);
-        addCircuitCard(root, "R20", "AUTODROMO H. RODRIGUEZ","Mexico",        "4.304 km • 71 laps", "mexico",       true,  theme);
-        addCircuitCard(root, "R21", "INTERLAGOS",            "Brazil",        "4.309 km • 71 laps", "interlagos",   true,  theme);
-        addCircuitCard(root, "R22", "LAS VEGAS STRIP",       "USA",           "6.201 km • 50 laps", "las vegas",    true,  theme);
-        addCircuitCard(root, "R23", "LUSAIL INTERNATIONAL",  "Qatar",         "5.419 km • 57 laps", "lusail",       true,  theme);
-        addCircuitCard(root, "R24", "YAS MARINA",            "UAE",           "5.281 km • 58 laps", "yas marina",   true,  theme);
-
-        // ── Historic circuits ─────────────────────────────────────────────
-        addSectionLabel(root, "GIANTS OF THE PAST", theme.accent);
-
-        addCircuitCard(root, null, "PESCARA CIRCUIT",         "Italy",         "25.8 km • 1957 GP",   "pescara",    false, theme);
-        addCircuitCard(root, null, "NÜRBURGRING NORDSCHLEIFE","Germany",       "22.8 km • Until 1976", "nurburgring",false, theme);
-        addCircuitCard(root, null, "SEPANG INTERNATIONAL",    "Malaysia",      "5.543 km • Last 2017", "sepang",     false, theme);
-        addCircuitCard(root, null, "BUDDH INTERNATIONAL",     "India",         "5.125 km • Last 2013", "buddh",      false, theme);
-        addCircuitCard(root, null, "KYALAMI",                 "South Africa",  "4.261 km • Last 1993", "kyalami",    false, theme);
-        addCircuitCard(root, null, "ADELAIDE STREET CIRCUIT", "Australia",     "3.780 km • Last 1995", "adelaide",   false, theme);
-        addCircuitCard(root, null, "ISTANBUL PARK",           "Turkey",        "5.338 km • Last 2021", "istanbul",   false, theme);
-
-        setContentView(swipeRefresh);
+        loadCircuits();
     }
 
-    // ── Helpers ───────────────────────────────────────────────────────────────
+    private void loadCircuits() {
+        circuitsList.removeAllViews();
+        addSectionLabel("2026 CALENDAR");
+        addCircuitCard("R1",  "ALBERT PARK",           "Australia",     "5.278 km • 58 laps", "melbourne",    true);
+        addCircuitCard("R2",  "SHANGHAI INT. CIRCUIT", "China",         "5.451 km • 56 laps", "shanghai",     true);
+        addCircuitCard("R3",  "SUZUKA CIRCUIT",        "Japan",         "5.807 km • 53 laps", "suzuka",       true);
+        addCircuitCard("R4",  "BAHRAIN INT. CIRCUIT",  "Bahrain",       "5.412 km • 57 laps", "bahrain",      true);
+        addCircuitCard("R5",  "JEDDAH CORNICHE",       "Saudi Arabia",  "6.174 km • 50 laps", "jeddah",       true);
+        addCircuitCard("R6",  "MIAMI INT. AUTODROME",  "USA",           "5.412 km • 57 laps", "miami",        true);
+        addCircuitCard("R7",  "GILLES-VILLENEUVE",     "Canada",        "4.361 km • 70 laps", "montreal",     true);
+        addCircuitCard("R8",  "CIRCUIT DE MONACO",     "Monaco",        "3.337 km • 78 laps", "monaco",       true);
+        addCircuitCard("R9",  "CIRCUIT DE BARCELONA",  "Spain",         "4.657 km • 66 laps", "barcelona",    true);
+        addCircuitCard("R10", "RED BULL RING",         "Austria",       "4.318 km • 71 laps", "red bull ring",true);
+        addCircuitCard("R11", "SILVERSTONE",           "UK",            "5.891 km • 52 laps", "silverstone",  true);
+        addCircuitCard("R12", "SPA-FRANCORCHAMPS",     "Belgium",       "7.004 km • 44 laps", "spa",          true);
+        addCircuitCard("R13", "HUNGARORING",           "Hungary",       "4.381 km • 70 laps", "hungaroring",  true);
+        addCircuitCard("R14", "CIRCUIT ZANDVOORT",     "Netherlands",   "4.259 km • 72 laps", "zandvoort",    true);
+        addCircuitCard("R15", "MONZA",                 "Italy",         "5.793 km • 53 laps", "monza",        true);
+        addCircuitCard("R16", "CIRCUITO DE MADRID",    "Spain",         "4.657 km • 66 laps", "madrid",       true);
+        addCircuitCard("R17", "BAKU CITY CIRCUIT",     "Azerbaijan",    "6.003 km • 51 laps", "baku",         true);
+        addCircuitCard("R18", "MARINA BAY STREET",     "Singapore",     "4.940 km • 62 laps", "singapore",    true);
+        addCircuitCard("R19", "CIRCUIT OF THE AMERICAS","USA (Austin)", "5.513 km • 56 laps", "cota",         true);
+        addCircuitCard("R20", "AUTODROMO H. RODRIGUEZ","Mexico",        "4.304 km • 71 laps", "mexico",       true);
+        addCircuitCard("R21", "INTERLAGOS",            "Brazil",        "4.309 km • 71 laps", "interlagos",   true);
+        addCircuitCard("R22", "LAS VEGAS STRIP",       "USA",           "6.201 km • 50 laps", "las vegas",    true);
+        addCircuitCard("R23", "LUSAIL INTERNATIONAL",  "Qatar",         "5.419 km • 57 laps", "lusail",       true);
+        addCircuitCard("R24", "YAS MARINA",            "UAE",           "5.281 km • 58 laps", "yas marina",   true);
 
-    private void addSectionLabel(LinearLayout parent, String text, int accentColor) {
+        addSectionLabel("GIANTS OF THE PAST");
+        addCircuitCard(null, "PESCARA CIRCUIT",         "Italy",         "25.8 km • 1957 GP",   "pescara",    false);
+        addCircuitCard(null, "NÜRBURGRING NORDSCHLEIFE","Germany",       "22.8 km • Until 1976", "nurburgring",false);
+        addCircuitCard(null, "SEPANG INTERNATIONAL",    "Malaysia",      "5.543 km • Last 2017", "sepang",     false);
+        addCircuitCard(null, "BUDDH INTERNATIONAL",     "India",         "5.125 km • Last 2013", "buddh",      false);
+        addCircuitCard(null, "KYALAMI",                 "South Africa",  "4.261 km • Last 1993", "kyalami",    false);
+        addCircuitCard(null, "ADELAIDE STREET CIRCUIT", "Australia",     "3.780 km • Last 1995", "adelaide",   false);
+        addCircuitCard(null, "ISTANBUL PARK",           "Turkey",        "5.338 km • Last 2021", "istanbul",   false);
+    }
+
+    private void addSectionLabel(String text) {
         TextView tv = new TextView(this);
         tv.setText(text);
-        tv.setTextColor(accentColor);
+        tv.setTextColor(theme.accent);
         tv.setTextSize(13);
         tv.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed), Typeface.BOLD);
         tv.setLetterSpacing(0.15f);
@@ -174,37 +130,30 @@ public class LapDetailsActivity extends BaseActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         p.setMargins(0, dp(20), 0, dp(10));
         tv.setLayoutParams(p);
-        parent.addView(tv);
+        circuitsList.addView(tv);
     }
 
-    private void addCircuitCard(LinearLayout parent, String round, String name,
-                                 String location, String length,
-                                 String circuitKey, boolean isActive, ThemeManager.TeamTheme theme) {
+    private void addCircuitCard(String round, String name, String location, String length, String circuitKey, boolean isActive) {
         CircuitInfo info = INFO.get(circuitKey);
 
-        LinearLayout card = new LinearLayout(this);
-        card.setOrientation(LinearLayout.VERTICAL);
-        card.setBackgroundColor(theme.cardBg);
+        com.google.android.material.card.MaterialCardView card = new com.google.android.material.card.MaterialCardView(this);
+        card.setCardBackgroundColor(theme.cardBg);
+        card.setRadius(dp(16));
+        card.setStrokeColor(isActive ? theme.accent : 0xFF333333);
+        card.setStrokeWidth(dp(1));
         LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         cardParams.setMargins(0, 0, 0, dp(10));
         card.setLayoutParams(cardParams);
 
-        LinearLayout cardInner = new LinearLayout(this);
-        cardInner.setOrientation(LinearLayout.HORIZONTAL);
+        LinearLayout contentContainer = new LinearLayout(this);
+        contentContainer.setOrientation(LinearLayout.VERTICAL);
+        card.addView(contentContainer);
 
-        View accent = new View(this);
-        accent.setLayoutParams(new LinearLayout.LayoutParams(dp(3), LinearLayout.LayoutParams.MATCH_PARENT));
-        accent.setBackgroundColor(isActive ? theme.accent : ThemeManager.blendColors(theme.cardBg, 0xFF444444, 0.5f));
-        cardInner.addView(accent);
-
-        // Header row
         LinearLayout headerRow = new LinearLayout(this);
         headerRow.setOrientation(LinearLayout.HORIZONTAL);
         headerRow.setGravity(Gravity.CENTER_VERTICAL);
-        headerRow.setPadding(dp(14), dp(14), dp(14), dp(14));
-        headerRow.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        headerRow.setPadding(dp(16), dp(16), dp(16), dp(16));
 
         if (round != null) {
             TextView tvRound = new TextView(this);
@@ -244,30 +193,18 @@ public class LapDetailsActivity extends BaseActivity {
         tvChevron.setTextSize(11);
         headerRow.addView(tvChevron);
 
-        cardInner.addView(headerRow);
-        card.addView(cardInner);
+        contentContainer.addView(headerRow);
 
-        // ── Expandable section ────────────────────────────────────────────
+        // Expandable section
         LinearLayout expandable = new LinearLayout(this);
         expandable.setOrientation(LinearLayout.VERTICAL);
         expandable.setVisibility(View.GONE);
-        expandable.setPadding(dp(17), 0, dp(14), dp(14));
-
-        View divLine = new View(this);
-        LinearLayout.LayoutParams dlp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, dp(1));
-        dlp.setMargins(0, 0, 0, dp(12));
-        divLine.setLayoutParams(dlp);
-        divLine.setBackgroundColor(ThemeManager.blendColors(theme.cardBg, 0xFF444444, 0.5f));
-        expandable.addView(divLine);
+        expandable.setPadding(dp(16), 0, dp(16), dp(16));
 
         // Map + specs side by side
-        LinearLayout contentRow = new LinearLayout(this);
-        contentRow.setOrientation(LinearLayout.HORIZONTAL);
-        contentRow.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        LinearLayout detailRow = new LinearLayout(this);
+        detailRow.setOrientation(LinearLayout.HORIZONTAL);
 
-        // Left: circuit map
         Integer circuitRes = CircuitAssets.getCircuitDrawable(circuitKey);
         if (circuitRes != null) {
             ImageView ivMap = new ImageView(this);
@@ -275,120 +212,59 @@ public class LapDetailsActivity extends BaseActivity {
             ivp.setMargins(0, 0, dp(12), 0);
             ivMap.setLayoutParams(ivp);
             ivMap.setScaleType(ImageView.ScaleType.FIT_CENTER);
-            ivMap.setAdjustViewBounds(true);
             ivMap.setImageResource(circuitRes);
-            contentRow.addView(ivMap);
+            detailRow.addView(ivMap);
         }
 
-        // Right: specs column
         LinearLayout specsCol = new LinearLayout(this);
         specsCol.setOrientation(LinearLayout.VERTICAL);
         specsCol.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
-        specsCol.setGravity(Gravity.TOP);
 
         if (info != null) {
-            addStatRow(specsCol, "TURNS",      String.valueOf(info.turns));
-            addStatRow(specsCol, "DRS ZONES",  String.valueOf(info.drs));
-            addStatRow(specsCol, "TOP SPEED",  info.topSpeed);
-            addStatRow(specsCol, "LAP RECORD", info.lapRecord);
-
-            // Fun fact
-            View factDivider = new View(this);
-            LinearLayout.LayoutParams fdp = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, dp(1));
-            fdp.setMargins(0, dp(10), 0, dp(8));
-            factDivider.setLayoutParams(fdp);
-            factDivider.setBackgroundColor(ThemeManager.blendColors(theme.cardBg, 0xFF444444, 0.5f));
-            specsCol.addView(factDivider);
-
-            TextView tvFactLabel = new TextView(this);
-            tvFactLabel.setText("DID YOU KNOW");
-            tvFactLabel.setTextColor(theme.accent);
-            tvFactLabel.setTextSize(9);
-            tvFactLabel.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed), Typeface.BOLD);
-            tvFactLabel.setLetterSpacing(0.12f);
-            specsCol.addView(tvFactLabel);
-
+            addStatRow(specsCol, "TURNS", info.turns + "");
+            addStatRow(specsCol, "DRS", info.drs + "");
+            addStatRow(specsCol, "TOP SPEED", info.topSpeed);
+            
             TextView tvFact = new TextView(this);
             tvFact.setText(info.funFact);
             tvFact.setTextColor(0xFF888888);
             tvFact.setTextSize(11);
-            tvFact.setTypeface(ResourcesCompat.getFont(this, R.font.inter), Typeface.NORMAL);
-            tvFact.setLineSpacing(dp(2), 1f);
+            tvFact.setPadding(0, dp(8), 0, 0);
             specsCol.addView(tvFact);
         }
 
-        contentRow.addView(specsCol);
-        expandable.addView(contentRow);
+        detailRow.addView(specsCol);
+        expandable.addView(detailRow);
+        contentContainer.addView(expandable);
 
-        card.addView(expandable);
-        parent.addView(card);
-
-        // Expand / collapse
-        headerRow.setOnClickListener(v -> {
-            boolean isExpanded = expandable.getVisibility() == View.VISIBLE;
-            if (isExpanded) {
-                int initialHeight = expandable.getMeasuredHeight();
-                ValueAnimator animator = ValueAnimator.ofInt(initialHeight, 0);
-                animator.setDuration(220);
-                animator.addUpdateListener(a -> {
-                    int val = (int) a.getAnimatedValue();
-                    expandable.getLayoutParams().height = val;
-                    expandable.requestLayout();
-                    if (val == 0) expandable.setVisibility(View.GONE);
-                });
-                animator.start();
-                tvChevron.setText("▼");
-                tvChevron.setTextColor(0xFF444444);
-            } else {
-                expandable.setVisibility(View.VISIBLE);
-                expandable.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                expandable.measure(
-                        View.MeasureSpec.makeMeasureSpec(card.getWidth(), View.MeasureSpec.AT_MOST),
-                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                int targetHeight = expandable.getMeasuredHeight();
-                expandable.getLayoutParams().height = 0;
-                expandable.requestLayout();
-                ValueAnimator animator = ValueAnimator.ofInt(0, targetHeight);
-                animator.setDuration(220);
-                animator.addUpdateListener(a -> {
-                    expandable.getLayoutParams().height = (int) a.getAnimatedValue();
-                    expandable.requestLayout();
-                });
-                animator.start();
-                tvChevron.setText("▲");
-                tvChevron.setTextColor(theme.accent);
-            }
+        card.setOnClickListener(v -> {
+            boolean expanding = expandable.getVisibility() == View.GONE;
+            if (expanding) CardAnimationHelper.expand(expandable);
+            else CardAnimationHelper.collapse(expandable);
+            CardAnimationHelper.rotateArrow(tvChevron, expanding);
+            tvChevron.setTextColor(expanding ? theme.accent : 0xFF444444);
+            tvChevron.setText(expanding ? "▲" : "▼");
         });
+
+        circuitsList.addView(card);
     }
 
     private void addStatRow(LinearLayout parent, String label, String value) {
         LinearLayout row = new LinearLayout(this);
-        row.setOrientation(LinearLayout.HORIZONTAL);
-        row.setGravity(Gravity.CENTER_VERTICAL);
-        LinearLayout.LayoutParams rp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        rp.setMargins(0, 0, 0, dp(6));
-        row.setLayoutParams(rp);
-
         TextView tvLabel = new TextView(this);
         tvLabel.setText(label);
         tvLabel.setTextColor(0xFF555555);
         tvLabel.setTextSize(9);
-        tvLabel.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed), Typeface.BOLD);
-        tvLabel.setLetterSpacing(0.08f);
-        tvLabel.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
+        tvLabel.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1f));
         row.addView(tvLabel);
 
         TextView tvValue = new TextView(this);
         tvValue.setText(value);
         tvValue.setTextColor(0xFFCCCCCC);
         tvValue.setTextSize(11);
-        tvValue.setTypeface(ResourcesCompat.getFont(this, R.font.jetbrains_mono), Typeface.NORMAL);
         tvValue.setGravity(Gravity.END);
-        tvValue.setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1.4f));
+        tvValue.setLayoutParams(new LinearLayout.LayoutParams(0, -2, 1f));
         row.addView(tvValue);
-
         parent.addView(row);
     }
 

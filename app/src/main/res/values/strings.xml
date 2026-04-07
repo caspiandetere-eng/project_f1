@@ -55,6 +55,23 @@
     <string name="iconic_quote">ICONIC QUOTE</string>
     <string name="fun_facts">FUN FACTS</string>
 
+    <!-- UI Labels -->
+    <string name="back_arrow">←</string>
+    <string name="circuit_database">CIRCUIT DATABASE</string>
+    <string name="circuit_tap_hint">Tap any circuit to reveal the track map</string>
+    <string name="calendar_2026">2026 CALENDAR</string>
+    <string name="giants_past">GIANTS OF THE PAST</string>
+    <string name="did_you_know">DID YOU KNOW</string>
+
+    <string name="tech_analysis_title">TECH &amp; ANALYSIS</string>
+    <string name="tech_analysis_subtitle">2026 Regulations &amp; Car Data</string>
+
+    <!-- Tech Analysis Tabs -->
+    <string name="tab_power_unit">Power Unit</string>
+    <string name="tab_aero">Aerodynamics</string>
+    <string name="tab_chassis">Chassis</string>
+    <string name="tab_sustainability">Sustainability</string>
+
     <!-- Senna -->
     <string name="ayrton_senna">Ayrton Senna</string>
     <string name="senna_years">1984 – 1994 · Brazilian</string>

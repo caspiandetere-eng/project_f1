@@ -60,8 +60,8 @@ public class OnboardingActivity extends AppCompatActivity {
         btnNext = findViewById(R.id.btnNext);
         TextView tvSkip = findViewById(R.id.tvSkip);
 
-        KnowledgeLevelManager.KnowledgeLevel level = KnowledgeLevelManager.getKnowledgeLevel(this);
-        pages = level == KnowledgeLevelManager.KnowledgeLevel.ROOKIE ? ROOKIE_PAGES : CASUAL_PAGES;
+        String tier = KnowledgeLevelManager.tierForLevel(this);
+        pages = tier.equals("rookie") ? ROOKIE_PAGES : CASUAL_PAGES;
 
         viewPager.setAdapter(new OnboardingAdapter(pages));
         setupDots(0);

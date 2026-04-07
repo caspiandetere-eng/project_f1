@@ -35,6 +35,13 @@
         <item name="cornerSizeTopRight">20dp</item>
     </style>
 
+    <style name="AlertDialogDark" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="android:background">#1A1A1A</item>
+        <item name="android:textColor">#CCCCCC</item>
+        <item name="colorPrimary">#E10600</item>
+        <item name="android:colorBackground">#1A1A1A</item>
+    </style>
+
     <style name="CircleImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>

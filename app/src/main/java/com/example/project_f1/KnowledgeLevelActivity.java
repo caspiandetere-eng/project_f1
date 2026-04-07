@@ -23,10 +23,17 @@ public class KnowledgeLevelActivity extends AppCompatActivity {
         String email = getIntent().getStringExtra("email");
         int userId = getIntent().getIntExtra("user_id", -1);
         
-        findViewById(R.id.cardRookie).setOnClickListener(v -> selectLevel(prefs, userId, "rookie"));
-        findViewById(R.id.cardCasual).setOnClickListener(v -> selectLevel(prefs, userId, "casual"));
-        findViewById(R.id.cardEnthusiast).setOnClickListener(v -> selectLevel(prefs, userId, "enthusiast"));
-        findViewById(R.id.cardInsider).setOnClickListener(v -> selectLevel(prefs, userId, "insider"));
+        int[] cardIds = {R.id.cardRookie, R.id.cardCasual, R.id.cardEnthusiast, R.id.cardInsider};
+        String[] levels = {"rookie", "casual", "enthusiast", "insider"};
+        long delayMs = 0;
+        for (int i = 0; i < cardIds.length; i++) {
+            android.view.View card = findViewById(cardIds[i]);
+            String level = levels[i];
+            card.postDelayed(() -> SpringAnimationHelper.popIn(card), delayMs);
+            card.setOnClickListener(v -> selectLevel(prefs, userId, level));
+            SpringAnimationHelper.attachPressSpring(card, 0.96);
+            delayMs += 80;
+        }
         findViewById(R.id.btnMenu).setOnClickListener(v -> startActivity(new Intent(this, SettingsActivity.class)));
     }
 

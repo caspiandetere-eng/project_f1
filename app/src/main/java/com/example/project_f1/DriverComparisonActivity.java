@@ -184,15 +184,35 @@ public class DriverComparisonActivity extends BaseActivity {
         ImageView photo = new ImageView(this);
         photo.setLayoutParams(new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
-        photo.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        photo.setScaleType(ImageView.ScaleType.MATRIX);
         photo.setClipToOutline(true);
         photo.setOutlineProvider(android.view.ViewOutlineProvider.BACKGROUND);
 
-        // Load image using Glide
+        // Load image using Glide, then align to top so face is visible
         Object imageSource = d.photoResId != 0 ? d.photoResId : d.getPhotoUrl();
         Glide.with(this)
                 .load(imageSource)
                 .transition(DrawableTransitionOptions.withCrossFade())
+                .listener(new com.bumptech.glide.request.RequestListener<android.graphics.drawable.Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@androidx.annotation.Nullable com.bumptech.glide.load.engine.GlideException e,
+                            Object model, com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target,
+                            boolean isFirstResource) { return false; }
+                    @Override
+                    public boolean onResourceReady(android.graphics.drawable.Drawable resource, Object model,
+                            com.bumptech.glide.request.target.Target<android.graphics.drawable.Drawable> target,
+                            com.bumptech.glide.load.DataSource dataSource, boolean isFirstResource) {
+                        photo.post(() -> {
+                            android.graphics.Matrix matrix = new android.graphics.Matrix();
+                            float scale = (float) photo.getWidth() / resource.getIntrinsicWidth();
+                            matrix.setScale(scale, scale);
+                            // Align to top — face is always near the top of driver portraits
+                            matrix.postTranslate(0, 0);
+                            photo.setImageMatrix(matrix);
+                        });
+                        return false;
+                    }
+                })
                 .into(photo);
 
         photoFrame.addView(photo);

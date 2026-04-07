@@ -1,75 +1,220 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="220dp"
-    android:gravity="bottom"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:paddingStart="20dp"
+    android:paddingEnd="20dp"
+    android:paddingTop="48dp"
+    android:paddingBottom="20dp">
 
-    <View
-        android:id="@+id/viewHeaderAccent"
-        android:layout_width="32dp"
-        android:layout_height="4dp"
-        android:layout_marginBottom="12dp"
-        android:background="@drawable/gradient_red" />
-
+    <!-- Profile row: photo + team logo -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:layout_marginBottom="8dp">
+        android:layout_marginBottom="14dp">
 
+        <!-- Driver photo -->
         <FrameLayout
-            android:layout_width="72dp"
-            android:layout_height="72dp">
+            android:layout_width="56dp"
+            android:layout_height="56dp">
 
             <ImageView
                 android:id="@+id/ivHeaderDriverPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="false"
                 android:background="@drawable/bg_circle_profile"
                 android:clipToOutline="true"
                 android:contentDescription="Profile photo" />
 
         </FrameLayout>
 
+        <!-- Team logo -->
         <FrameLayout
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_marginStart="12dp"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="10dp"
             android:background="@drawable/bg_team_logo_badge">
 
             <ImageView
                 android:id="@+id/ivHeaderTeamLogo"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
                 android:contentDescription="Favorite team" />
 
         </FrameLayout>
 
+        <!-- Name + email -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvHeaderName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/titillium_web"
+                android:textFontWeight="700"
+                android:text="Driver"
+                android:textColor="#FFFFFF"
+                android:textSize="17sp"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/tvHeaderEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/inter"
+                android:text=""
+                android:textColor="#666666"
+                android:textSize="11sp"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tvHeaderName"
+    <!-- Divider -->
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/titillium_web"
-        android:textFontWeight="700"
-        android:text="Driver"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp" />
+        android:layout_height="1dp"
+        android:background="#1AFFFFFF"
+        android:layout_marginBottom="14dp" />
 
-    <TextView
-        android:id="@+id/tvHeaderEmail"
+    <!-- XP section -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/inter"
-        android:text=""
-        android:textColor="#999999"
-        android:textSize="13sp" />
+        android:orientation="vertical">
+
+        <!-- Top row: tier badge + next tier -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="10dp">
+
+            <!-- Tier + level badge — tinted by Java -->
+            <TextView
+                android:id="@+id/tvHeaderLevel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/barlow_condensed"
+                android:textFontWeight="700"
+                android:textSize="12sp"
+                android:textColor="#FFFFFF"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:letterSpacing="0.06"
+                android:clickable="true"
+                android:focusable="true"
+                android:text="ROOKIE · L1" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <!-- Next tier label -->
+            <TextView
+                android:id="@+id/tvHeaderNextTier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/barlow_condensed"
+                android:textSize="11sp"
+                android:textColor="#555555"
+                android:letterSpacing="0.04"
+                android:text="Next: CASUAL" />
+
+        </LinearLayout>
+
+        <!-- XP numbers row -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="7dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="XP"
+                android:textColor="#444444"
+                android:textSize="10sp"
+                android:fontFamily="@font/barlow_condensed"
+                android:letterSpacing="0.1"
+                android:layout_marginEnd="6dp" />
+
+            <TextView
+                android:id="@+id/tvHeaderXp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/barlow_condensed"
+                android:textFontWeight="700"
+                android:textSize="13sp"
+                android:textColor="#CCCCCC"
+                android:text="0 / 100" />
+
+        </LinearLayout>
+
+        <!-- XP progress bar track -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_marginBottom="6dp">
+
+            <!-- Track -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:background="#1AFFFFFF" />
+
+            <!-- Fill — width set by Java -->
+            <View
+                android:id="@+id/viewXpFill"
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_gravity="start"
+                android:background="@drawable/gradient_red" />
+
+        </FrameLayout>
+
+        <!-- XP fraction label -->
+        <TextView
+            android:id="@+id/tvHeaderXpFraction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
+            android:textSize="10sp"
+            android:textColor="#444444"
+            android:gravity="end"
+            android:text="0 / 100 XP to next level" />
+
+    </LinearLayout>
+
+    <!-- Bottom accent line -->
+    <View
+        android:id="@+id/viewHeaderAccent"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/gradient_red" />
 
 </LinearLayout>

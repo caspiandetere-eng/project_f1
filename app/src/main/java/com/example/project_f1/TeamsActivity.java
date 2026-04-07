@@ -55,8 +55,7 @@ public class TeamsActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         theme = ThemeManager.applyFullTheme(this);
-        isEnthusiast = KnowledgeLevelManager.getKnowledgeLevel(this).level
-                >= KnowledgeLevelManager.KnowledgeLevel.ENTHUSIAST.level;
+        isEnthusiast = KnowledgeLevelManager.isEnthusiast(this) || KnowledgeLevelManager.isInsider(this);
 
         androidx.core.widget.NestedScrollView scroll = new androidx.core.widget.NestedScrollView(this);
         scroll.setFillViewport(true);

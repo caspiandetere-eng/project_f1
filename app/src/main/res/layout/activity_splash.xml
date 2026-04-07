@@ -1,34 +1,166 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
     android:background="@drawable/bg_racing_gradient">
 
-    <ImageView
-        android:id="@+id/ivLogo"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:layout_marginBottom="32dp"
-        android:contentDescription="@string/app_name"
-        android:src="@drawable/ic_launcher_foreground" />
+    <!-- Top accent stripe -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="4dp"
+        android:background="#E10600"
+        android:layout_gravity="top" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="24dp"
-        android:indeterminate="true" />
+    <!-- Center content -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingStart="40dp"
+        android:paddingEnd="40dp">
 
+        <!-- App logo -->
+        <ImageView
+            android:id="@+id/ivSplashLogo"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/f1"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:contentDescription="F1 Logo" />
+
+        <!-- App name -->
+        <TextView
+            android:id="@+id/tvSplashTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="FORMULA 1"
+            android:textColor="#FFFFFF"
+            android:textSize="36sp"
+            android:fontFamily="@font/titillium_web"
+            android:textFontWeight="700"
+            android:letterSpacing="0.2" />
+
+        <!-- Tagline -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="The Pinnacle of Motorsport"
+            android:textColor="#AAAAAA"
+            android:textSize="13sp"
+            android:fontFamily="@font/inter"
+            android:letterSpacing="0.05" />
+
+        <!-- Divider line -->
+        <View
+            android:layout_width="48dp"
+            android:layout_height="2dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="#E10600" />
+
+        <!-- Race start lights row -->
+        <LinearLayout
+            android:id="@+id/lightsRow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="32dp">
+
+            <View
+                android:id="@+id/light1"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/splash_light_off" />
+
+            <View
+                android:id="@+id/light2"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/splash_light_off" />
+
+            <View
+                android:id="@+id/light3"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/splash_light_off" />
+
+            <View
+                android:id="@+id/light4"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/splash_light_off" />
+
+            <View
+                android:id="@+id/light5"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:background="@drawable/splash_light_off" />
+
+        </LinearLayout>
+
+        <!-- Progress bar track -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_marginBottom="16dp">
+
+            <!-- Track background -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background="#2A2A2A" />
+
+            <!-- Fill -->
+            <View
+                android:id="@+id/splashProgressFill"
+                android:layout_width="0dp"
+                android:layout_height="4dp"
+                android:background="#E10600"
+                android:layout_gravity="start" />
+
+        </FrameLayout>
+
+        <!-- Status text -->
+        <TextView
+            android:id="@+id/tvStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Starting engine..."
+            android:textColor="#888888"
+            android:textSize="13sp"
+            android:fontFamily="@font/inter"
+            android:letterSpacing="0.03" />
+
+    </LinearLayout>
+
+    <!-- Bottom version label -->
     <TextView
-        android:id="@+id/tvStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Loading..."
-        android:textSize="16sp"
-        android:fontFamily="@font/inter"
-        android:textColor="@android:color/white"
-        android:textAlignment="center" />
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="32dp"
+        android:text="2026 SEASON"
+        android:textColor="#444444"
+        android:textSize="11sp"
+        android:fontFamily="@font/barlow_condensed"
+        android:letterSpacing="0.15" />
 
-</LinearLayout>
+    <!-- Bottom accent stripe -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#1A1A1A"
+        android:layout_gravity="bottom" />
+
+</FrameLayout>

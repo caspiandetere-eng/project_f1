@@ -93,9 +93,11 @@ public class UserRepository {
         public final String points;
         public final String wins;
         public final String constructor;
+        public final String nationality;
 
         StandingRow(int position, String driverId, String givenName,
-                    String familyName, String points, String wins, String constructor) {
+                    String familyName, String points, String wins, String constructor,
+                    String nationality) {
             this.position = position;
             this.driverId = driverId;
             this.givenName = givenName;
@@ -103,6 +105,7 @@ public class UserRepository {
             this.points = points;
             this.wins = wins;
             this.constructor = constructor;
+            this.nationality = nationality;
         }
     }
 
@@ -166,6 +169,7 @@ public class UserRepository {
             + ", s." + F1Database.COL_POINTS
             + ", s." + F1Database.COL_WINS
             + ", s." + F1Database.COL_CONSTRUCTOR
+            + ", d." + F1Database.COL_NATIONALITY
             + " FROM " + F1Database.TABLE_STANDINGS + " s"
             + " LEFT JOIN " + F1Database.TABLE_DRIVERS + " d"
             + " ON s." + F1Database.COL_DRIVER_ID + " = d." + F1Database.COL_DRIVER_ID
@@ -181,7 +185,8 @@ public class UserRepository {
                 c.getString(3),
                 c.getString(4),
                 c.getString(5),
-                c.getString(6)
+                c.getString(6),
+                c.getString(7)
             ));
         }
         c.close();

@@ -10,4 +10,38 @@
     <color name="f1_gold">#FFD700</color>
     <color name="f1_silver">#C0C0C0</color>
     <color name="f1_bronze">#CD7F32</color>
+
+    <!-- Quiz colors -->
+    <color name="quiz_bg">#0D0D0D</color>
+    <color name="quiz_card_bg">#111111</color>
+    <color name="quiz_card_stroke">#2A2A2A</color>
+    <color name="quiz_progress_track">#1A1A1A</color>
+    <color name="quiz_text_primary">#FFFFFF</color>
+    <color name="quiz_text_secondary">#888888</color>
+    <color name="quiz_text_muted">#AAAAAA</color>
+    <color name="quiz_text_dim">#666666</color>
+    <color name="quiz_text_faint">#555555</color>
+    <color name="quiz_option_bg">#0D0D0D</color>
+    <color name="quiz_option_stroke">#2A2A2A</color>
+    <color name="quiz_option_text">#DDDDDD</color>
+    <color name="quiz_correct_bg">#0A2A0A</color>
+    <color name="quiz_correct_stroke">#2ECC71</color>
+    <color name="quiz_correct_text">#2ECC71</color>
+    <color name="quiz_wrong_bg">#2A0A0A</color>
+    <color name="quiz_wrong_stroke">#E74C3C</color>
+    <color name="quiz_wrong_text">#E74C3C</color>
+    <color name="quiz_unselected_bg">#0D0D0D</color>
+    <color name="quiz_unselected_stroke">#1A1A1A</color>
+    <color name="quiz_unselected_text">#555555</color>
+    <color name="quiz_score_mid_bg">#2A1A00</color>
+    <color name="quiz_score_mid_stroke">#FFAA00</color>
+    <color name="quiz_score_mid_text">#FFAA00</color>
+    <color name="quiz_btn_text">#000000</color>
+    <color name="quiz_legend_text">#666666</color>
+    <color name="quiz_xp_track">#1A1A1A</color>
+    <color name="quiz_xp_numbers">#666666</color>
+    <color name="quiz_level_up_bg">#1A2ECC71</color>
+    <color name="quiz_level_up_stroke">#552ECC71</color>
+    <color name="quiz_demote_bg">#1AE74C3C</color>
+    <color name="quiz_demote_stroke">#55E74C3C</color>
 </resources>

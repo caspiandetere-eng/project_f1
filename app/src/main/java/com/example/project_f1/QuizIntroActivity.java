@@ -62,7 +62,7 @@ public class QuizIntroActivity extends BaseActivity {
         // Title
         TextView tvTitle = new TextView(this);
         tvTitle.setText("F1 KNOWLEDGE QUIZ");
-        tvTitle.setTextColor(0xFFFFFFFF);
+        tvTitle.setTextColor(getResources().getColor(R.color.quiz_text_primary, null));
         tvTitle.setTextSize(28);
         tvTitle.setGravity(Gravity.CENTER);
         tvTitle.setTypeface(ResourcesCompat.getFont(this, R.font.titillium_web), Typeface.BOLD);
@@ -74,8 +74,10 @@ public class QuizIntroActivity extends BaseActivity {
 
         // Subtitle
         TextView tvSub = new TextView(this);
-        tvSub.setText("15 questions · Find your level");
-        tvSub.setTextColor(0xFF888888);
+        String currentLabel = KnowledgeLevelManager.displayLabel(this);
+        int currentXp = KnowledgeLevelManager.getXp(this);
+        tvSub.setText("30 questions · " + currentLabel + "  " + currentXp + "/100 XP");
+        tvSub.setTextColor(getResources().getColor(R.color.quiz_text_secondary, null));
         tvSub.setTextSize(15);
         tvSub.setGravity(Gravity.CENTER);
         tvSub.setTypeface(ResourcesCompat.getFont(this, R.font.inter));
@@ -90,14 +92,15 @@ public class QuizIntroActivity extends BaseActivity {
         root.addView(card);
 
         String[] infoLines = {
-            "🏎  Answer 15 F1 questions",
-            "🏁  Get your knowledge level",
+            "🏎  Answer 30 F1 questions",
+            "⬆  Earn XP and level up (20 levels)",
+            "⬇  Score < 40% causes demotion",
             "📊  Content adapts to your level"
         };
         for (String line : infoLines) {
             TextView tv = new TextView(this);
             tv.setText(line);
-            tv.setTextColor(0xFFCCCCCC);
+            tv.setTextColor(getResources().getColor(R.color.quiz_option_text, null));
             tv.setTextSize(15);
             tv.setTypeface(ResourcesCompat.getFont(this, R.font.inter));
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -115,15 +118,15 @@ public class QuizIntroActivity extends BaseActivity {
         levelsCard.setLayoutParams(levelsParams);
         root.addView(levelsCard);
 
-        addLevelRow(levelsCard, "0–4", "Rookie", theme.accent, dp);
-        addLevelRow(levelsCard, "5–8", "Casual", theme.accent, dp);
-        addLevelRow(levelsCard, "9–12", "Enthusiast", theme.accent, dp);
-        addLevelRow(levelsCard, "13–15", "Insider", theme.accent, dp);
+        addLevelRow(levelsCard, "L1–L5",   "Rookie",      theme.accent, dp);
+        addLevelRow(levelsCard, "L6–L10",  "Casual",      theme.accent, dp);
+        addLevelRow(levelsCard, "L11–L15", "Enthusiast",  theme.accent, dp);
+        addLevelRow(levelsCard, "L16–L20", "Insider",     theme.accent, dp);
 
         // Start button
         TextView btnStart = new TextView(this);
         btnStart.setText("START QUIZ");
-        btnStart.setTextColor(0xFF000000);
+        btnStart.setTextColor(getResources().getColor(R.color.quiz_btn_text, null));
         btnStart.setTextSize(16);
         btnStart.setGravity(Gravity.CENTER);
         btnStart.setTypeface(ResourcesCompat.getFont(this, R.font.titillium_web), Typeface.BOLD);
@@ -149,9 +152,9 @@ public class QuizIntroActivity extends BaseActivity {
         card.setOrientation(LinearLayout.VERTICAL);
         card.setPadding(px(20, dp), px(20, dp), px(20, dp), px(6, dp));
         GradientDrawable bg = new GradientDrawable();
-        bg.setColor(ThemeManager.blendColors(0xFF0D0D0D, theme.accent, 0.07f));
+        bg.setColor(ThemeManager.blendColors(getResources().getColor(R.color.quiz_bg, null), theme.accent, 0.07f));
         bg.setCornerRadius(px(16, dp));
-        bg.setStroke(px(1, dp), ThemeManager.blendColors(0xFF222222, theme.accent, 0.28f));
+        bg.setStroke(px(1, dp), ThemeManager.blendColors(getResources().getColor(R.color.quiz_card_stroke, null), theme.accent, 0.28f));
         card.setBackground(bg);
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -179,7 +182,7 @@ public class QuizIntroActivity extends BaseActivity {
 
         TextView tvLabel = new TextView(this);
         tvLabel.setText(label.toUpperCase());
-        tvLabel.setTextColor(0xFFCCCCCC);
+        tvLabel.setTextColor(getResources().getColor(R.color.quiz_option_text, null));
         tvLabel.setTextSize(13);
         tvLabel.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed));
         row.addView(tvLabel);

@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -52,8 +53,17 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
 
+    // Rebound – physics-based spring animations
+    implementation("com.facebook.rebound:rebound:0.3.8")
+
     // YouTube Player Data API dependency
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.1")
+
+    // MPAndroidChart for advanced charting
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.firebase:firebase-auth")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

@@ -5,10 +5,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
+import com.facebook.rebound.SimpleSpringListener;
+import com.facebook.rebound.Spring;
+import com.facebook.rebound.SpringConfig;
+import com.facebook.rebound.SpringSystem;
 
 public final class CardAnimationHelper {
 
     private static final int DURATION = 300;
+    // Spring config for elevation bounce on card tap
+    private static final SpringConfig ELEVATION_CONFIG = SpringConfig.fromOrigamiTensionAndFriction(60, 7);
 
     private CardAnimationHelper() {}
 
@@ -76,15 +82,20 @@ public final class CardAnimationHelper {
                 .start();
     }
 
-    /** Elevate card on expand, restore on collapse. */
+    /** Elevate card on expand, restore on collapse — driven by a Rebound spring for a natural bounce. */
     public static void animateElevation(View card, boolean expanding) {
-        float from = expanding ? 4f : 12f;
-        float to   = expanding ? 12f : 4f;
-        ValueAnimator anim = ValueAnimator.ofFloat(from, to);
-        anim.setDuration(DURATION);
-        anim.setInterpolator(new DecelerateInterpolator());
-        anim.addUpdateListener(a -> card.setElevation((float) a.getAnimatedValue()
-                * card.getResources().getDisplayMetrics().density));
-        anim.start();
+        float density = card.getResources().getDisplayMetrics().density;
+        float targetDp = expanding ? 12f : 4f;
+
+        SpringSystem system = SpringSystem.create();
+        Spring spring = system.createSpring().setSpringConfig(ELEVATION_CONFIG);
+        spring.addListener(new SimpleSpringListener() {
+            @Override
+            public void onSpringUpdate(Spring s) {
+                card.setElevation((float) s.getCurrentValue() * density);
+            }
+        });
+        spring.setCurrentValue(expanding ? 4.0 : 12.0);
+        spring.setEndValue(targetDp);
     }
 }

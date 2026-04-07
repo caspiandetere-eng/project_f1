@@ -62,14 +62,86 @@ public class SettingsActivity extends BaseActivity {
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
         });
         if (tvCurrentLevel != null) {
-            String level = prefs.getString("knowledge_level", "rookie");
-            tvCurrentLevel.setText("Current: " + level.substring(0, 1).toUpperCase() + level.substring(1));
+            tvCurrentLevel.setText("Current: " + KnowledgeLevelManager.displayLabel(this));
+        }
+
+        // Notification toggle
+        androidx.appcompat.widget.SwitchCompat switchNotifications = findViewById(R.id.switchNotifications);
+        androidx.appcompat.widget.SwitchCompat switch3Days  = findViewById(R.id.switch3Days);
+        androidx.appcompat.widget.SwitchCompat switch1Day   = findViewById(R.id.switch1Day);
+        androidx.appcompat.widget.SwitchCompat switch1Hour  = findViewById(R.id.switch1Hour);
+        android.view.View rowNotif3Days = findViewById(R.id.rowNotif3Days);
+        android.view.View rowNotif1Day  = findViewById(R.id.rowNotif1Day);
+        android.view.View rowNotif1Hour = findViewById(R.id.rowNotif1Hour);
+        android.view.View notifDivider  = findViewById(R.id.notifDivider);
+
+        if (switchNotifications != null) {
+            boolean masterOn = prefs.getBoolean("notifications_enabled", true);
+            switchNotifications.setChecked(masterOn);
+
+            // Restore individual toggle states
+            if (switch3Days != null)  switch3Days.setChecked(prefs.getBoolean("notif_3days", true));
+            if (switch1Day  != null)  switch1Day.setChecked(prefs.getBoolean("notif_1day",  true));
+            if (switch1Hour != null)  switch1Hour.setChecked(prefs.getBoolean("notif_1hour", true));
+
+            // Show/hide sub-rows based on master state
+            setNotifSubRowsVisible(masterOn, rowNotif3Days, rowNotif1Day, rowNotif1Hour, notifDivider);
+
+            switchNotifications.setOnCheckedChangeListener((btn, isChecked) -> {
+                prefs.edit().putBoolean("notifications_enabled", isChecked).apply();
+                setNotifSubRowsVisible(isChecked, rowNotif3Days, rowNotif1Day, rowNotif1Hour, notifDivider);
+                rescheduleNotifications(prefs, isChecked);
+            });
+
+            // Individual timing toggles — only meaningful when master is ON
+            if (switch3Days != null) switch3Days.setOnCheckedChangeListener((btn, isChecked) -> {
+                prefs.edit().putBoolean("notif_3days", isChecked).apply();
+                rescheduleNotifications(prefs, true);
+            });
+            if (switch1Day != null) switch1Day.setOnCheckedChangeListener((btn, isChecked) -> {
+                prefs.edit().putBoolean("notif_1day", isChecked).apply();
+                rescheduleNotifications(prefs, true);
+            });
+            if (switch1Hour != null) switch1Hour.setOnCheckedChangeListener((btn, isChecked) -> {
+                prefs.edit().putBoolean("notif_1hour", isChecked).apply();
+                rescheduleNotifications(prefs, true);
+            });
         }
         
         updateCacheSize();
         startCacheMonitoring();
     }
     
+    private void setNotifSubRowsVisible(boolean visible,
+                                         android.view.View row3Days,
+                                         android.view.View row1Day,
+                                         android.view.View row1Hour,
+                                         android.view.View divider) {
+        int vis = visible ? android.view.View.VISIBLE : android.view.View.GONE;
+        if (row3Days != null) row3Days.setVisibility(vis);
+        if (row1Day  != null) row1Day.setVisibility(vis);
+        if (row1Hour != null) row1Hour.setVisibility(vis);
+        if (divider  != null) divider.setVisibility(vis);
+    }
+
+    private void rescheduleNotifications(android.content.SharedPreferences prefs, boolean masterOn) {
+        String cached = CacheManager.getCache(this, "schedule_2026");
+        if (cached == null) return;
+        try {
+            com.example.project_f1.models.JolpicaScheduleResponse resp =
+                    new com.google.gson.Gson().fromJson(
+                            cached, com.example.project_f1.models.JolpicaScheduleResponse.class);
+            // Always cancel first so stale alarms are cleared
+            RaceNotificationScheduler.cancelAll(this, resp);
+            if (masterOn) {
+                // Reset version key so scheduleAll re-runs with new toggle states
+                getSharedPreferences("F1NotifPrefs", MODE_PRIVATE)
+                        .edit().remove("scheduled_version").apply();
+                RaceNotificationScheduler.scheduleAll(this, resp);
+            }
+        } catch (Exception ignored) {}
+    }
+
     private void applySettingsAccents(ThemeManager.TeamTheme theme) {
         // Background
         View root = findViewById(android.R.id.content);
@@ -86,7 +158,7 @@ public class SettingsActivity extends BaseActivity {
         View headerBar = findViewById(R.id.headerAccentBar);
         if (headerBar != null) headerBar.setBackgroundColor(theme.accent);
         // All cards
-        int[] cardIds = {R.id.cardAccount, R.id.cardFavorites, R.id.cardQuiz, R.id.cardDisplay, R.id.cardStorage};
+        int[] cardIds = {R.id.cardAccount, R.id.cardFavorites, R.id.cardQuiz, R.id.cardDisplay, R.id.cardNotifications, R.id.cardStorage};
         for (int id : cardIds) {
             com.google.android.material.card.MaterialCardView card = findViewById(id);
             if (card != null) {

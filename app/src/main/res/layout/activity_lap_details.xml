@@ -1,230 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/swipeRefresh"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#0D0D0D">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#0D0D0D"
-        android:fillViewport="true">
+    <View
+        android:id="@+id/topStripe"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:background="@drawable/gradient_red"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topStripe">
 
-        <View
-            android:layout_width="4dp"
-            android:layout_height="60dp"
-            android:layout_gravity="start"
-            android:background="#E10600" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2026 CALENDAR"
-            android:textColor="#FFFFFF"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            android:letterSpacing="0.1"
-            android:shadowColor="#E10600"
-            android:shadowRadius="20"
-            android:layout_marginTop="-50dp"
-            android:layout_marginStart="20dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Complete Circuit Database - 24 Rounds"
-            android:textColor="#999999"
-            android:textSize="14sp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="5dp" />
-
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="#1A1A1A"
-            android:padding="15dp"
-            android:layout_marginTop="20dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R1 • ALBERT PARK" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Australia • 5.278 km • 58 laps\nRecord: 1:20.235 (Perez)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
+            android:layout_height="match_parent"
+            android:scrollbars="none">
 
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R2 • SHANGHAI INT. CIRCUIT" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="China • 5.451 km • 56 laps\nRecord: 1:32.238 (Schumacher)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/rootContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:paddingBottom="32dp">
 
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R3 • SUZUKA CIRCUIT" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Japan • 5.807 km • 53 laps\nRecord: 1:30.983 (Hamilton)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
+                <!-- Header -->
+                <LinearLayout
+                    android:id="@+id/header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginBottom="24dp">
 
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R4 • BAHRAIN INT. CIRCUIT" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Bahrain • 5.412 km • 57 laps\nRecord: 1:31.447 (De la Rosa)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/btnBack"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:text="←"
+                        android:textColor="#FFFFFF"
+                        android:textSize="22sp"
+                        android:gravity="center"
+                        android:background="@drawable/bg_glass_card"
+                        android:layout_marginEnd="14dp"
+                        android:clickable="true"
+                        android:focusable="true" />
 
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R5 • JEDDAH CORNICHE" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Saudi Arabia • 6.174 km • 50 laps\nRecord: 1:30.734 (Hamilton)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
+                    <View
+                        android:id="@+id/headerAccentBar"
+                        android:layout_width="4dp"
+                        android:layout_height="52dp"
+                        android:layout_marginEnd="14dp"
+                        android:background="@color/f1_red_accent" />
 
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R6 • MIAMI INT. AUTODROME" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="USA • 5.412 km • 57 laps\nRecord: 1:29.708 (Verstappen)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R7 • CIRCUIT GILLES-VILLENEUVE" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Canada • 4.361 km • 70 laps\nRecord: 1:13.078 (Bottas)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="CIRCUIT DATABASE"
+                            android:textColor="#FFFFFF"
+                            android:textSize="26sp"
+                            android:fontFamily="@font/titillium_web"
+                            android:textFontWeight="700"
+                            android:letterSpacing="0.08" />
 
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R8 • CIRCUIT DE MONACO" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Monaco • 3.337 km • 78 laps\nRecord: 1:12.909 (Hamilton)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tap any circuit to reveal the track map"
+                            android:textColor="#999999"
+                            android:textSize="13sp"
+                            android:fontFamily="@font/inter" />
+                    </LinearLayout>
+                </LinearLayout>
 
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R9 • CIRCUIT DE BARCELONA" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Spain • 4.657 km • 66 laps\nRecord: 1:16.330 (Piastri)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
+                <!-- Dynamic content will be added here -->
+                <LinearLayout
+                    android:id="@+id/circuitsList"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
 
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R10 • RED BULL RING" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Austria • 4.318 km • 71 laps\nRecord: 1:05.619 (Sainz)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R11 • SILVERSTONE" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="UK • 5.891 km • 52 laps\nRecord: 1:27.097 (Verstappen)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R12 • SPA-FRANCORCHAMPS" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Belgium • 7.004 km • 44 laps\nRecord: 1:44.701 (Piastri)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R13 • HUNGARORING" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Hungary • 4.381 km • 70 laps\nRecord: 1:16.627 (Hamilton)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R14 • CIRCUIT ZANDVOORT" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Netherlands • 4.259 km • 72 laps\nRecord: 1:11.097 (Hamilton)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R15 • MONZA (Temple of Speed)" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Italy • 5.793 km • 53 laps\nRecord: 1:21.046 (Barrichello)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R16 • CIRCUITO DE MADRID" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Spain • 4.657 km • 66 laps\nRecord: New Track (TBD)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R17 • BAKU CITY CIRCUIT" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Azerbaijan • 6.003 km • 51 laps\nRecord: 1:43.009 (Leclerc)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R18 • MARINA BAY STREET" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Singapore • 4.940 km • 62 laps\nRecord: 1:35.867 (Hamilton)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R19 • CIRCUIT OF THE AMERICAS" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="USA (Austin) • 5.513 km • 56 laps\nRecord: 1:36.169 (Leclerc)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R20 • AUTODROMO H. RODRIGUEZ" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Mexico • 4.304 km • 71 laps\nRecord: 1:17.774 (Bottas)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R21 • INTERLAGOS" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Brazil • 4.309 km • 71 laps\nRecord: 1:10.540 (Bottas)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R22 • LAS VEGAS STRIP" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="USA • 6.201 km • 50 laps\nRecord: 1:33.365 (Piastri)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R23 • LUSAIL INTERNATIONAL" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Qatar • 5.419 km • 57 laps\nRecord: 1:22.384 (Verstappen)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="R24 • YAS MARINA" android:textColor="#E10600" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="UAE • 5.281 km • 58 laps\nRecord: 1:25.637 (Verstappen)" android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Giants of the Past"
-            android:textColor="#E10600"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginTop="30dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Legendary circuits that shaped F1 history"
-            android:textColor="#999999"
-            android:textSize="13sp"
-            android:layout_marginTop="5dp" />
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="15dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PESCARA CIRCUIT" android:textColor="#999999" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Italy • 25.8 km • 1957 GP\nLongest circuit in F1 history. Closed due to extreme length making it impractical for modern safety standards and logistics." android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="NÜRBURGRING NORDSCHLEIFE" android:textColor="#999999" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Germany • 22.8 km • Used until 1976\nThe 'Green Hell'. Closed after Niki Lauda's near-fatal crash exposed inadequate safety measures for such a long, dangerous circuit." android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SEPANG INTERNATIONAL" android:textColor="#999999" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Malaysia • 5.543 km • Last race 2017\nRecord: 1:34.080 (Vettel)\nFamed for wide track and humidity. Dropped due to declining attendance and high hosting fees making it financially unsustainable." android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="BUDDH INTERNATIONAL" android:textColor="#999999" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="India • 5.125 km • Last race 2013\nRecord: 1:27.249 (Vettel)\nIndia's only F1 track. Closed due to tax disputes with Indian government and lack of local F1 fanbase to justify costs." android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="KYALAMI" android:textColor="#999999" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="South Africa • 4.261 km • Last race 1993\nRecord: 1:17.578 (Mansell)\nIconic high-altitude track. Dropped due to political isolation during apartheid era and later financial constraints." android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ADELAIDE STREET CIRCUIT" android:textColor="#999999" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Australia • 3.780 km • Last race 1995\nRecord: 1:15.381 (Schumacher)\nSeason finale for many years. Replaced by Melbourne's Albert Park for better facilities and larger capacity." android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:background="#1A1A1A" android:padding="15dp" android:layout_marginTop="10dp" android:layout_marginBottom="30dp">
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="ISTANBUL PARK" android:textColor="#999999" android:textSize="16sp" android:textStyle="bold" />
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Turkey • 5.338 km • Last race 2021\nRecord: 1:24.770 (Montoya)\nFamous quadruple-apex Turn 8. Dropped due to financial disagreements and Turkey's economic challenges making hosting fees prohibitive." android:textColor="#CCCCCC" android:textSize="13sp" android:layout_marginTop="8dp" />
-        </LinearLayout>
-
-    </LinearLayout>
-    </ScrollView>
-
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

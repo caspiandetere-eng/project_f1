@@ -147,42 +147,60 @@
                     android:layout_height="0dp"
                     android:visibility="gone" />
 
-                <!-- Video button (BasicsCardAdapter) -->
-                <LinearLayout
-                    android:id="@+id/basicsVideoBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <!-- Video thumbnail tap target -->
+                <FrameLayout
+                    android:id="@+id/videoThumbnailContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
                     android:layout_marginTop="16dp"
-                    android:background="@drawable/btn_video_bg"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:padding="10dp">
+                    android:background="@drawable/bg_video_thumb"
+                    android:clipToOutline="true"
+                    android:clickable="true"
+                    android:focusable="true">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:contentDescription="@null"
-                        android:src="@drawable/ic_check_circle"
-                        android:tint="#FFFFFF" />
+                        android:id="@+id/videoThumbnail"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:contentDescription="@null" />
 
-                    <TextView
+                    <!-- Dark overlay -->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#55000000" />
+
+                    <!-- Play button -->
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:fontFamily="@font/titillium_web"
-                        android:text="Watch Video"
-                        android:textColor="#FFFFFF"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
+                        android:layout_gravity="center"
+                        android:orientation="vertical"
+                        android:gravity="center">
 
-                <!-- YouTubePlayerView for F1BasicsActivity -->
-                <com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
-                    android:id="@+id/youtubePlayerView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    app:autoPlay="false" />
+                        <TextView
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:text="▶"
+                            android:textSize="28sp"
+                            android:textColor="#FFFFFF"
+                            android:gravity="center"
+                            android:background="#CCE10600"
+                            android:padding="8dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="TAP TO WATCH"
+                            android:textColor="#FFFFFF"
+                            android:textSize="11sp"
+                            android:fontFamily="@font/barlow_condensed"
+                            android:letterSpacing="0.1"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </FrameLayout>
 
             </LinearLayout>
         </LinearLayout>

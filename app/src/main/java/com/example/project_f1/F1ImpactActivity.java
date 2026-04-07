@@ -14,20 +14,15 @@ public class F1ImpactActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ThemeManager.applyTheme(this);
         setContentView(R.layout.activity_f1_impact);
         ThemeManager.TeamTheme theme = ThemeManager.applyFullTheme(this);
 
-        View root = ((android.view.ViewGroup) findViewById(android.R.id.content)).getChildAt(0);
-        android.graphics.drawable.GradientDrawable bg = new android.graphics.drawable.GradientDrawable(
-                android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM,
-                new int[]{theme.bgTop, theme.bgBottom});
-        root.setBackground(bg);
-        View stripe = root.findViewById(R.id.topStripe);
+        View stripe = findViewById(R.id.topStripe);
         if (stripe != null) stripe.setBackgroundColor(theme.accent);
-        View headerBar = root.findViewById(R.id.headerAccentBar);
+        View headerBar = findViewById(R.id.headerAccentBar);
         if (headerBar != null) headerBar.setBackgroundColor(theme.accent);
-        ThemeManager.tintViewTree((android.view.ViewGroup) root, theme);
+        
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
         setupExpandableCards();
         animateCardsEntrance();
@@ -53,9 +48,6 @@ public class F1ImpactActivity extends BaseActivity {
                 CardAnimationHelper.collapse(currentlyExpandedContent);
                 CardAnimationHelper.rotateArrow(currentlyExpandedArrow, false);
                 CardAnimationHelper.animateElevation(currentlyExpandedCard, false);
-                currentlyExpandedContent = null;
-                currentlyExpandedArrow = null;
-                currentlyExpandedCard = null;
             }
 
             if (isExpanded) {

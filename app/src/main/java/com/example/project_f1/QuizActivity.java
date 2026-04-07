@@ -14,11 +14,12 @@ import androidx.core.content.res.ResourcesCompat;
 
 public class QuizActivity extends BaseActivity {
 
-    private static final int TOTAL = 15;
+    private static final int TOTAL = 30;
 
     private int currentIndex = 0;
     private int score = 0;
     private boolean answered = false;
+    private final boolean[] answerResults = new boolean[TOTAL];
 
     private ThemeManager.TeamTheme theme;
     private float dp;
@@ -58,14 +59,14 @@ public class QuizActivity extends BaseActivity {
 
         TextView btnBack = new TextView(this);
         btnBack.setText("✕");
-        btnBack.setTextColor(0xFF888888);
+        btnBack.setTextColor(getResources().getColor(R.color.quiz_text_secondary, null));
         btnBack.setTextSize(18);
         btnBack.setTypeface(ResourcesCompat.getFont(this, R.font.inter));
         btnBack.setOnClickListener(v -> finish());
         topRow.addView(btnBack);
 
         tvProgress = new TextView(this);
-        tvProgress.setTextColor(0xFF888888);
+        tvProgress.setTextColor(getResources().getColor(R.color.quiz_text_secondary, null));
         tvProgress.setTextSize(14);
         tvProgress.setTypeface(ResourcesCompat.getFont(this, R.font.barlow_condensed));
         tvProgress.setGravity(Gravity.END);
@@ -79,7 +80,7 @@ public class QuizActivity extends BaseActivity {
         LinearLayout progressTrack = new LinearLayout(this);
         progressTrack.setOrientation(LinearLayout.HORIZONTAL);
         GradientDrawable trackBg = new GradientDrawable();
-        trackBg.setColor(0xFF1A1A1A);
+        trackBg.setColor(getResources().getColor(R.color.quiz_progress_track, null));
         trackBg.setCornerRadius(px(3));
         progressTrack.setBackground(trackBg);
         LinearLayout.LayoutParams trackParams = new LinearLayout.LayoutParams(
@@ -101,9 +102,9 @@ public class QuizActivity extends BaseActivity {
         questionCard.setOrientation(LinearLayout.VERTICAL);
         questionCard.setPadding(px(20), px(24), px(20), px(24));
         GradientDrawable cardBg = new GradientDrawable();
-        cardBg.setColor(ThemeManager.blendColors(0xFF0D0D0D, theme.accent, 0.07f));
+        cardBg.setColor(ThemeManager.blendColors(getResources().getColor(R.color.quiz_bg, null), theme.accent, 0.07f));
         cardBg.setCornerRadius(px(16));
-        cardBg.setStroke(px(1), ThemeManager.blendColors(0xFF222222, theme.accent, 0.28f));
+        cardBg.setStroke(px(1), ThemeManager.blendColors(getResources().getColor(R.color.quiz_card_stroke, null), theme.accent, 0.28f));
         questionCard.setBackground(cardBg);
         LinearLayout.LayoutParams qCardParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -111,7 +112,7 @@ public class QuizActivity extends BaseActivity {
         questionCard.setLayoutParams(qCardParams);
 
         tvQuestion = new TextView(this);
-        tvQuestion.setTextColor(0xFFFFFFFF);
+        tvQuestion.setTextColor(getResources().getColor(R.color.quiz_text_primary, null));
         tvQuestion.setTextSize(18);
         tvQuestion.setTypeface(ResourcesCompat.getFont(this, R.font.titillium_web), Typeface.BOLD);
         tvQuestion.setLineSpacing(0, 1.3f);
@@ -129,16 +130,16 @@ public class QuizActivity extends BaseActivity {
 
         // Explanation
         tvExplanation = new TextView(this);
-        tvExplanation.setTextColor(0xFFAAAAAA);
+        tvExplanation.setTextColor(getResources().getColor(R.color.quiz_text_muted, null));
         tvExplanation.setTextSize(14);
         tvExplanation.setTypeface(ResourcesCompat.getFont(this, R.font.inter));
         tvExplanation.setLineSpacing(0, 1.4f);
         tvExplanation.setPadding(px(16), px(14), px(16), px(14));
         tvExplanation.setVisibility(View.GONE);
         GradientDrawable expBg = new GradientDrawable();
-        expBg.setColor(0xFF111111);
+        expBg.setColor(getResources().getColor(R.color.quiz_card_bg, null));
         expBg.setCornerRadius(px(12));
-        expBg.setStroke(px(1), 0xFF2A2A2A);
+        expBg.setStroke(px(1), getResources().getColor(R.color.quiz_card_stroke, null));
         tvExplanation.setBackground(expBg);
         LinearLayout.LayoutParams expParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -148,7 +149,7 @@ public class QuizActivity extends BaseActivity {
 
         // Next button
         btnNext = new TextView(this);
-        btnNext.setTextColor(0xFF000000);
+        btnNext.setTextColor(getResources().getColor(R.color.quiz_btn_text, null));
         btnNext.setTextSize(15);
         btnNext.setGravity(Gravity.CENTER);
         btnNext.setTypeface(ResourcesCompat.getFont(this, R.font.titillium_web), Typeface.BOLD);
@@ -186,7 +187,7 @@ public class QuizActivity extends BaseActivity {
             final int idx = i;
             TextView opt = new TextView(this);
             opt.setText(q.options[i]);
-            opt.setTextColor(0xFFDDDDDD);
+            opt.setTextColor(getResources().getColor(R.color.quiz_option_text, null));
             opt.setTextSize(15);
             opt.setTypeface(ResourcesCompat.getFont(this, R.font.inter));
             opt.setPadding(px(16), px(16), px(16), px(16));
@@ -194,9 +195,9 @@ public class QuizActivity extends BaseActivity {
             opt.setTag(i);
 
             GradientDrawable optBg = new GradientDrawable();
-            optBg.setColor(ThemeManager.blendColors(0xFF0D0D0D, theme.accent, 0.05f));
+            optBg.setColor(ThemeManager.blendColors(getResources().getColor(R.color.quiz_option_bg, null), theme.accent, 0.05f));
             optBg.setCornerRadius(px(12));
-            optBg.setStroke(px(1), 0xFF2A2A2A);
+            optBg.setStroke(px(1), getResources().getColor(R.color.quiz_option_stroke, null));
             opt.setBackground(optBg);
 
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
@@ -222,6 +223,7 @@ public class QuizActivity extends BaseActivity {
         QuizQuestion q = QuizData.QUESTIONS.get(currentIndex);
         boolean correct = selectedIdx == q.correctIndex;
         if (correct) score++;
+        answerResults[currentIndex] = correct;
 
         // Color all options
         for (int i = 0; i < optionsContainer.getChildCount(); i++) {
@@ -229,17 +231,17 @@ public class QuizActivity extends BaseActivity {
             GradientDrawable bg = new GradientDrawable();
             bg.setCornerRadius(px(12));
             if (i == q.correctIndex) {
-                bg.setColor(0xFF0A2A0A);
-                bg.setStroke(px(2), 0xFF2ECC71);
-                opt.setTextColor(0xFF2ECC71);
+                bg.setColor(getResources().getColor(R.color.quiz_correct_bg, null));
+                bg.setStroke(px(2), getResources().getColor(R.color.quiz_correct_stroke, null));
+                opt.setTextColor(getResources().getColor(R.color.quiz_correct_text, null));
             } else if (i == selectedIdx) {
-                bg.setColor(0xFF2A0A0A);
-                bg.setStroke(px(2), 0xFFE74C3C);
-                opt.setTextColor(0xFFE74C3C);
+                bg.setColor(getResources().getColor(R.color.quiz_wrong_bg, null));
+                bg.setStroke(px(2), getResources().getColor(R.color.quiz_wrong_stroke, null));
+                opt.setTextColor(getResources().getColor(R.color.quiz_wrong_text, null));
             } else {
-                bg.setColor(0xFF0D0D0D);
-                bg.setStroke(px(1), 0xFF1A1A1A);
-                opt.setTextColor(0xFF555555);
+                bg.setColor(getResources().getColor(R.color.quiz_unselected_bg, null));
+                bg.setStroke(px(1), getResources().getColor(R.color.quiz_unselected_stroke, null));
+                opt.setTextColor(getResources().getColor(R.color.quiz_unselected_text, null));
             }
             opt.setBackground(bg);
             opt.setClickable(false);
@@ -269,19 +271,45 @@ public class QuizActivity extends BaseActivity {
     }
 
     private void saveAndShowResult() {
-        String level = QuizData.levelForScore(score);
-        getSharedPreferences("F1Prefs", MODE_PRIVATE)
-                .edit()
-                .putString("user_level", level)
-                .putString("knowledge_level", level)
-                .apply();
+        KnowledgeLevelManager.QuizResult result =
+                KnowledgeLevelManager.applyQuizResult(this, score, TOTAL);
         StateManager.init(this);
 
-        Intent intent = new Intent(this, QuizResultActivity.class);
-        intent.putExtra("score", score);
-        intent.putExtra("level", level);
-        startActivity(intent);
-        overridePendingTransition(R.anim.fade_in, R.anim.slide_out_right);
+        // Build boolean array of correct/wrong per question
+        boolean[] correct = new boolean[TOTAL];
+        for (int i = 0; i < TOTAL; i++) correct[i] = answerResults[i];
+
+        Intent resultIntent = new Intent(this, QuizResultActivity.class);
+        resultIntent.putExtra("score", score);
+        resultIntent.putExtra("total", TOTAL);
+        resultIntent.putExtra("xp_earned", result.xpEarned);
+        resultIntent.putExtra("old_level", result.oldLevel);
+        resultIntent.putExtra("new_level", result.newLevel);
+        resultIntent.putExtra("xp_after", result.xpAfter);
+        resultIntent.putExtra("leveled_up", result.leveledUp);
+        resultIntent.putExtra("demoted", result.demoted);
+        resultIntent.putExtra("correct_answers", correct);
+
+        if (result.leveledUp || result.demoted) {
+            Intent lcIntent = new Intent(this, LevelChangeActivity.class);
+            lcIntent.putExtra("leveled_up", result.leveledUp);
+            lcIntent.putExtra("old_level", result.oldLevel);
+            lcIntent.putExtra("new_level", result.newLevel);
+            lcIntent.putExtra("old_tier", KnowledgeLevelManager.tierForLevel(result.oldLevel));
+            lcIntent.putExtra("new_tier", KnowledgeLevelManager.tierForLevel(result.newLevel));
+            // Pass result intent so LevelChangeActivity can forward to it
+            lcIntent.putExtra("score", score);
+            lcIntent.putExtra("total", TOTAL);
+            lcIntent.putExtra("xp_earned", result.xpEarned);
+            lcIntent.putExtra("new_level_final", result.newLevel);
+            lcIntent.putExtra("xp_after", result.xpAfter);
+            lcIntent.putExtra("correct_answers", correct);
+            startActivity(lcIntent);
+            overridePendingTransition(R.anim.fade_in, R.anim.slide_out_right);
+        } else {
+            startActivity(resultIntent);
+            overridePendingTransition(R.anim.fade_in, R.anim.slide_out_right);
+        }
         finish();
     }
 

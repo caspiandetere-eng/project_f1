@@ -4,6 +4,7 @@ import android.content.Context;
 import com.example.project_f1.api.JolpicaApiClient;
 import com.example.project_f1.api.OpenF1ApiClient;
 import com.example.project_f1.models.JolpicaDriverResponse;
+import com.example.project_f1.models.JolpicaScheduleResponse;
 import com.example.project_f1.models.JolpicaStandingsResponse;
 import com.example.project_f1.models.OpenF1Session;
 import com.google.gson.Gson;
@@ -15,9 +16,11 @@ import retrofit2.Response;
 public class DataSyncManager {
     private static final String CACHE_SESSIONS = "sessions_2026";
     private static final String CACHE_STANDINGS = "standings_2026";
-    private static final long CACHE_VALIDITY_SESSIONS = 6 * 60 * 60 * 1000; // 6 hours
-    private static final long CACHE_VALIDITY_STANDINGS = 60 * 60 * 1000; // 1 hour
-    private static final long CACHE_VALIDITY_HISTORICAL = 7 * 24 * 60 * 60 * 1000L; // 7 days
+    private static final String CACHE_SCHEDULE  = "schedule_2026";
+    private static final long CACHE_VALIDITY_SESSIONS = 6 * 60 * 60 * 1000;
+    private static final long CACHE_VALIDITY_STANDINGS = 60 * 60 * 1000;
+    private static final long CACHE_VALIDITY_SCHEDULE  = 24 * 60 * 60 * 1000L; // 24 hours
+    private static final long CACHE_VALIDITY_HISTORICAL = 7 * 24 * 60 * 60 * 1000L;
 
     private static final int[] HISTORICAL_YEARS = {2021, 2022, 2023, 2024, 2025};
 
@@ -61,6 +64,37 @@ public class DataSyncManager {
             }
         }
         fetchStandingsFromApi(ctx, year, callback);
+    }
+
+    /**
+     * Load the official race schedule from Jolpica: cache-first, refresh if stale.
+     */
+    public static void loadSchedule(Context ctx, int year, SyncCallback<JolpicaScheduleResponse> callback) {
+        String cached = CacheManager.getCache(ctx, CACHE_SCHEDULE);
+        if (cached != null) {
+            try {
+                JolpicaScheduleResponse response = new Gson().fromJson(cached, JolpicaScheduleResponse.class);
+                callback.onSuccess(response);
+                return;
+            } catch (Exception e) {
+                CacheManager.clearCache(ctx, CACHE_SCHEDULE);
+            }
+        }
+        JolpicaApiClient.getApiService().getRaceSchedule(year).enqueue(new Callback<JolpicaScheduleResponse>() {
+            @Override
+            public void onResponse(Call<JolpicaScheduleResponse> call, Response<JolpicaScheduleResponse> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    CacheManager.saveCache(ctx, CACHE_SCHEDULE, new Gson().toJson(response.body()), CACHE_VALIDITY_SCHEDULE);
+                    callback.onSuccess(response.body());
+                } else {
+                    callback.onFailure("Schedule API error");
+                }
+            }
+            @Override
+            public void onFailure(Call<JolpicaScheduleResponse> call, Throwable t) {
+                callback.onFailure(t.getMessage());
+            }
+        });
     }
 
     private static void fetchSessionsFromApi(Context ctx, int year, SyncCallback<List<OpenF1Session>> callback) {

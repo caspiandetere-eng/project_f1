@@ -3,15 +3,17 @@ package com.example.project_f1;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import com.google.android.material.card.MaterialCardView;
 import java.util.List;
 
@@ -20,7 +22,7 @@ public class BasicsCardAdapter extends RecyclerView.Adapter<BasicsCardAdapter.Vi
     private final List<BasicsCardItem> items;
     private final int themeAccent;
 
-    public BasicsCardAdapter(Context context, List<BasicsCardItem> items) {
+    public BasicsCardAdapter(Context context, List<BasicsCardItem> items, LifecycleOwner unused) {
         this.items = items;
         this.themeAccent = ThemeManager.getAccentColor(context);
     }
@@ -38,27 +40,16 @@ public class BasicsCardAdapter extends RecyclerView.Adapter<BasicsCardAdapter.Vi
         BasicsCardItem item = items.get(position);
         boolean expanded = position == StateManager.get().getExpandedCardPosition();
 
-        // Accent colour
         int accent = Color.parseColor(item.accentHex);
         h.accentBar.setBackgroundColor(accent);
         h.arrow.setColorFilter(accent);
         h.divider.setBackgroundColor(Color.argb(32, Color.red(accent), Color.green(accent), Color.blue(accent)));
 
-        // Glass card background tinted with accent
-        android.graphics.drawable.GradientDrawable cardBg = new android.graphics.drawable.GradientDrawable(
-                android.graphics.drawable.GradientDrawable.Orientation.TL_BR,
-                new int[]{
-                        ThemeManager.blendColors(0xFF0D0D0D, accent, 0.07f),
-                        ThemeManager.blendColors(0xFF111111, accent, 0.04f)
-                });
-        cardBg.setCornerRadius(h.itemView.getResources().getDisplayMetrics().density * 24);
         h.card.setCardBackgroundColor(ThemeManager.blendColors(0xFF0D0D0D, accent, 0.07f));
         h.card.setStrokeColor(ThemeManager.blendColors(0xFF222222, accent, 0.25f));
         h.card.setStrokeWidth(1);
 
         boolean isDetailed = StateManager.get().isDetailed();
-
-        // Knowledge badge
         if (isDetailed) {
             h.levelBadge.setText("DETAILED");
             h.levelBadge.setTextColor(Color.parseColor("#FFD700"));
@@ -67,20 +58,29 @@ public class BasicsCardAdapter extends RecyclerView.Adapter<BasicsCardAdapter.Vi
             h.levelBadge.setTextColor(themeAccent);
         }
 
-        // Title & preview always show the general text (short)
         h.title.setText(item.title);
         h.preview.setText(item.generalText);
-
-        // Full description: detailed for advanced users, general for rookies
         h.fullDesc.setText(isDetailed ? item.detailedText : item.generalText);
 
-        // Image: only visible when expanded
-        if (item.imageRes != 0) {
-            h.image.setImageResource(item.imageRes);
-        }
+        if (item.imageRes != 0) h.image.setImageResource(item.imageRes);
 
-        // Snap state (no animation on bind — avoids flicker on scroll)
-        h.image.setVisibility(expanded ? View.VISIBLE : View.GONE);
+        // Load YouTube thumbnail and wire tap
+        String videoId = extractVideoId(item.videoUrl);
+        if (videoId != null) {
+            String thumbUrl = "https://img.youtube.com/vi/" + videoId + "/hqdefault.jpg";
+            Glide.with(h.itemView.getContext()).load(thumbUrl).centerCrop().into(h.videoThumbnail);
+        }
+        h.videoContainer.setOnClickListener(v -> {
+            if (videoId == null) return;
+            Intent intent = new Intent(v.getContext(), VideoPlayerActivity.class);
+            intent.putExtra(VideoPlayerActivity.EXTRA_VIDEO_ID, videoId);
+            v.getContext().startActivity(intent);
+        });
+        h.videoContainer.setClickable(videoId != null);
+        h.videoContainer.setFocusable(videoId != null);
+
+        // Snap expand state
+        h.image.setVisibility(expanded && item.imageRes != 0 ? View.VISIBLE : View.GONE);
         h.image.setAlpha(expanded ? 1f : 0f);
         h.expandableContent.setVisibility(expanded ? View.VISIBLE : View.GONE);
         h.divider.setVisibility(expanded ? View.VISIBLE : View.GONE);
@@ -91,37 +91,19 @@ public class BasicsCardAdapter extends RecyclerView.Adapter<BasicsCardAdapter.Vi
         float density = h.itemView.getResources().getDisplayMetrics().density;
         h.card.setCardElevation(expanded ? 12 * density : 4 * density);
 
-        // Staggered entrance: fade + slide up
+        // Entrance animation
         h.itemView.setAlpha(0f);
-        h.itemView.setTranslationY(h.itemView.getResources().getDisplayMetrics().density * 20);
+        h.itemView.setTranslationY(density * 20);
         h.itemView.animate()
-                .alpha(1f)
-                .translationY(0f)
-                .setDuration(300)
+                .alpha(1f).translationY(0f).setDuration(300)
                 .setStartDelay(position * 55L)
                 .setInterpolator(new androidx.interpolator.view.animation.FastOutSlowInInterpolator())
                 .start();
 
-        // Video button
-        h.videoBtn.setOnClickListener(v -> {
-            try {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.videoUrl));
-                intent.setPackage("com.google.android.youtube");
-                v.getContext().startActivity(intent);
-            } catch (Exception e) {
-                // YouTube not installed — open in browser
-                v.getContext().startActivity(
-                        new Intent(Intent.ACTION_VIEW, Uri.parse(item.videoUrl)));
-            }
-        });
-
-        // Card tap
         h.card.setOnClickListener(v -> {
             int pos = h.getAdapterPosition();
             if (pos == RecyclerView.NO_POSITION) return;
-
             int prev = StateManager.get().getExpandedCardPosition();
-
             if (pos == prev) {
                 StateManager.get().resetExpandedCard();
                 animateCollapse(h);
@@ -129,17 +111,12 @@ public class BasicsCardAdapter extends RecyclerView.Adapter<BasicsCardAdapter.Vi
                 StateManager.get().setExpandedCard(pos);
                 animateExpand(h, item);
             }
-
-            if (prev != StateManager.NO_POSITION && prev != pos) {
-                notifyItemChanged(prev);
-            }
+            if (prev != StateManager.NO_POSITION && prev != pos) notifyItemChanged(prev);
         });
     }
 
     private void animateExpand(ViewHolder h, BasicsCardItem item) {
         h.preview.setMaxLines(Integer.MAX_VALUE);
-
-        // Reveal image first
         if (item.imageRes != 0) {
             h.image.setVisibility(View.VISIBLE);
             h.image.setAlpha(0f);
@@ -147,11 +124,9 @@ public class BasicsCardAdapter extends RecyclerView.Adapter<BasicsCardAdapter.Vi
                     .setInterpolator(new androidx.interpolator.view.animation.FastOutSlowInInterpolator())
                     .start();
         }
-
         CardAnimationHelper.expand(h.expandableContent);
         CardAnimationHelper.rotateArrow(h.arrow, true);
         CardAnimationHelper.animateElevation(h.card, true);
-
         h.divider.setVisibility(View.VISIBLE);
         h.divider.setAlpha(0f);
         h.divider.animate().alpha(1f).setDuration(300).start();
@@ -159,38 +134,37 @@ public class BasicsCardAdapter extends RecyclerView.Adapter<BasicsCardAdapter.Vi
 
     private void animateCollapse(ViewHolder h) {
         h.preview.setMaxLines(2);
-
-        // Hide image
         h.image.animate().alpha(0f).setDuration(200)
-                .withEndAction(() -> h.image.setVisibility(View.GONE))
-                .start();
-
+                .withEndAction(() -> h.image.setVisibility(View.GONE)).start();
         CardAnimationHelper.collapse(h.expandableContent);
         CardAnimationHelper.rotateArrow(h.arrow, false);
         CardAnimationHelper.animateElevation(h.card, false);
-
         h.divider.animate().alpha(0f).setDuration(200)
-                .withEndAction(() -> h.divider.setVisibility(View.GONE))
-                .start();
+                .withEndAction(() -> h.divider.setVisibility(View.GONE)).start();
+    }
+
+    static String extractVideoId(String url) {
+        if (url == null) return null;
+        try {
+            android.net.Uri uri = android.net.Uri.parse(url);
+            if ("youtu.be".equals(uri.getHost())) return uri.getLastPathSegment();
+            return uri.getQueryParameter("v");
+        } catch (Exception e) { return null; }
     }
 
     @Override
-    public int getItemCount() {
-        return items.size();
-    }
+    public int getItemCount() { return items.size(); }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         final MaterialCardView card;
         final ImageView image;
         final View accentBar;
-        final TextView levelBadge;
-        final TextView title;
-        final TextView preview;
+        final TextView levelBadge, title, preview, fullDesc;
         final ImageView arrow;
         final View divider;
         final LinearLayout expandableContent;
-        final TextView fullDesc;
-        final LinearLayout videoBtn;
+        final FrameLayout videoContainer;
+        final ImageView videoThumbnail;
 
         ViewHolder(@NonNull View v) {
             super(v);
@@ -204,7 +178,8 @@ public class BasicsCardAdapter extends RecyclerView.Adapter<BasicsCardAdapter.Vi
             divider = v.findViewById(R.id.basicsCardDivider);
             expandableContent = v.findViewById(R.id.basicsExpandableContent);
             fullDesc = v.findViewById(R.id.basicsCardFullDesc);
-            videoBtn = v.findViewById(R.id.basicsVideoBtn);
+            videoContainer = v.findViewById(R.id.videoThumbnailContainer);
+            videoThumbnail = v.findViewById(R.id.videoThumbnail);
         }
     }
 }

@@ -1,0 +1,59 @@
+{
+  "verstappen": {
+    "circuits": [
+      {"name": "Bahrain", "avgSpeed": 203.5, "wins": 3, "podiums": 5, "poles": 2, "fastestLaps": 4, "avgPosition": 1.8, "races": 5},
+      {"name": "Jeddah", "avgSpeed": 252.8, "wins": 2, "podiums": 3, "poles": 1, "fastestLaps": 2, "avgPosition": 2.0, "races": 3},
+      {"name": "Melbourne", "avgSpeed": 231.4, "wins": 1, "podiums": 4, "poles": 1, "fastestLaps": 2, "avgPosition": 2.5, "races": 5},
+      {"name": "Suzuka", "avgSpeed": 218.7, "wins": 2, "podiums": 4, "poles": 2, "fastestLaps": 3, "avgPosition": 2.2, "races": 5},
+      {"name": "Shanghai", "avgSpeed": 201.3, "wins": 1, "podiums": 3, "poles": 0, "fastestLaps": 1, "avgPosition": 3.1, "races": 4},
+      {"name": "Miami", "avgSpeed": 223.6, "wins": 2, "podiums": 2, "poles": 1, "fastestLaps": 2, "avgPosition": 1.5, "races": 2},
+      {"name": "Monaco", "avgSpeed": 158.2, "wins": 1, "podiums": 4, "poles": 1, "fastestLaps": 0, "avgPosition": 2.8, "races": 5},
+      {"name": "Montreal", "avgSpeed": 221.9, "wins": 2, "podiums": 4, "poles": 1, "fastestLaps": 2, "avgPosition": 2.3, "races": 5},
+      {"name": "Barcelona", "avgSpeed": 195.4, "wins": 3, "podiums": 5, "poles": 2, "fastestLaps": 3, "avgPosition": 1.6, "races": 5},
+      {"name": "Austria", "avgSpeed": 237.2, "wins": 4, "podiums": 5, "poles": 3, "fastestLaps": 4, "avgPosition": 1.2, "races": 5},
+      {"name": "Silverstone", "avgSpeed": 233.8, "wins": 2, "podiums": 5, "poles": 1, "fastestLaps": 2, "avgPosition": 2.0, "races": 5},
+      {"name": "Hungaroring", "avgSpeed": 191.7, "wins": 2, "podiums": 4, "poles": 1, "fastestLaps": 2, "avgPosition": 2.4, "races": 5},
+      {"name": "Spa", "avgSpeed": 234.5, "wins": 3, "podiums": 5, "poles": 2, "fastestLaps": 3, "avgPosition": 1.8, "races": 5},
+      {"name": "Zandvoort", "avgSpeed": 209.3, "wins": 3, "podiums": 3, "poles": 3, "fastestLaps": 3, "avgPosition": 1.0, "races": 3},
+      {"name": "Monza", "avgSpeed": 264.3, "wins": 2, "podiums": 4, "poles": 1, "fastestLaps": 2, "avgPosition": 2.2, "races": 5},
+      {"name": "Singapore", "avgSpeed": 172.4, "wins": 2, "podiums": 3, "poles": 1, "fastestLaps": 1, "avgPosition": 2.3, "races": 4},
+      {"name": "Austin", "avgSpeed": 213.8, "wins": 3, "podiums": 5, "poles": 2, "fastestLaps": 3, "avgPosition": 1.6, "races": 5},
+      {"name": "Mexico City", "avgSpeed": 201.6, "wins": 2, "podiums": 4, "poles": 1, "fastestLaps": 2, "avgPosition": 2.0, "races": 5},
+      {"name": "Interlagos", "avgSpeed": 217.3, "wins": 2, "podiums": 4, "poles": 1, "fastestLaps": 2, "avgPosition": 2.1, "races": 5},
+      {"name": "Las Vegas", "avgSpeed": 246.7, "wins": 1, "podiums": 1, "poles": 0, "fastestLaps": 0, "avgPosition": 2.0, "races": 1},
+      {"name": "Qatar", "avgSpeed": 239.1, "wins": 2, "podiums": 2, "poles": 2, "fastestLaps": 2, "avgPosition": 1.0, "races": 2},
+      {"name": "Abu Dhabi", "avgSpeed": 211.4, "wins": 3, "podiums": 5, "poles": 2, "fastestLaps": 3, "avgPosition": 1.8, "races": 5}
+    ]
+  },
+  "hamilton": {
+    "circuits": [
+      {"name": "Bahrain", "avgSpeed": 201.8, "wins": 5, "podiums": 12, "poles": 5, "fastestLaps": 6, "avgPosition": 2.1, "races": 15},
+      {"name": "Jeddah", "avgSpeed": 251.2, "wins": 1, "podiums": 2, "poles": 1, "fastestLaps": 1, "avgPosition": 2.3, "races": 3},
+      {"name": "Melbourne", "avgSpeed": 229.6, "wins": 4, "podiums": 10, "poles": 6, "fastestLaps": 5, "avgPosition": 2.4, "races": 14},
+      {"name": "Suzuka", "avgSpeed": 217.2, "wins": 2, "podiums": 8, "poles": 3, "fastestLaps": 4, "avgPosition": 3.1, "races": 14},
+      {"name": "Shanghai", "avgSpeed": 199.8, "wins": 6, "podiums": 11, "poles": 5, "fastestLaps": 5, "avgPosition": 2.2, "races": 13},
+      {"name": "Monaco", "avgSpeed": 157.4, "wins": 3, "podiums": 8, "poles": 3, "fastestLaps": 2, "avgPosition": 3.2, "races": 15},
+      {"name": "Montreal", "avgSpeed": 220.3, "wins": 7, "podiums": 11, "poles": 6, "fastestLaps": 5, "avgPosition": 2.0, "races": 14},
+      {"name": "Barcelona", "avgSpeed": 194.1, "wins": 6, "podiums": 12, "poles": 5, "fastestLaps": 6, "avgPosition": 1.9, "races": 15},
+      {"name": "Austria", "avgSpeed": 235.6, "wins": 4, "podiums": 9, "poles": 3, "fastestLaps": 4, "avgPosition": 2.5, "races": 12},
+      {"name": "Silverstone", "avgSpeed": 232.1, "wins": 8, "podiums": 13, "poles": 6, "fastestLaps": 7, "avgPosition": 1.7, "races": 15},
+      {"name": "Hungaroring", "avgSpeed": 190.3, "wins": 8, "podiums": 11, "poles": 7, "fastestLaps": 5, "avgPosition": 2.1, "races": 15},
+      {"name": "Spa", "avgSpeed": 232.8, "wins": 4, "podiums": 10, "poles": 4, "fastestLaps": 5, "avgPosition": 2.3, "races": 14},
+      {"name": "Monza", "avgSpeed": 262.1, "wins": 5, "podiums": 10, "poles": 5, "fastestLaps": 4, "avgPosition": 2.4, "races": 15},
+      {"name": "Singapore", "avgSpeed": 171.2, "wins": 5, "podiums": 9, "poles": 4, "fastestLaps": 3, "avgPosition": 2.2, "races": 11},
+      {"name": "Austin", "avgSpeed": 212.4, "wins": 6, "podiums": 9, "poles": 5, "fastestLaps": 4, "avgPosition": 1.9, "races": 11},
+      {"name": "Mexico City", "avgSpeed": 200.2, "wins": 2, "podiums": 7, "poles": 3, "fastestLaps": 2, "avgPosition": 2.8, "races": 9},
+      {"name": "Interlagos", "avgSpeed": 215.7, "wins": 2, "podiums": 9, "poles": 2, "fastestLaps": 3, "avgPosition": 2.6, "races": 15},
+      {"name": "Abu Dhabi", "avgSpeed": 209.8, "wins": 5, "podiums": 11, "poles": 5, "fastestLaps": 6, "avgPosition": 2.0, "races": 14}
+    ]
+  },
+  "leclerc": {
+    "circuits": [
+      {"name": "Bahrain", "avgSpeed": 202.1, "wins": 2, "podiums": 4, "poles": 3, "fastestLaps": 2, "avgPosition": 2.6, "races": 5},
+      {"name": "Monaco", "avgSpeed": 157.8, "wins": 1, "podiums": 2, "poles": 3, "fastestLaps": 1, "avgPosition": 3.4, "races": 5},
+      {"name": "Monza", "avgSpeed": 263.2, "wins": 2, "podiums": 3, "poles": 3, "fastestLaps": 2, "avgPosition": 2.8, "races": 5},
+      {"name": "Singapore", "avgSpeed": 171.8, "wins": 1, "podiums": 3, "poles": 2, "fastestLaps": 1, "avgPosition": 2.9, "races": 4},
+      {"name": "Austria", "avgSpeed": 236.4, "wins": 2, "podiums": 4, "poles": 2, "fastestLaps": 2, "avgPosition": 2.4, "races": 5}
+    ]
+  }
+}
